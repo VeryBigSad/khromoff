@@ -3,7 +3,7 @@
 
 def static_context(request):
     context = {'static': {
-        'HOSTNAME': 'http://127.0.0.1'
+        'HOSTNAME': request.META['HTTP_HOST']
     }}
     return context
 
