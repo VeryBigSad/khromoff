@@ -12,8 +12,8 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <title>{% block title %} Khromoff's site {% endblock %} - Khromoff</title>
 </head>
-<body class="d-flex flex-column min-vh-100">
-    <nav class="navbar navbar-light navbar-expand-md" style="background-color: rgba(56,56,56,0.1);">
+<body class="d-flex flex-column min-vh-100 mw-100">
+    <nav class="navbar w-100 navbar-light navbar-expand-md" style="background-color: rgba(56,56,56,0.1);">
         <a href="/" class="navbar-brand h1">Khromoff site</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsingNavbar3">
             <span class="navbar-toggler-icon"></span>
@@ -24,7 +24,9 @@
                 {% block left-nav-items %}
                 {% endblock %}
 
-                <li class="nav_item dropdown">
+                <div class="mr-5"></div>
+
+                <li class="nav_item dropdown m-auto p-auto">
                     <button class=" btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Ваш профиль
                     </button>
@@ -33,11 +35,15 @@
                             <h6 class="dropdown-header">Привет, {{ user.username }}!</h6>
                             <a class="dropdown-item" href="/personal">Личный кабинет</a>
                             <div class="dropdown-separator"></div>
-                            <a href="/logout" class="dropdown-item">Выйти</a>
+                            <a href="/l/ogout" class="dropdown-item">Выйти</a>
                         {% else %}
                             <h6 class="dropdown-header">Привет, я тебя не знаю...</h6>
-                            <a href="/login" class="dropdown-item active">Войти/Зарегистрироваться</a>
+                            <a href="/l/ogin" class="dropdown-item active">Войти/Зарегистрироваться</a>
                             <a href="#" class="dropdown-item">ыыыы</a>
+                            {% if True %}
+                                {# TODO: MAKE THIS DEBUG ONLY! #}
+                                <a href="/l/ogin?guest" class="dropdown-item">Войти как гость (эта функция включена тк дебаг)</a>
+                            {% endif %}
 
                         {% endif %}
                     </div>
