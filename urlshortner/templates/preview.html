@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %} Preview of {{ long_url }} redirect {% endblock %}
+
+{% block content %}
+    <div class="container text-center">
+        <div class="">
+            {% if request.GET.new %}
+                <div class="alert alert-success pt-2 pd-2 pl-3 pr-3 d-inline-flex"><h6>ShortURL had been created successfully!</h6></div>
+            {% endif %}
+            <h1>You are previewing a redirect to <a class="h1" href="{{ long_url }}">{{ long_url }}</a></h1>
+            <small class="text-muted">Click the blue URL to proceed to the site</small>
+            <hr>
+            {% if '/a/' in request.path %}
+                <p class="text-muted mt-5">By the way, this link is 100% anonymous, so we don't collect any data of you here.</p>
+            {% endif %}
+            <p class="h3">To share the link with anyone, copy and paste it to them: <a class="h1" href="{{ static.HOSTNAME }}/s/{% if '/a/' in request.path %}a/{% endif %}{{ short_code }}">{{ static.HOSTNAME }}/s/{{ short_code }}</a></p>
+        </div>
+    </div>
+{% endblock %}
+

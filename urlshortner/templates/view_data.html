@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %} View statistics of {{ url_obj.short_code }} {% endblock %}
+
+{% block content %}
+    <div class="text-center container-fluid">
+        <h2>This ShortURL leads to <a href="{{ url_obj.full_url }}">{{ url_obj.full_url }}</a></h2>
+        <p>There {% if redirects|length == 0 %} wasn't any redirects :( {% elif redirects|length == 1 %} was 1 redirect. {% else %} were {{ redirects|length }} redirects. {% endif %}</p>
+        <div>
+            {% for i in redirects %}
+            <div>
+                time clicked: {{ i.time }}<br>
+                ip address: {{ i.IP }}<br>
+                user agent: {{ i.user_agent }}
+            </div>
+            <br>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
+

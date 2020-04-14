@@ -1,0 +1,57 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% block head %} {% endblock %}
+    <link rel="stylesheet" href="{% static "styles.css" %}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <title>{% block title %} Khromoff's site {% endblock %} - Khromoff</title>
+</head>
+<body class="d-flex flex-column min-vh-100">
+    <nav class="navbar navbar-light navbar-expand-md" style="background-color: rgba(56,56,56,0.1);">
+        <a href="/" class="navbar-brand h1">Khromoff site</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsingNavbar3">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="navbar-collapse collapse" id="collapsingNavbar3">
+            <ul class="navbar-nav justify-content-center">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Khromoff's site</a>
+                </li>
+                {% block left-nav-items %}
+                {% endblock %}
+
+            </ul>
+            <ul class="nav navbar-nav ml-auto w-100 justify-content-end">
+                {% if user.is_authenticated %}
+                    <li class="nav_item">
+                        <a class="nav-link" href="/profile">Your profile</a>
+                    </li>
+                {% else %}
+                    <li class="nav_item">
+                        <a class="nav-link" href="/auth/login">Login</a>
+                    </li>
+                    <li class="nav_item">
+                        <a class="nav-link" href="/auth/register">Create Account</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+</nav>
+
+    <div id="content" class="container-fluid flex-grow-1">
+        <p class="dick">This shouldn't be visible!</p>
+        {% block content %}
+            about me
+        {% endblock %}
+    </div>
+    <footer class="bg-dark text-white mt-9 text-center">
+        <p>FOOTER))0)</p>
+        urls: <br>
+        1. <a href="/s">urlshortner</a>
+        <p><small class="text-muted">Powered by <a class="text-muted" href="{{ static.HOSTNAME }}">{{ static.HOSTNAME }}/</a> with love <3</small></p>
+    </footer>
+</body>
+</html>

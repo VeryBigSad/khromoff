@@ -1,0 +1,10 @@
+/*#content {*/
+/*    min-height: 30rem;*/
+/*}*/
+/*#preview-redirect-footer {*/
+/*    min-height: 10rem;*/
+/*}*/
+
+body {
+    min-height: 100vh;
+}
