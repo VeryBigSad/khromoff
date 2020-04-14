@@ -3,7 +3,8 @@
 
 def static_context(request):
     context = {'static': {
-        'HOSTNAME': request.META['HTTP_HOST']
+        # TODO: rename to https
+        'HOSTNAME': 'http://' + request.META['HTTP_HOST']
     }}
     return context
 
