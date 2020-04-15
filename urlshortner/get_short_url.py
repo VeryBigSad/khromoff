@@ -4,14 +4,20 @@ from django.contrib.auth.models import PermissionDenied
 import random
 
 
-def get(long_url, request, url_length=3):
+def get(long_url, request, url_length=3, do_register=True):
     do_collect_meta = (lambda: True if request.POST.get('do_collect_meta') is not None else False)()
 
     # We don't need to generate it if we are provided by it.
-    if request.POST.get('alias'):
-        if request.user == AnonymousUser:
+    if request.POST.get('alias') and request.user == AnonymousUser:
+        obj = ShortUrl.objects.filter(long_url=None, short_code=request.POST.get('alias'))
+        if long_url and obj.exists():
+            obj.long_url = request.POST['long_url']
+            obj.save()
+            return request.POST.get('alias')
+        if do_register:
             raise PermissionDenied
 
+    elif request.user != AnonymousUser and request.POST.get('alias'):
         if ShortUrl.objects.filter(short_code=request.POST['alias']).exists():
             # TODO: NameError is when something doesn't exist, in our case problem that such alias exists already.
             raise NameError
@@ -24,11 +30,11 @@ def get(long_url, request, url_length=3):
         return request.POST['alias']
 
     obj = ShortUrl.objects.filter(full_url=long_url, alias=False, do_collect_meta=do_collect_meta)
-    if obj.exists() and len(obj[0].short_code) == url_length:  # TODO: AND it's the same length as [url_length]
+    if obj.exists() and len(obj[0].short_code) == url_length:
         short_code = obj[0].short_code
         return short_code
 
-    alphabet = 'abcdefghjklmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ0123456789-_'
+    alphabet = 'abcdefghjklmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ0123456789-'
 
     unique = False
     short_code = ''
@@ -49,10 +55,10 @@ def get(long_url, request, url_length=3):
 
 def register(short_code, request):
     do_collect_meta = (lambda: True if request.POST.get('do_collect_meta') is not None else False)()
-    alias = (lambda: False if request.POST['alias'] == '' else True)()
+    alias = (lambda: True if request.POST.get('alias') else False)()
 
     new_obj = ShortUrl(short_code=short_code, do_collect_meta=do_collect_meta,
-                       full_url=request.POST['long_url'], creator_ip=request.META['REMOTE_ADDR'],
+                       full_url=request.POST.get('long_url'), creator_ip=request.META['REMOTE_ADDR'],
                        alias=alias)
     if request.user.is_authenticated:
         new_obj.author = request.user

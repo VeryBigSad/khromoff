@@ -47,7 +47,8 @@ def create_new_link(request):
             url = '/s/a/p/' + short_code + '?new=1'
         return HttpResponseRedirect(url)
     else:
-        return render(request, 'new_shorten_url_form.html', context={})
+        return render(request, 'new_shorten_url_form.html',
+                      context={'url_unauthorised': get(None, request=request, do_register=False)})
 
 
 @login_required()
