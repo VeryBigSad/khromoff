@@ -42,8 +42,8 @@ def create_new_link(request):
                                                'description': 'You can\'t use such a small alias, only 3+ symbols.'}]})
 
         url = '/s/p/' + short_code + '?new=1'
-        # print(request.POST)
-        if not request.POST.get('do_collect_meta'):
+        print(request.POST)
+        if not request.POST.get('do_collect_meta') and request.user.is_authenticated:
             url = '/s/a/p/' + short_code + '?new=1'
         return HttpResponseRedirect(url)
     else:

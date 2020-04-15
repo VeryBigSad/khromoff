@@ -8,8 +8,8 @@ def get(long_url, request, url_length=3):
     do_collect_meta = (lambda: True if request.POST.get('do_collect_meta') is not None else False)()
 
     # We don't need to generate it if we are provided by it.
-    if request.POST.get('alias'):
-        if request.user == AnonymousUser:
+    if request.POST.get('alias') and request.POST.get('alias') != 'Only for authorised users':
+        if request.user.is_anonymous:
             raise PermissionDenied
 
         if ShortUrl.objects.filter(short_code=request.POST['alias']).exists():
@@ -48,7 +48,8 @@ def get(long_url, request, url_length=3):
 
 
 def register(short_code, request):
-    do_collect_meta = (lambda: True if request.POST.get('do_collect_meta') is not None else False)()
+    do_collect_meta = (lambda: True if request.POST.get('do_collect_meta') is not None or
+                                       request.user.is_anonymous else False)()
     alias = (lambda: False if request.POST['alias'] == '' else True)()
 
     new_obj = ShortUrl(short_code=short_code, do_collect_meta=do_collect_meta,
