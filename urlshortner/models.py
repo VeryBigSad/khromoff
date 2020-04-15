@@ -12,7 +12,7 @@ class ShortUrl(models.Model):
     active = models.BooleanField(default=True)
     alias = models.BooleanField(default=False)
     short_code = models.CharField(max_length=18)
-    full_url = models.URLField(max_length=300, null=True)
+    full_url = models.URLField(max_length=300)
 
     def __str__(self):
         return self.full_url
