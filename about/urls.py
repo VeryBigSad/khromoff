@@ -1,5 +1,7 @@
 from django.urls import path
+from django.conf.urls.static import static
 
+from khromoff import settings
 from . import views
 
 urlpatterns = [
@@ -10,3 +12,4 @@ urlpatterns = [
     path('', views.index)
 
 ]
+# + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

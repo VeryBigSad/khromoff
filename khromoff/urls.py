@@ -23,3 +23,4 @@ urlpatterns = [
     path('', include('about.urls'))
 
 ]
+

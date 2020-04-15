@@ -8,9 +8,10 @@
     <script src="https://netdna.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 {#    <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">#}
     {% block head %} {% endblock %}
-    <link rel="stylesheet" href="{% static "styles.css" %}">
+    <link rel="stylesheet" href="{% static "basic_styles.css" %}">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <title>{% block title %} Khromoff's site {% endblock %} - Khromoff</title>
+    <script src="https://kit.fontawesome.com/3ca5d1bb23.js" crossorigin="anonymous"></script>
 </head>
 <body class="d-flex flex-column min-vh-100 mw-100">
     <nav class="navbar w-100 navbar-light navbar-expand-md" style="background-color: rgba(56,56,56,0.1);">
@@ -69,11 +70,27 @@
             This page should never be opened. Please report
         {% endblock %}
     </div>
-    <footer class="bg-dark text-white mt-9 text-center">
-        <p>FOOTER))0)</p>
-        urls: <br>
-        1. <a href="/s">urlshortner</a>
-        <p><small class="text-muted">Powered by <a class="text-muted" href="{{ static.HOSTNAME }}">{{ static.HOSTNAME }}/</a> with love <3</small></p>
+    <footer class="bg-dark text-white text-center">
+        <div class="text-center container">
+            <span class="contact-me">Contact me - </span>
+
+            <span class="contact-me-icons">
+                <a href="{{ static.urls.MY_VK }}" class="text-reset"><i class="fab fa-vk"></i></a>
+            </span>
+            <span class="contact-me-icons">
+                <a href="{{ static.urls.MY_TELEGRAM }}" class="text-reset"><i class="fab fa-telegram"></i></a>
+            </span>
+            <span class="contact-me-icons">
+                <a href="{{ static.urls.MY_GITHUB }}" class="text-reset"><i class="fab fa-github"></i></a>
+            </span>
+            </div>
+
+        <div class="">
+            {# TODO: footer #}
+            stuff: <br>
+            1. <a href="/s">urlshortner</a>
+            <p><small class="text-muted">Powered by <a class="text-muted" href="{{ static.HOSTNAME }}">{{ static.HOSTNAME }}/</a> with love <3</small></p>
+        </div>
     </footer>
 </body>
 </html>

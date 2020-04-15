@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+from django.contrib.staticfiles.storage import StaticFilesStorage
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 # LOGIN_URL = '/auth/login'
@@ -123,10 +124,11 @@ USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.0/howto/static-files/
 
-# STATICFILES_DIRS = [
-#     os.path.join(BASE_DIR, "static")
-# ]
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static")
+]
+
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, "static_files")
 
