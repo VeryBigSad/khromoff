@@ -1,10 +1,21 @@
 from .models import ShortUrl
-from django.contrib.auth.models import AnonymousUser
 from django.contrib.auth.models import PermissionDenied
 import random
 
+from khromoff.exceptions import *
+
 
 def get(long_url, request, url_length=3):
+    # If possible, creates short url of length url_length
+    # If not (2 [max_tries] tries of random pick - means that it is impossible)
+    # So, if not, creates url_length + 1. And so on until it creates it.
+
+    if 'https://' not in long_url or 'http://' not in long_url:
+        # Maybe if he doesn't specify http or https we try https, and if not responding then create http?
+        # but man, latency...
+        long_url = 'http://' + long_url
+        # TODO: IMPORTANT: FINISH URL CHECKER
+
     do_collect_meta = (lambda: True if request.POST.get('do_collect_meta') is not None else False)()
 
     # We don't need to generate it if we are provided by it.
@@ -13,18 +24,17 @@ def get(long_url, request, url_length=3):
             raise PermissionDenied
 
         if ShortUrl.objects.filter(short_code=request.POST['alias']).exists():
-            # TODO: NameError is when something doesn't exist, in our case problem that such alias exists already.
-            raise NameError
+            raise NameExistsError
 
         if len(request.POST['alias']) < 3:
-            # TODO: Overflow error is not for this but whatever
-            raise OverflowError
+            raise InvalidAliasError
 
-        register(request.POST['alias'], request)
+        register(request.POST['alias'], request, long_url)
         return request.POST['alias']
 
+    # if we already registred this url, we authorize it.
     obj = ShortUrl.objects.filter(full_url=long_url, alias=False, do_collect_meta=do_collect_meta)
-    if obj.exists() and len(obj[0].short_code) == url_length:  # TODO: AND it's the same length as [url_length]
+    if obj.exists() and len(obj[0].short_code) == url_length:
         short_code = obj[0].short_code
         return short_code
 
@@ -43,17 +53,21 @@ def get(long_url, request, url_length=3):
             url_length += 1
             tries = 0
 
-    register(short_code, request)
+    register(short_code, request, long_url)
     return short_code
 
 
-def register(short_code, request):
+# Creates entry in DB
+def register(short_code, request, long_url=None):
+    if long_url is None:
+        long_url = request.POST['long_url']
+
     do_collect_meta = (lambda: True if request.POST.get('do_collect_meta') is not None or
                                        request.user.is_anonymous else False)()
     alias = (lambda: False if request.POST['alias'] == '' else True)()
 
     new_obj = ShortUrl(short_code=short_code, do_collect_meta=do_collect_meta,
-                       full_url=request.POST['long_url'], creator_ip=request.META['REMOTE_ADDR'],
+                       full_url=long_url, creator_ip=request.META['REMOTE_ADDR'],
                        alias=alias)
     if request.user.is_authenticated:
         new_obj.author = request.user

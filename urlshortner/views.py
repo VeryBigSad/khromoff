@@ -2,23 +2,16 @@ from django.core.exceptions import PermissionDenied
 from django.shortcuts import render, HttpResponseRedirect, Http404
 from django.http.response import HttpResponseForbidden
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import AnonymousUser
-
-import re
 
 from khromoff import settings
 from urlshortner.models import ShortUrl, Visit
+
+from khromoff.exceptions import NameExistsError, InvalidAliasError, InvalidUrlError
 from .get_short_url import get
 
 
 def create_new_link(request):
     if request.method == 'POST':
-        # if url is invalid
-        if not re.match(r"http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+",
-                        request.POST['long_url']):
-            return render(request, 'new_shorten_url_form.html', context={
-                'errors': [{'type': 'invalid_link', 'description': 'This URL is not real. Maybe a typo?'}],
-                'form_fields': {'long_url': request.POST['long_url']}, 'old': dict(request.POST)})
 
         # if we are getting short url to ourselves
         if '://' + settings.HOSTNAME + '/s' in request.POST['long_url']:
@@ -28,7 +21,7 @@ def create_new_link(request):
                 'form_fields': {'long_url': request.POST['long_url']}, 'old': dict(request.POST)})
         try:
             short_code = get(request.POST['long_url'], request=request)
-        except NameError:
+        except NameExistsError:
             return render(request, 'new_shorten_url_form.html',
                           context={'errors': [{'type': 'invalid_alias',
                                                'description': 'This alias already exists, try another or random.'}]})
@@ -36,11 +29,14 @@ def create_new_link(request):
             return render(request, 'new_shorten_url_form.html',
                           context={'errors': [{'type': 'permission_denied',
                                                'description': 'You don\'t have enough permissions to do that.'}]})
-        except OverflowError:
+        except InvalidAliasError:
             return render(request, 'new_shorten_url_form.html',
                           context={'errors': [{'type': 'alias_too_short',
                                                'description': 'You can\'t use such a small alias, only 3+ symbols.'}]})
-
+        except InvalidUrlError:
+            return render(request, 'new_shorten_url_form.html',
+                          context={'errors': [{'type': 'invalid_url',
+                                               'description': 'URL you passed in is invalid, maybe a typo?'}]})
         url = '/s/p/' + short_code + '?new=1'
         print(request.POST)
         if not request.POST.get('do_collect_meta') and request.user.is_authenticated:
