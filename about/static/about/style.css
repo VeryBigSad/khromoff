@@ -1,3 +1,7 @@
-#dick{
-    visibility: hidden;
+.about-me-text{
+    font-size: 1.7rem;
+}
+.site-info-text{
+    padding-top: 1.5rem;
+    font-size: 1.2rem;
 }

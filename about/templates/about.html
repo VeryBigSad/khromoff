@@ -4,20 +4,20 @@
 
 {% block head %}
     <link rel="stylesheet" href="{% static "about/style.css" %}">
-    <link rel="stylesheet" href="{% static "basic_styles.css" %}">
 {% endblock %}
 
 {% block content %}
-    {% static "about/style.css" %}
-    <div id="about" class="container-md text-center">
+    <div class="container-md text-center about-me-text">
         <p>
-            Привет! Я Михаиал, это мой сайт. Изначально это должен был быть сайт-визитка, но кто знает во что он превратится в конце (я пишу это задолго до публикации этого в интернет).
+            Привет! Я Михаил, это мой сайт. Изначально это должен был быть сайт-визитка, но кто знает во что он превратится в конце (я пишу это задолго до публикации этого в интернет).
         </p>
         <p>
-            Тут вы сможете найти всякие разные прикольные (а иногда полезные!) штуки.
+            Во вкладке Интересное {# TODO: use badges #} вы можете увидить сделанные мною проекты, большие и не очень.
         </p>
-        <p>
-            Сам сайт написан на Django, для фронтенда используется Bootstrap 4.4. Дизайн был вдохновлен плагином beautiful-jekyll.
+        <p class="text-muted mt-auto site-info-text">
+            Сам сайт написан на Django, для фронтенда используется Bootstrap 4.4.
+            Дизайн был вдохновлен плагином <a href="https://github.com/daattali/beautiful-jekyll" class="text-muted">beautiful-jekyll</a>.
+            <a href="https://github.com/mikhailkhromov/khromoff" class="text-muted">Исходный код на гитхаб</a>
         </p>
     </div>
 {% endblock %}
