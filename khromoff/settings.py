@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
-from django.contrib.staticfiles.storage import StaticFilesStorage
+from khromoff.secrets import SECRET_KEY
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 # LOGIN_URL = '/auth/login'
@@ -22,7 +22,7 @@ HOSTNAME = '127.0.0.1'
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '+pj9%h8lmao*okp0i7v(6ox6g%5donthackmeplSSy-xt&-k2n@9ql9ow8*rj9hx!a!9'
+SECRET_KEY = SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
