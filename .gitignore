@@ -1,4 +1,8 @@
 *.pyc
+
 secrets.py
 db.sqlite3
-migrations/*
+
+.idea/
+frontend/
+migrations/

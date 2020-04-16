@@ -17,12 +17,10 @@ def about(request):
 
 
 def login_page(request):
-    print(request)
-    # return render(request, 'base.html')
-    # if request.GET.get('guest'):
-    user = authenticate(username='guest', password='dickerydick')
-    login(request, user)
-    print(user)
+    if request.GET.get('guest'):
+        user = authenticate(username='guest', password='dickerydick')
+        # This user should always exist. Otherwise, idk create it manually, this is TEMP so not coding it :shrug:
+        login(request, user)
     if request.GET.get('next'):
         return HttpResponseRedirect(request.GET['next'])
     else:
