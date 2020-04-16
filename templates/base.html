@@ -14,7 +14,7 @@
     <script src="https://kit.fontawesome.com/3ca5d1bb23.js" crossorigin="anonymous"></script>
 </head>
 <body class="d-flex flex-column min-vh-100 mw-100">
-    <nav class="navbar w-100 navbar-light navbar-expand-md" style="background-color: rgba(56,56,56,0.1);">
+    <nav class="navbar navbar-light navbar-expand-md" style="background-color: rgba(56,56,56,0.1);">
         <a href="/" class="navbar-brand h1">Khromoff site</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsingNavbar3">
             <span class="navbar-toggler-icon"></span>
@@ -25,33 +25,6 @@
                 {% block left-nav-items %}
                 {% endblock %}
 
-                <div class="mr-5"></div>
-
-                <li class="nav_item dropdown m-auto p-auto">
-                    <button class=" btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Ваш профиль
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        {% if user.is_authenticated %}
-                            <h6 class="dropdown-header">Привет, {{ user.username }}!</h6>
-                            <a class="dropdown-item" href="/personal">Личный кабинет</a>
-                            <div class="dropdown-separator"></div>
-                            <a href="/l/ogout" class="dropdown-item">Выйти</a>
-                        {% else %}
-                            <h6 class="dropdown-header">Привет, я тебя не знаю...</h6>
-                            <a href="/l/ogin" class="dropdown-item active">Войти/Зарегистрироваться</a>
-                            <a href="#" class="dropdown-item">ыыыы</a>
-                            {% if True %}
-                                {# TODO: MAKE THIS DEBUG ONLY! #}
-                                <a href="/l/ogin?guest" class="dropdown-item">Войти как гость (эта функция включена тк дебаг)</a>
-                            {% endif %}
-
-                        {% endif %}
-                    </div>
-                </li>
-
-            </ul>
-            <ul class="nav navbar-nav ml-auto w-100 justify-content-end mr-5">
                 <li class="nav-item dropdown">
                     <button class=" btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Интересное
@@ -60,6 +33,36 @@
                         <a class="dropdown-item" href="/s/">Сокращатель ссылок</a>
                     </div>
                 </li>
+
+{#                <li class="nav-item">#}
+{#                    <a class="nav-link" href="#">nav-link</a>#}
+{#                </li>#}
+            </ul>
+
+            <ul class="nav navbar-nav w-100 justify-content-end right-navbar-dropdown">
+                <li class="nav_item dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Ваш профиль
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                        {% if user.is_authenticated %}
+                            <h6 class="dropdown-header">Привет, {{ user.username }}!</h6>
+                            <a class="dropdown-item" href="/personal">Личный кабинет</a>
+                            <div class="dropdown-separator"></div>
+                            <a href="/l/ogout?next={{ request.get_full_path }}" class="dropdown-item">Выйти</a>
+                        {% else %}
+                            <h6 class="dropdown-header">Привет, я тебя не знаю...</h6>
+                            <a href="/l/ogin?next={{ request.get_full_path }}" class="dropdown-item active">Войти/Зарегистрироваться</a>
+                            <a href="#" class="dropdown-item">ыыыы</a>
+                            {% if True %}
+                                {# TODO: MAKE THIS DEBUG ONLY! #}
+                                <a href="/l/ogin?guest&next={{ request.get_full_path }}" class="dropdown-item">Войти как гость (эта функция включена тк дебаг)</a>
+                            {% endif %}
+
+                        {% endif %}
+                    </div>
+                </li>
+
 
             </ul>
         </div>
