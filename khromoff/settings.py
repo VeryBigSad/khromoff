@@ -27,7 +27,7 @@ SECRET_KEY = SECRET_KEY
 DEBUG = True
 
 ALLOWED_HOSTS = ['localhost', '*', '192.168.1.39', '127.0.0.1']
-
+HOSTNAME = 'khrmff.ru'
 
 # Application definition
 

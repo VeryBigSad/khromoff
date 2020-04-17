@@ -9,12 +9,12 @@ from khromoff.exceptions import *
 
 def return_real_url(url):
     # TODO: IMPORTANT! FINISH!
-    if not ('https://' in url or 'http://' in url) and '://' not in url:
-        url = 'https://' + url
-        if '.' not in url:
-            raise InvalidUrlError
-    else:
-        raise InvalidUrlError
+    # if not ('https://' == url[:8] or 'http://' == url[:7]) and '://' in url:
+    #     url = 'https://' + url
+    #     if '.' not in url:
+    #         raise InvalidUrlError
+    # else:
+    #     raise InvalidUrlError
 
     return url
 
