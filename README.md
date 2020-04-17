@@ -1,4 +1,4 @@
-# My site on django (eventually this will be replaced with a domain)
+# khrmff.ru
 Nothing special.
 If you want to run this on your machine, then do this:
 
