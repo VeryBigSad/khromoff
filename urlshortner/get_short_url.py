@@ -1,8 +1,22 @@
 from .models import ShortUrl
 from django.contrib.auth.models import PermissionDenied
+
 import random
+from urllib.parse import urlparse
 
 from khromoff.exceptions import *
+
+
+def return_real_url(url):
+    # TODO: IMPORTANT! FINISH!
+    if not ('https://' in url or 'http://' in url) and '://' not in url:
+        url = 'https://' + url
+        if '.' not in url:
+            raise InvalidUrlError
+    else:
+        raise InvalidUrlError
+
+    return url
 
 
 def get(long_url, request, url_length=3):
@@ -10,11 +24,7 @@ def get(long_url, request, url_length=3):
     # If not (2 [max_tries] tries of random pick - means that it is impossible)
     # So, if not, creates url_length + 1. And so on until it creates it.
 
-    if 'https://' not in long_url or 'http://' not in long_url:
-        # Maybe if he doesn't specify http or https we try https, and if not responding then create http?
-        # but man, latency...
-        long_url = 'http://' + long_url
-        # TODO: IMPORTANT: FINISH URL CHECKER
+    long_url = return_real_url(long_url)
 
     do_collect_meta = (lambda: True if request.POST.get('do_collect_meta') is not None else False)()
 
