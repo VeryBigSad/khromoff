@@ -1,15 +1,15 @@
 {% load static %}
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     {% block head %} {% endblock %}
     <link rel="stylesheet" href="{% static "basic_styles.css" %}">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <title>{% block title %} Khromoff's site {% endblock %} - Khromoff</title>
-    <script src="https://kit.fontawesome.com/3ca5d1bb23.js" crossorigin="anonymous"></script>
 </head>
 <body class="d-flex flex-column min-vh-100 mw-100">
     <nav class="navbar navbar-light navbar-expand-md" style="background-color: rgba(56,56,56,0.1);">
@@ -22,8 +22,31 @@
 
                 {% block left-nav-items %}
                 {% endblock %}
+                <li class="nav-item d-block d-sm-none d-none d-sm-block d-md-none">
+                    <h6>Интересное:</h6>
+                    <a class="btn btn-primary btn-lg" href="/s/">Сокращатель ссылок</a>
+                    <hr>
+                </li>
+                <li class="nav-item d-block d-sm-none d-none d-sm-block d-md-none">
+                    {% if user.is_authenticated %}
+                        <h6 class="">Привет, {{ user.username }}!</h6>
+                        <a class="btn btn-secondary" href="/personal">Личный кабинет</a>
+                        <a class="btn btn-secondary" href="/l/ogout?next={{ request.get_full_path }}">Выйти</a>
+                    {% else %}
+                        <h6 class="">Привет, я тебя не знаю...</h6>
+                        <a href="/l/ogin?next={{ request.get_full_path }}" class="btn btn-secondary">Зарегистрироваться</a>
+{#                        <a href="#" class="btn btn-secondary">ыыыы</a>#}
+                        {% if True %}
+{#                             TODO: MAKE THIS DEBUG ONLY!#}
+                            <a class="btn btn-secondary" href="/l/ogin?guest&next={{ request.get_full_path }}">Войти как гость</a>
+                        {% endif %}
 
-                <li class="nav-item dropdown">
+                    {% endif %}
+                    <hr>
+                </li>
+
+
+                <li class="nav-item dropdown d-sm-none d-md-block d-none d-sm-block">
                     <button class=" btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Интересное
                     </button>
@@ -31,17 +54,13 @@
                         <a class="dropdown-item" href="/s/">Сокращатель ссылок</a>
                     </div>
                 </li>
-
-{#                <li class="nav-item">#}
-{#                    <a class="nav-link" href="#">nav-link</a>#}
-{#                </li>#}
             </ul>
 
             <ul class="nav navbar-nav w-100 justify-content-end right-navbar-dropdown">
-                <li class="nav_item mr-3">
+                <li class="nav_item mr-3 text-center">
                     <a href="/about" class="nav-link">О сайте</a>
                 </li>
-                <li class="nav_item dropdown">
+                <li class="nav_item dropdown d-none d-sm-block d-sm-none d-md-block">
                     <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Ваш профиль
                     </button>
@@ -78,25 +97,26 @@
         <div class="text-center container">
             <span class="contact-me">Contact me - </span>
 
-            <span class="contact-me-icons">
+            <span class="contact-me-icons vk-icon">
                 <a href="{{ static.urls.MY_VK }}" class="text-reset"><i class="fab fa-vk"></i></a>
             </span>
-            <span class="contact-me-icons">
+            <span class="contact-me-icons telegram-icon">
                 <a href="{{ static.urls.MY_TELEGRAM }}" class="text-reset"><i class="fab fa-telegram"></i></a>
             </span>
-            <span class="contact-me-icons">
+            <span class="contact-me-icons github-icon">
                 <a href="{{ static.urls.MY_GITHUB }}" class="text-reset"><i class="fab fa-github"></i></a>
             </span>
             </div>
 
-        <div class="">
-            {# TODO: footer #}
-            stuff: <br>
-            1. <a href="/s">urlshortner</a>
-            <p><small class="text-muted">Powered by <a class="text-muted" href="{{ static.HOSTNAME }}">{{ static.HOSTNAME }}/</a> with love <3</small></p>
-        </div>
+{#        <div class="">#}
+{#             TODO: footer#}
+{#            stuff: <br>#}
+{#            1. <a href="/s">urlshortner</a>#}
+        <p><small class="text-muted"><a class="text-muted" href="{{ static.HOSTNAME }}">{{ static.HOSTNAME }}/</a> &mdash; 2020 &copy;</small></p>
+{#        </div>#}
     </footer>
 
+    <script src="https://kit.fontawesome.com/3ca5d1bb23.js" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <script src="https://netdna.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 </body>
