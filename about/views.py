@@ -17,8 +17,11 @@ def about(request):
 
 
 def login_page(request):
-    if request.GET.get('guest'):
+    if request.GET.get('guest') == '':
         user = authenticate(username='guest', password='dickerydick')
+
+        # If invalid session, then delete db and recreate.
+
         # This user should always exist. Otherwise, idk create it manually, this is TEMP so not coding it :shrug:
         login(request, user)
     if request.GET.get('next'):
