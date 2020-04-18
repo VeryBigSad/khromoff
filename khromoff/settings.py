@@ -27,7 +27,7 @@ SECRET_KEY = SECRET_KEY
 
 ALLOWED_HOSTS = ['localhost', '*', '192.168.1.39', '127.0.0.1']
 HOSTNAME = 'khrmff.ru'
-DEBUG = False
+DEBUG = True
 
 # Application definition
 
@@ -120,9 +120,9 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 
-# STATICFILES_DIRS = [
-#     os.path.join(BASE_DIR, "static")
-# ]
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "general_static")
+]
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
