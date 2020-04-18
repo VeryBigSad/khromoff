@@ -72,18 +72,3 @@ def redirect(request, short_id, preview=False, anonymous=False):
         raise Http404
 
 
-@login_required()
-def view_data(request, short_id):
-    try:
-        url_object = ShortUrl.objects.filter(short_code=short_id, do_collect_meta=True)
-        if not url_object.exists():
-            raise Http404
-        if not (url_object.author == request.user or request.user.is_superuser):
-            raise HttpResponseForbidden
-
-        # TODO: add on-the-way update of new visits, since 20 is not enough.
-        return render(request, 'view_data.html', context={'url_obj': url_object,
-                                                          'redirects': Visit.objects.filter(shorturl=url_object)[:20]})
-
-    except ShortUrl.DoesNotExist:
-        raise Http404
