@@ -2,21 +2,22 @@ from .models import ShortUrl
 from django.contrib.auth.models import PermissionDenied
 
 import random
-from urllib.parse import urlparse
+import re
 
 from khromoff.exceptions import *
 
 
 def return_real_url(url):
-    # TODO: IMPORTANT! FINISH!
-    # if not ('https://' == url[:8] or 'http://' == url[:7]) and '://' in url:
-    #     url = 'https://' + url
-    #     if '.' not in url:
-    #         raise InvalidUrlError
-    # else:
-    #     raise InvalidUrlError
+    if not ('http://' in url or 'https://' in url):
+        url = 'https://' + url
 
-    return url
+    if ' ' in url or not '.' in url:
+        raise InvalidUrlError
+
+    if re.match('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', url):
+        return url
+    else:
+        raise InvalidUrlError
 
 
 def get(long_url, request, url_length=3):
