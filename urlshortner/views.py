@@ -37,10 +37,9 @@ def create_new_link(request):
             return render(request, 'new_shorten_url_form.html',
                           context={'errors': [{'type': 'invalid_url',
                                                'description': 'URL you passed in is invalid, maybe a typo?'}]})
-        url = '/s/p/' + short_code + '?new=1'
-        print(request.POST)
+        url = '/shorturl/p/' + short_code + '?new=1'
         if not request.POST.get('do_collect_meta') and request.user.is_authenticated:
-            url = '/s/a/p/' + short_code + '?new=1'
+            url = '/shorturl/a/p/' + short_code + '?new=1'
         return HttpResponseRedirect(url)
     else:
         return render(request, 'new_shorten_url_form.html', context={})

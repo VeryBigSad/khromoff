@@ -27,7 +27,7 @@ SECRET_KEY = SECRET_KEY
 
 ALLOWED_HOSTS = ['localhost', '*', '192.168.1.39', '127.0.0.1']
 HOSTNAME = 'khrmff.ru'
-DEBUG = False
+DEBUG = True
 
 # Application definition
 
@@ -65,7 +65,10 @@ TEMPLATES = [
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
-                'khromoff.static_context.static_context',
+                # my
+                'khromoff.context_processor.static_context',
+                'khromoff.context_processor.urls',
+
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
