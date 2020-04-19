@@ -24,3 +24,5 @@ urlpatterns = [
 
 ]
 
+handler404 = 'khromoff.views.error404'
+handler500 = 'khromoff.views.error500'

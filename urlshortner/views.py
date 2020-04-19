@@ -68,6 +68,9 @@ def redirect(request, short_id, preview=False, anonymous=False):
         return HttpResponseRedirect(long_url)
 
     else:
-        raise Http404
+        return render(request, '404error.html', context={'description': 'We are unable to find this shorturl.'
+                                                                        ' Please check that url is entered'
+                                                                        ' correctly.'}, status=404)
+        # raise Http404
 
 
