@@ -16,11 +16,19 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+from . import views
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('l/', include('about.urls')),
     path('shorturl/', include('urlshortner.urls')),
-    path('', include('about.urls'))
 
+    path('', views.index, name='index'),
+    path('about', views.about, name='about'),
+    path('me', views.me, name='me'),
+    path('personal', views.personal, name='personal'),
+    path('login', views.login_page, name='login'),
+    path('logout', views.logout_page, name='logout')
 ]
 
+handler404 = 'khromoff.views.error404'
+handler500 = 'khromoff.views.error500'
