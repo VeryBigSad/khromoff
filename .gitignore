@@ -7,4 +7,4 @@ db.sqlite3
 frontend/
 migrations/
 
-static/
+/static/

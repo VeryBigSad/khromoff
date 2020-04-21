@@ -32,7 +32,7 @@ def create_new_link(request):
         except InvalidAliasError:
             return render(request, 'new_shorten_url_form.html',
                           context={'errors': [{'type': 'alias_too_short',
-                                               'description': 'You can\'t use such a small alias, only 3+ symbols.'}]})
+                                               'description': 'Please, use alias from 3 to 30 symbols length.'}]})
         except InvalidUrlError:
             return render(request, 'new_shorten_url_form.html',
                           context={'errors': [{'type': 'invalid_url',
@@ -58,7 +58,7 @@ def redirect(request, short_id, preview=False, anonymous=False):
 
         if url_object.do_collect_meta:
             meta_obj = Visit(shorturl=url_object, IP=request.META['REMOTE_ADDR'],
-                             user_agent=request.META['HTTP_USER_AGENT'])
+                             user_agent=request.META['HTTP_USER_AGENT'], http_referer=request.META['HTTP_REFERER'])
             meta_obj.save()
 
         if preview:

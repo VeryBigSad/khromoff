@@ -18,7 +18,7 @@
 </head>
 <body class="d-flex flex-column min-vh-100 mw-100">
     <nav class="navbar navbar-light navbar-expand-md" style="background-color: rgba(56,56,56,0.1);">
-        <a href="/" class="navbar-brand h1">Khromoff</a>
+        <a href="{% url 'index' %}" class="navbar-brand h1">Khromoff</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsingNavbar3">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -27,21 +27,20 @@
 
                 <li class="nav-item d-block d-sm-none d-none d-sm-block d-md-none">
                     <h6>Интересное:</h6>
-                    <a class="btn btn-primary btn-lg" href="{{ urls.urlshortner_url }}">Сокращатель ссылок</a>
+                    <a class="btn btn-primary btn-lg" href="{% url 'urlshortner-index' %}">Сокращатель ссылок</a>
                     <hr>
                 </li>
                 <li class="nav-item d-block d-sm-none d-none d-sm-block d-md-none">
                     {% if user.is_authenticated %}
                         <h6 class="">Привет, {{ user.username }}!</h6>
-                        <a class="btn btn-secondary" href="{{ urls.personal_url }}">Личный кабинет</a>
-                        <a class="btn btn-secondary" href="{{ urls.logout_url }}?next={{ request.get_full_path }}">Выйти</a>
+                        <a class="btn btn-secondary" href="{% url 'personal' %}">Личный кабинет</a>
+                        <a class="btn btn-secondary" href="{% url 'logout' %}?next={{ request.get_full_path }}">Выйти</a>
                     {% else %}
                         <h6 class="">Привет, я тебя не знаю...</h6>
-                        <a href="{{ urls.login_url }}?next={{ request.get_full_path }}" class="btn btn-secondary">Войти</a>
-{#                        <a href="#" class="btn btn-secondary">ыыыы</a>#}
-                        {% if True %}
+                        <a href="{% url 'login' %}?next={{ request.get_full_path }}" class="btn btn-secondary">Войти</a>
+                        {% if debug %}
 {#                             TODO: MAKE THIS DEBUG ONLY!#}
-                            <a class="btn btn-secondary" href="{{ urls.login_url }}?guest&next={{ request.get_full_path }}">Войти как гость</a>
+                            <a class="btn btn-secondary" href="{% url 'login' %}?guest&next={{ request.get_full_path }}">Войти как гость</a>
                         {% endif %}
 
                     {% endif %}
@@ -54,7 +53,7 @@
                         Интересное
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton12">
-                        <a class="dropdown-item" href="{{ urls.urlshortner_url }}">Сокращатель ссылок</a>
+                        <a class="dropdown-item" href="{% url 'urlshortner-index' %}">Сокращатель ссылок</a>
                     </div>
                 </li>
                 {% block left-nav-items %}
@@ -63,7 +62,7 @@
 
             <ul class="nav navbar-nav flex-grow-1 justify-content-end right-navbar-dropdown">
                 <li class="nav-item mr-3 text-center">
-                    <a href="{{ urls.about_url }}" class="nav-link">О сайте</a>
+                    <a href="{% url 'about' %}" class="nav-link">О сайте</a>
                 </li>
                 <li class="nav-item dropdown d-none d-sm-block d-sm-none d-md-block">
                     <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -72,16 +71,15 @@
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
                         {% if user.is_authenticated %}
                             <h6 class="dropdown-header">Привет, {{ user.username }}!</h6>
-                            <a class="dropdown-item" href="/personal">Личный кабинет</a>
+                            <a class="dropdown-item" href="{% url 'personal' %}">Личный кабинет</a>
                             <div class="dropdown-separator"></div>
-                            <a href="{{ urls.logout_url }}?next={{ request.get_full_path }}" class="dropdown-item">Выйти</a>
+                            <a href="{% url 'logout' %}?next={{ request.get_full_path }}" class="dropdown-item">Выйти</a>
                         {% else %}
                             <h6 class="dropdown-header">Привет, я тебя не знаю...</h6>
-                            <a href="{{ urls.login_url }}?next={{ request.get_full_path }}" class="dropdown-item active">Войти/Зарегистрироваться</a>
-                            <a href="#" class="dropdown-item">ыыыы</a>
-                            {% if True %}
+                            <a href="{% url 'login' %}?next={{ request.get_full_path }}" class="dropdown-item">Войти/Зарегистрироваться</a>
+                            {% if debug %}
                                 {# TODO: MAKE THIS DEBUG ONLY! #}
-                                <a href="{{ urls.login_url }}?guest&next={{ request.get_full_path }}" class="dropdown-item">Войти как гость (эта функция включена тк дебаг)</a>
+                                <a href="{% url 'login' %}?guest&next={{ request.get_full_path }}" class="dropdown-item">Войти как гость (эта функция включена тк дебаг)</a>
                             {% endif %}
 
                         {% endif %}
@@ -103,22 +101,17 @@
             <span class="contact-me">Contact me - </span>
 
             <span class="contact-me-icons vk-icon">
-                <a href="{{ static.contact_urls.MY_VK }}" class="text-reset"><i class="fab fa-vk"></i></a>
+                <a href="{% url 'my-vk-redirect' %}" class="text-reset"><i class="fab fa-vk"></i></a>
             </span>
             <span class="contact-me-icons telegram-icon">
-                <a href="{{ static.contact_urls.MY_TELEGRAM }}" class="text-reset"><i class="fab fa-telegram"></i></a>
+                <a href="{% url 'my-telegram-redirect' %}" class="text-reset"><i class="fab fa-telegram"></i></a>
             </span>
             <span class="contact-me-icons github-icon">
-                <a href="{{ static.contact_urls.MY_GITHUB }}" class="text-reset"><i class="fab fa-github"></i></a>
+                <a href="{% url 'my-github-redirect' %}" class="text-reset"><i class="fab fa-github"></i></a>
             </span>
-            </div>
+        </div>
 
-{#        <div class="">#}
-{#             TODO: footer#}
-{#            stuff: <br>#}
-{#            1. <a href="/s">urlshortner</a>#}
-        <p><small class="text-muted"><a class="text-muted" href="{{ static.HOSTNAME }}">{{ static.HOSTNAME }}/</a> &mdash; 2020 &copy;</small></p>
-{#        </div>#}
+        <p><small class="text-muted"><a class="text-muted" href="{{ static.HOSTNAME }}">{{ static.HOSTNAME }}</a> &mdash; 2020 &copy;</small></p>
     </footer>
 
     <script src="https://kit.fontawesome.com/3ca5d1bb23.js" crossorigin="anonymous"></script>

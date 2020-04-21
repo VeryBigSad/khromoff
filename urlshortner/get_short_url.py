@@ -5,6 +5,7 @@ import random
 import re
 
 from khromoff.exceptions import *
+from urlshortner.settings import MAX_URL_LENGTH, MAX_SHORTCODE_LENGTH
 
 
 def return_real_url(url):
@@ -12,6 +13,8 @@ def return_real_url(url):
         url = 'https://' + url
 
     if ' ' in url or not '.' in url:
+        raise InvalidUrlError
+    if len(url) > MAX_URL_LENGTH:
         raise InvalidUrlError
 
     if re.match('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', url):
@@ -37,7 +40,7 @@ def get(long_url, request, url_length=3):
         if ShortUrl.objects.filter(short_code=request.POST['alias']).exists():
             raise NameExistsError
 
-        if len(request.POST['alias']) < 3:
+        if 3 > len(request.POST['alias']) or len(request.POST['alias']) > 30:
             raise InvalidAliasError
 
         register(request.POST['alias'], request, long_url)

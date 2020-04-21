@@ -1,30 +1,14 @@
-# file with static shit we need in processing
+from khromoff.settings import DEBUG
 
 
 def static_context(request):
     # some basic stuff
 
     context = {'static': {
-        'HOSTNAME': request.META['HTTP_HOST'],
-        'contact_urls': {'MY_VK': 'https://vk.com/id516131573',
-                         'MY_TELEGRAM': 'https://t.me/Mikhail_Khromov',
-                         'MY_GITHUB': 'https://github.com/mikhailkhromov'
-                         }
+        'HOSTNAME': request.META['HTTP_HOST']
     }}
     return context
 
 
-def urls(request):
-    # urls to different parts of the sitex
-
-    context = {
-        'urls': {
-            'about_url': '/about',
-            'login_url': '/l/ogin',
-            'logout_url': '/l/ogout',
-            'personal_url': '/l/personal',
-            'urlshortner_url': '/shorturl',
-
-        }
-    }
-    return context
+def debug(request):
+    return {'debug': DEBUG}

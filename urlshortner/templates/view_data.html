@@ -1,0 +1,10 @@
+{% extends "base_shortner.html" %}
+
+{% block title %}Посмотреть информацию о переадресации{% endblock %}
+
+{% block content %}
+    <div class="container-fluid text-center">
+        <h1>Информация о переадресации на <a href="{{ full_url }}">{{ full_url }}</a></h1>
+        <h4>Всего было {# TODO: redirects length #}</h4>
+    </div>
+{% endblock %}
