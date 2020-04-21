@@ -1,3 +1,5 @@
+import string
+
 from .models import ShortUrl
 from django.contrib.auth.models import PermissionDenied
 
@@ -11,6 +13,7 @@ from urlshortner.settings import MAX_URL_LENGTH, MAX_SHORTCODE_LENGTH
 def return_real_url(url):
     if not ('http://' in url or 'https://' in url):
         url = 'https://' + url
+    # TODO: check url on recursive redirecting
 
     if ' ' in url or not '.' in url:
         raise InvalidUrlError
@@ -31,19 +34,21 @@ def get(long_url, request, url_length=3):
     long_url = return_real_url(long_url)
 
     do_collect_meta = (lambda: True if request.POST.get('do_collect_meta') is not None else False)()
-
     # We don't need to generate it if we are provided by it.
     if request.POST.get('alias') and request.POST.get('alias') != 'Only for authorised users':
         if request.user.is_anonymous:
             raise PermissionDenied
 
-        if ShortUrl.objects.filter(short_code=request.POST['alias']).exists():
+        if ShortUrl.objects.filter(short_code=request.POST['alias'].lower()).exists():
             raise NameExistsError
 
-        if 3 > len(request.POST['alias']) or len(request.POST['alias']) > 30:
+        if 3 > len(request.POST['alias']) or len(request.POST['alias']) > MAX_SHORTCODE_LENGTH:
             raise InvalidAliasError
+        for i in request.POST['alias'].lower():
+            if i not in string.ascii_lowercase + '0123456789-_':
+                raise InvalidAliasError
 
-        register(request.POST['alias'], request, long_url)
+        register(request.POST['alias'].lower(), request, long_url)
         return request.POST['alias']
 
     # if we already registred this url, we authorize it.
@@ -52,13 +57,13 @@ def get(long_url, request, url_length=3):
         short_code = obj[0].short_code
         return short_code
 
-    alphabet = 'abcdefghjklmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ0123456789-_'
+    alphabet = 'abcdefghjklmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ0123456789-'
 
     unique = False
     short_code = ''
     max_tries = 2  # How much requests to database, till we will give up on url_length and add 1 symbol to it
     tries = 0
-    while not unique:  # TODO: use a/<short_code>, so for anonymous and not there's two different things
+    while not unique:
         tries += 1
         short_code = ''.join([random.choice(alphabet) for i in range(url_length)])
         if not ShortUrl.objects.filter(short_code=short_code, do_collect_meta=do_collect_meta).exists():

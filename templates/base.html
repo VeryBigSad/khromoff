@@ -39,7 +39,6 @@
                         <h6 class="">Привет, я тебя не знаю...</h6>
                         <a href="{% url 'login' %}?next={{ request.get_full_path }}" class="btn btn-secondary">Войти</a>
                         {% if debug %}
-{#                             TODO: MAKE THIS DEBUG ONLY!#}
                             <a class="btn btn-secondary" href="{% url 'login' %}?guest&next={{ request.get_full_path }}">Войти как гость</a>
                         {% endif %}
 
@@ -64,6 +63,9 @@
                 <li class="nav-item mr-3 text-center">
                     <a href="{% url 'about' %}" class="nav-link">О сайте</a>
                 </li>
+                <li class="nav-item mr-3 text-center">
+                    <a href="{% url 'me' %}" class="nav-link">Обо мне</a>
+                </li>
                 <li class="nav-item dropdown d-none d-sm-block d-sm-none d-md-block">
                     <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Ваш профиль
@@ -78,22 +80,19 @@
                             <h6 class="dropdown-header">Привет, я тебя не знаю...</h6>
                             <a href="{% url 'login' %}?next={{ request.get_full_path }}" class="dropdown-item">Войти/Зарегистрироваться</a>
                             {% if debug %}
-                                {# TODO: MAKE THIS DEBUG ONLY! #}
                                 <a href="{% url 'login' %}?guest&next={{ request.get_full_path }}" class="dropdown-item">Войти как гость (эта функция включена тк дебаг)</a>
                             {% endif %}
 
                         {% endif %}
                     </div>
                 </li>
-
-
             </ul>
         </div>
-</nav>
+    </nav>
 
     <div id="content" class="container-fluid flex-grow-1">
         {% block content %}
-            This page should never be opened. Please report
+            <h1>If you see this, please report.dj</h1>
         {% endblock %}
     </div>
     <footer class="bg-dark text-white text-center">
@@ -109,9 +108,12 @@
             <span class="contact-me-icons github-icon">
                 <a href="{% url 'my-github-redirect' %}" class="text-reset"><i class="fab fa-github"></i></a>
             </span>
+            <span class="contact-me-icons email-icon">
+                <a href="mailto:khromov05@gmail.com" class="text-reset"><i class="far fa-envelope"></i></a>
+            </span>
         </div>
 
-        <p><small class="text-muted"><a class="text-muted" href="{{ static.HOSTNAME }}">{{ static.HOSTNAME }}</a> &mdash; 2020 &copy;</small></p>
+        <p><small class="text-muted"><a class="text-muted" href="https://{{ static.HOSTNAME }}">{{ static.HOSTNAME }}</a> &mdash; 2020 - {% now "Y" %} &copy;</small></p>
     </footer>
 
     <script src="https://kit.fontawesome.com/3ca5d1bb23.js" crossorigin="anonymous"></script>

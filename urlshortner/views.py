@@ -2,6 +2,7 @@ from django.core.exceptions import PermissionDenied
 from django.shortcuts import render, HttpResponseRedirect, Http404
 from django.http.response import HttpResponseForbidden
 from django.contrib.auth.decorators import login_required
+from django.urls import reverse
 
 from khromoff import settings
 from urlshortner.models import ShortUrl, Visit
@@ -14,11 +15,6 @@ def create_new_link(request):
     if request.method == 'POST':
 
         # if we are getting short url to ourselves
-        if '://' + settings.HOSTNAME + '/s' in request.POST['long_url']:
-            return render(request, 'new_shorten_url_form.html', context={
-                'errors': [{'type': 'this_site_link', 'description': 'This URL links to other short url. '
-                                                                     'You can\'t do that!'}],
-                'form_fields': {'long_url': request.POST['long_url']}, 'old': dict(request.POST)})
         try:
             short_code = get(request.POST['long_url'], request=request)
         except NameExistsError:
@@ -32,14 +28,16 @@ def create_new_link(request):
         except InvalidAliasError:
             return render(request, 'new_shorten_url_form.html',
                           context={'errors': [{'type': 'alias_too_short',
-                                               'description': 'Please, use alias from 3 to 30 symbols length.'}]})
+                                               'description': 'Please, use alias from 3 to 30 symbols length, '
+                                                              'and only letters, numbers, and underscore.'}]})
         except InvalidUrlError:
             return render(request, 'new_shorten_url_form.html',
                           context={'errors': [{'type': 'invalid_url',
                                                'description': 'URL you passed in is invalid, maybe a typo?'}]})
-        url = '/shorturl/p/' + short_code + '?new=1'
         if not request.POST.get('do_collect_meta') and request.user.is_authenticated:
-            url = '/shorturl/a/p/' + short_code + '?new=1'
+            url = reverse('shorturl-a-p-redirect', kwargs={'short_id': short_code})
+        else:
+            url = reverse('shorturl-p-redirect', kwargs={'short_id': short_code})
         return HttpResponseRedirect(url)
     else:
         return render(request, 'new_shorten_url_form.html', context={})
@@ -52,25 +50,24 @@ def links(request):
 
 def redirect(request, short_id, preview=False, anonymous=False):
     url_object = ShortUrl.objects.filter(short_code=short_id, do_collect_meta=not anonymous)
-    if url_object.exists():
-        url_object = url_object[0]
-        long_url = url_object.full_url
+    if not url_object.exists():
+        url_object = ShortUrl.objects.filter(short_code=short_id.lower(), do_collect_meta=not anonymous, alias=True)
+        if not url_object.exists():
+            return render(request, '404error.html', context={'description': 'We are unable to find this shorturl.'
+                                                                            ' Please check that url is entered'
+                                                                            ' correctly.'}, status=404)
+            # raise Http404
+    print(url_object)
+    url_object = url_object[0]
+    long_url = url_object.full_url
 
-        if url_object.do_collect_meta:
-            meta_obj = Visit(shorturl=url_object, IP=request.META['REMOTE_ADDR'],
-                             user_agent=request.META['HTTP_USER_AGENT'], http_referer=request.META['HTTP_REFERER'])
-            meta_obj.save()
+    if url_object.do_collect_meta:
+        meta_obj = Visit(shorturl=url_object, IP=request.META['REMOTE_ADDR'],
+                         user_agent=request.META['HTTP_USER_AGENT'], http_referer=request.META.get('HTTP_REFERER'))
+        meta_obj.save()
 
-        if preview:
-            return render(request, 'preview.html', context={'long_url': long_url, 'do_collect_meta': anonymous,
-                                                            'short_code': short_id})
+    if preview:
+        return render(request, 'preview.html', context={'long_url': long_url, 'do_collect_meta': anonymous,
+                                                        'short_code': short_id})
 
-        return HttpResponseRedirect(long_url)
-
-    else:
-        return render(request, '404error.html', context={'description': 'We are unable to find this shorturl.'
-                                                                        ' Please check that url is entered'
-                                                                        ' correctly.'}, status=404)
-        # raise Http404
-
-
+    return HttpResponseRedirect(long_url)

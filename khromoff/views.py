@@ -1,9 +1,13 @@
+import datetime
+
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
 
 from khromoff.settings import DEBUG
+
+from datetime import datetime
 
 
 def error404(request, exception):
@@ -35,7 +39,11 @@ def personal(request):
 
 
 def about(request):
-    return render(request, 'about.html', context={})
+    return render(request, 'about.html')
+
+
+def me(request):
+    return render(request, 'me.html', context={'age': datetime.today().year - 2005})
 
 
 def logout_page(request):

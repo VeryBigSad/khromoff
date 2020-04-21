@@ -14,7 +14,7 @@ import os
 from khromoff.secrets import SECRET_KEY
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-# LOGIN_URL = '/auth/login'
+LOGIN_URL = '/login'
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Quick-start development settings - unsuitable for production
@@ -23,6 +23,13 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = SECRET_KEY
 
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+SECURE_SSL_REDIRECT = True
+SECURE_HSTS_PRELOAD = True
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_SECONDS = 3600
+SECURE_REFERRER_POLICY = 'no-referrer-when-downgrade'
 # SECURITY WARNING: don't run with debug turned on in production!
 
 ALLOWED_HOSTS = ['localhost', '*', '192.168.1.39', '127.0.0.1']
@@ -41,7 +48,6 @@ INSTALLED_APPS = [
 
     # my apps
     'urlshortner.apps.UrlshortnerConfig',
-    # 'about.apps.AboutConfig'
 ]
 
 MIDDLEWARE = [
