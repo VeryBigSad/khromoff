@@ -22,12 +22,17 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('shorturl/', include('urlshortner.urls')),
 
+    # accounts shit
     path('', views.index, name='index'),
     path('about', views.about, name='about'),
     path('me', views.me, name='me'),
     path('personal', views.personal, name='personal'),
     path('login', views.login_page, name='login'),
-    path('logout', views.logout_page, name='logout')
+    path('logout', views.logout_page, name='logout'),
+
+    # api
+    path('api-docs/', include('api.urls')),
+    path('api/shorturl/', include('urlshortner.api.urls'))
 ]
 
 handler404 = 'khromoff.views.error404'

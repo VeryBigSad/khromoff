@@ -1,0 +1,9 @@
+.profile-info{
+    border-width: 0.3em !important;
+}
+.profile-info-divider{
+    border-right-width: 1em; !important;
+}
+.alert-popup{
+    max-width: 400px;
+}
