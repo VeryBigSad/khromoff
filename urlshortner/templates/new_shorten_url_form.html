@@ -1,27 +1,28 @@
 {% extends "base_shortner.html" %}
-{% block title %}Create your ShortenURL!{% endblock %}
+{% block title %}Сократить ссылку{% endblock %}
 
 {% block content %}
     <div class="container-lg text-center ">
-        <h1 class="">Create ShortURL</h1>
+        <h1 class="">Создать короткую ссылку</h1>
         <div class="">
             {% for i in errors %}
                 <div class="alert alert-danger">
-                    Error! {{ i.description }}
+                    Ошибка! {{ i.description }}
                 </div>
             {% endfor %}
         </div>
             <form action="" method="POST" class="form">
                 {% csrf_token %}
                 <div class="form-group">
-                    <label for="url_input">Your long URL: </label>
+                    <label for="url_input">Длинная ссылка: </label>
                     <input class="form-control text-monospace" id="url_input" name="long_url" type="text" value="{{ request.POST.long_url }}">
                 </div>
 
                 {% if user.is_authenticated %}
+                    {# TODO: remove authentication requirment #}
                     {# TODO: ADD SO IT'S READONLY UNLESS YOU REGISTER, WOULD BE REAAAALLLYYY COOL #}
                     <div class="form-group">
-                        <label for="basic-url">Your alias (not required)</label>
+                        <label for="basic-url">Персональная ссылка</label>
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">https://l.{{ static.HOSTNAME }}/</span>
@@ -30,28 +31,28 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="checkbox">Do collect meta data? - </label>
-                        <input class="form-check-label" id="checkbox" type="checkbox" name="do_collect_meta" value="true" checked   >
+                        <label for="checkbox">Позволить собирать данные о переходах? - </label>
+                        <input class="form-check-label" id="checkbox" type="checkbox" name="do_collect_meta" value="true" checked>
                     </div>
                 {% else %}
-                    <small class="text-muted pd-0 md-0 pt-5 mt-5">Only for authorised users</small>
+                    <small class="text-muted pd-0 md-0 pt-5 mt-5">Только для авторизованных пользователей</small>
                     <hr class="pt-0 mt-0">
                     <div class="form-group">
-                        <label for="basic-url">Your alias (not required)</label>
+                        <label for="basic-url">Персональная ссылка</label>
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">https://l.{{ static.HOSTNAME }}/</span>
                             </div>
-                            <input id="basic-url" type="text" class="form-control" name="alias" value="Only for authorised users" readonly>
+                            <input id="basic-url" type="text" class="form-control" name="alias" value="Только для авторизованных пользователей" readonly>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="checkbox">Do collect meta data? - </label>
+                        <label for="checkbox">Позволить собирать данные о переходах? - </label>
                         <input class="form-check-label" id="checkbox" type="checkbox" name="do_collect_meta" value="true" checked disabled>
                     </div>
                 {% endif %}
 
-                <button class="btn btn-primary btn-lg btn-block" type="submit">Create ShortURL!</button>
+                <button class="btn btn-primary btn-lg btn-block" type="submit">Создать короткую ссылку</button>
 
             </form>
         </div>

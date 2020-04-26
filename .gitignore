@@ -4,7 +4,6 @@ secrets.py
 db.sqlite3
 
 .idea/
-frontend/
 migrations/
 
 /static/

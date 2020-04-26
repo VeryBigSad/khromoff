@@ -15,25 +15,29 @@ def create_new_link(request):
     if request.method == 'POST':
 
         # if we are getting short url to ourselves
+        errors = []
         try:
             short_code = get(request.POST['long_url'], request=request)
         except NameExistsError:
-            return render(request, 'new_shorten_url_form.html',
-                          context={'errors': [{'type': 'invalid_alias',
-                                               'description': 'This alias already exists, try another or random.'}]})
+            errors.append({'type': 'invalid_alias',
+                           'description': 'This alias already exists, try another or random.'})
+
+        # TODO: replace this with rest exception
         except PermissionDenied:
-            return render(request, 'new_shorten_url_form.html',
-                          context={'errors': [{'type': 'permission_denied',
-                                               'description': 'You don\'t have enough permissions to do that.'}]})
+            errors.append({'type': 'permission_denied',
+                           'description': 'You don\'t have enough permissions to do that.'})
         except InvalidAliasError:
-            return render(request, 'new_shorten_url_form.html',
-                          context={'errors': [{'type': 'alias_too_short',
-                                               'description': 'Please, use alias from 3 to 30 symbols length, '
-                                                              'and only letters, numbers, and underscore.'}]})
+            errors.append({'type': 'alias_too_short',
+                           'description': 'Please, use alias from 3 to 30 symbols length, '
+                                          'and only letters, numbers, and underscore.'})
         except InvalidUrlError:
-            return render(request, 'new_shorten_url_form.html',
-                          context={'errors': [{'type': 'invalid_url',
-                                               'description': 'URL you passed in is invalid, maybe a typo?'}]})
+            errors.append({'type': 'invalid_url',
+                           'description': 'URL you passed is either invalid or '
+                                          'links to this site. Please check the correctness.'})
+
+        if errors:
+            return render(request, 'new_shorten_url_form.html', context={'errors': errors})
+
         if not request.POST.get('do_collect_meta') and request.user.is_authenticated:
             url = reverse('shorturl-a-p-redirect', kwargs={'short_id': short_code})
         else:
@@ -44,8 +48,13 @@ def create_new_link(request):
 
 
 @login_required()
-def links(request):
-    return render(request, 'links.html', context={'links': ShortUrl.objects.filter(author=request.user)})
+def view_data(request, view_data_code):
+    shorturl = ShortUrl.objects.filter(view_data_code=view_data_code)
+    if shorturl.exists():
+        return render(request, 'view_data.html', context={'shorturl': shorturl[0],
+                      'visits': Visit.objects.filter(shorturl=shorturl[0])})
+    else:
+        raise Http404
 
 
 def redirect(request, short_id, preview=False, anonymous=False):
