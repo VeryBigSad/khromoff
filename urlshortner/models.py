@@ -1,20 +1,31 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
+from rest_framework_api_key.models import AbstractAPIKey
 
-from urlshortner.settings import MAX_SHORTCODE_LENGTH, MAX_URL_LENGTH
+from urlshortner.constants import MAX_SHORTCODE_LENGTH, MAX_URL_LENGTH
+
+User = get_user_model()
+
+
+class UserAPIKey(AbstractAPIKey):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)  # who owns the key
 
 
 class ShortUrl(models.Model):
-    author = models.ForeignKey(User, on_delete=models.SET_DEFAULT, default=None, null=True, blank=True)
+    # key - key with which url was created
+    key = models.ForeignKey(UserAPIKey, on_delete=models.SET_DEFAULT, default=None, null=True)
+    author = models.ForeignKey(User, on_delete=models.SET_DEFAULT, default=None, null=True)
+    active = models.BooleanField(default=True)
+
     creator_ip = models.GenericIPAddressField(default='127.0.0.1')
     time_created = models.DateTimeField(auto_now=True)
 
-    do_collect_meta = models.BooleanField(default=True)
-
-    active = models.BooleanField(default=True)
-    alias = models.BooleanField(default=False)
-    short_code = models.CharField(max_length=MAX_SHORTCODE_LENGTH)
     full_url = models.URLField(max_length=MAX_URL_LENGTH, null=True)
+    short_code = models.CharField(max_length=MAX_SHORTCODE_LENGTH)
+    do_collect_meta = models.BooleanField(default=True)
+    alias = models.BooleanField(default=False)
+    # page where we can see spy info actually
+    view_data_code = models.CharField(max_length=MAX_SHORTCODE_LENGTH + 1, default=None, null=True)
 
     def __str__(self):
         return str(self.full_url)
@@ -29,4 +40,4 @@ class Visit(models.Model):
     IP = models.GenericIPAddressField(default='127.0.0.1')
 
     def __str__(self):
-        return self.time.strftime("%A, %d. %B %Y %H:%M:%S")
+        return str(self.time.strftime("%d.%m.%Y %H:%M:%S; ")) + self.IP + '; ' + self.shorturl.full_url
