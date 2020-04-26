@@ -10,7 +10,8 @@ from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.urls import reverse
 from datetime import datetime
 
-from urlshortner.models import ShortUrl, Visit, UserAPIKey
+from urlshortner.models import ShortUrl, Visit
+from api.models import UserAPIKey
 
 User = get_user_model()
 

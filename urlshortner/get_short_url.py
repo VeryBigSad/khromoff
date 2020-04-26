@@ -81,6 +81,7 @@ def get(long_url, request, url_length=3):
     # if we already registred this url, we authorize it.
     obj = ShortUrl.objects.filter(full_url=long_url, alias=False, do_collect_meta=do_collect_meta)
     if obj.exists() and len(obj[0].short_code) == url_length:
+        # TODO: create copy with other author and time_created
         obj = obj[0]
         obj.time_created = datetime.today()
         obj.save()  # updating time it was created, because yes.
@@ -91,8 +92,8 @@ def get(long_url, request, url_length=3):
     short_code = get_shorturl(ShortUrl, url_length, filter_kwargs={'do_collect_meta': do_collect_meta},
                               check_for_existing_var='short_code')
 
-    register(short_code, request, long_url)
-    return short_code
+    obj = register(short_code, request, long_url)
+    return obj
 
 
 # Creates entry in DB
@@ -113,3 +114,4 @@ def register(short_code, request, long_url, key=None):
     # also possible that no auth data sent.
 
     new_obj.save()
+    return new_obj

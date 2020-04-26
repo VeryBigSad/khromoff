@@ -11,7 +11,8 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
-from khromoff.secrets import SECRET_KEY
+
+from khromoff import secrets
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 LOGIN_URL = '/login'
@@ -21,7 +22,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = SECRET_KEY
+SECRET_KEY = secrets.SECRET_KEY
 
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
@@ -48,6 +49,13 @@ INSTALLED_APPS = [
 
     # my apps
     'urlshortner.apps.UrlshortnerConfig',
+    'api.apps.ApiConfig',
+
+    # 3rd party
+    'rest_framework',
+    'rest_framework_api_key'
+
+
 ]
 
 MIDDLEWARE = [
@@ -89,29 +97,40 @@ WSGI_APPLICATION = 'khromoff.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': secrets.db_name,
+        'HOST': secrets.db_hostname,
+        'PORT': '5432',
+        'PASSWORD': secrets.db_password,
+        'USER': secrets.db_username
     }
+}
+
+REST_FRAMEWORK = {
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticatedOrReadOnly",
+    ]
 }
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
+    # {
+    #     'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+    # },
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
     },
     {
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
     },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    # {
+    #     'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+    # },
 ]
 
 # Internationalization
