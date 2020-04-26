@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Сделать тестовый запрос к API{% endblock %}
+
+{% block content %}
+    <div class="container-fluid">
+
+        <form class="container text-center" action="" method="POST">
+            {% csrf_token %}
+            <label for="url">url</label>
+            <input class="form-control" type="text" name="url" id="url">
+
+            <label for="var-1">var1</label>
+            <input class="form-control" type="text" name="var1" id="var-1">
+            <label for="var-name-1">var1-name</label>
+            <input class="form-control" type="text" name="var1_val" id="var-name-1">
+
+            <label for="var-2">var2</label>
+            <input class="form-control" type="text" name="var2" id="var-2">
+            <label for="var-2-name">var2-name</label>
+            <input class="form-control" type="text" name="var2_val" id="var-2-name">
+
+            <label for="var-3">var3</label>
+            <input class="form-control" type="text" name="var3" id="var-3">
+            <label for="var-3-name">var3-name</label>
+            <input class="form-control" type="text" name="var3_val" id="var-3-name">
+
+            <button type="submit">Отправить</button>
+        </form>
+
+        <div class="resp mt-5 rounded-sm border p-3 bg-secondary">
+            {{ resp }}
+        </div>
+    </div>
+{% endblock %}

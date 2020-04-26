@@ -2,13 +2,10 @@ from django.db import models
 from django.contrib.auth import get_user_model
 from rest_framework_api_key.models import AbstractAPIKey
 
+from api.models import UserAPIKey
 from urlshortner.constants import MAX_SHORTCODE_LENGTH, MAX_URL_LENGTH
 
 User = get_user_model()
-
-
-class UserAPIKey(AbstractAPIKey):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)  # who owns the key
 
 
 class ShortUrl(models.Model):

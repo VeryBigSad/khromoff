@@ -15,9 +15,11 @@
             {% if '/a/' in request.path %}
                 <p class="text-muted mt-auto">By the way, this link is 100% anonymous, so we don't collect any data of you here.</p>
             {% endif %}
-            {% if view_data_url %}
-                <h3>Чтобы посмотреть информацию о переходах по этой короткой ссылке, кликните <a
-                        href="{% url 'urlshortner-data' view_data_url %}">сюда</a>.</h3>
+            {% if request.GET.view_data_code %}
+                <h4 class="font-weight-normal">Чтобы посмотреть информацию о переходах по этой короткой ссылке, кликните
+                    <a href="{% url 'urlshortner-data' request.GET.view_data_code %}">сюда</a>.
+                </h4>
+                <div class="mt-5"></div>
             {% endif %}
             <h3>To share the link with anyone, copy and paste it to them: </h3>
             <a class="font-weight-bold h3 text-break" href="https://l.{{ static.HOSTNAME }}/{% if '/a/' in request.path %}a/{% endif %}{{ short_code }}">https://l.{{ static.HOSTNAME }}/{% if '/a/' in request.path %}a/{% endif %}{{ short_code }}</a>

@@ -17,7 +17,8 @@ def create_new_link(request):
         # if we are getting short url to ourselves
         errors = []
         try:
-            short_code = get(request.POST['long_url'], request=request)
+            short_obj = get(request.POST['long_url'], request=request)
+            short_code = short_obj.short_code
         except NameExistsError:
             errors.append({'type': 'invalid_alias',
                            'description': 'This alias already exists, try another or random.'})
@@ -40,9 +41,16 @@ def create_new_link(request):
 
         if not request.POST.get('do_collect_meta') and request.user.is_authenticated:
             url = reverse('shorturl-a-p-redirect', kwargs={'short_id': short_code})
+            # return render(request, 'preview.html', context={'long_url': short_obj.long_url, 'do_collect_meta':
+            # short_obj.do_collect_meta, 'short_code': short_obj.short_id, 'view_data_code': short_obj.view_data_code})
         else:
+            # return render(request, 'preview.html', context={'long_url': short_obj.long_url, 'do_collect_meta':
+            # short_obj.do_collect_meta, 'short_code': short_obj.short_id, 'view_data_code': short_obj.view_data_code})
             url = reverse('shorturl-p-redirect', kwargs={'short_id': short_code})
+            url += '?view_data_code=' + short_obj.view_data_code
+        # TODO: replace render() with reverse() and redirect()
         return HttpResponseRedirect(url)
+
     else:
         return render(request, 'new_shorten_url_form.html', context={})
 
@@ -52,12 +60,12 @@ def view_data(request, view_data_code):
     shorturl = ShortUrl.objects.filter(view_data_code=view_data_code)
     if shorturl.exists():
         return render(request, 'view_data.html', context={'shorturl': shorturl[0],
-                      'visits': Visit.objects.filter(shorturl=shorturl[0])})
+                                                          'visits': Visit.objects.filter(shorturl=shorturl[0])})
     else:
         raise Http404
 
 
-def redirect(request, short_id, preview=False, anonymous=False):
+def redirect(request, short_id, view_data_code=None, preview=False, anonymous=False):
     url_object = ShortUrl.objects.filter(short_code=short_id, do_collect_meta=not anonymous)
     if not url_object.exists():
         url_object = ShortUrl.objects.filter(short_code=short_id.lower(), do_collect_meta=not anonymous, alias=True)
@@ -76,7 +84,7 @@ def redirect(request, short_id, preview=False, anonymous=False):
         meta_obj.save()
 
     if preview:
-        return render(request, 'preview.html', context={'long_url': long_url, 'do_collect_meta': anonymous,
-                                                        'short_code': short_id})
+        return render(request, 'preview.html', context={'long_url': long_url, 'do_collect_meta': not anonymous,
+                                                        'short_code': short_id, 'view_data_code': view_data_code})
 
     return HttpResponseRedirect(long_url)

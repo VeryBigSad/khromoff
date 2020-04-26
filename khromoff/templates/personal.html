@@ -72,7 +72,7 @@
 
                         {% for i in created_shorturls %}
                             {# TODO: on click we redirect to visits of this url, link: #}
-                            <tr onclick="">
+                            <tr>
                                 <th>
                                     <a href="{% url 'shorturl-redirect' i.obj.short_code %}">
                                         {{ i.obj.full_url }}
@@ -99,21 +99,29 @@
             <div class="keylist col-lg-6 col-md-12">
                 <h3>Ваши ключи API (для разработчиков)</h3>
                 {% if keys %}
-                    <table class="table table-bordered table-responsive-md">
+                    <table class="table table-sm table-bordered table-responsive-sm">
                         <thead>
                             <tr>
-                                <th scope="col">Ключ</th>
+                                <th scope="col">Имя</th>
+                                <th scope="col">Префикс ключа</th>
                                 <th scope="col">Права</th>
+                                <th scope="col">Запросов в минуту</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for i in keys %}
                                 <tr>
-                                    <th>
-                                        {{ i.key }}
+                                    <th class="font-weight-normal">
+                                        {{ i.name }}
                                     </th>
-                                    <th>
-                                        {{ i.some_property }}
+                                    <th class="font-weight-normal">
+                                        {{ i.prefix }}
+                                    </th>
+                                    <th class="font-weight-normal">
+                                        Создавать ShortURL; Смотреть информацию о Visit;
+                                    </th>
+                                    <th class="font-weight-normal">
+                                        &infin;
                                     </th>
                                 </tr>
                             {% endfor %}
