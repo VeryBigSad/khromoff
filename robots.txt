@@ -1,0 +1,14 @@
+User-agent: *
+
+Disallow: /admin/*
+
+Disallow: /login
+Disallow: /personal
+
+Disallow: /about
+Disallow: /me
+
+Clean-Param: utm_source&utm_medium&utm_campaign
+Clean-Param: ?next
+
+# TODO: use some replacemnt of just redirecting at l.khrmff

@@ -28,6 +28,9 @@
                 <li class="nav-item d-block d-sm-none d-none d-sm-block d-md-none">
                     <h6>Интересное:</h6>
                     <a class="btn btn-primary btn-lg" href="{% url 'urlshortner-index' %}">Сокращатель ссылок</a>
+                    {% if debug %}
+                        <a class="btn btn-primary btn-lg" href="{% url 'api-docs-index' %}">Документация API</a>
+                    {% endif %}
                     <hr>
                 </li>
                 <li class="nav-item d-block d-sm-none d-none d-sm-block d-md-none">
@@ -53,6 +56,9 @@
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton12">
                         <a class="dropdown-item" href="{% url 'urlshortner-index' %}">Сокращатель ссылок</a>
+                        {% if debug %}
+                            <a class="dropdown-item" href="{% url 'api-docs-index' %}">API (для разработчиков)</a>
+                        {% endif %}
                     </div>
                 </li>
                 {% block left-nav-items %}
@@ -66,6 +72,11 @@
                 <li class="nav-item mr-3 text-center">
                     <a href="{% url 'me' %}" class="nav-link">Обо мне</a>
                 </li>
+                {% if request.user.is_staff %}
+                    <li class="nav-item mr-3 text-center">
+                        <a href="{% url 'admin:index' %}" class="nav-link">Админ-панель</a>
+                    </li>
+                {% endif %}
                 <li class="nav-item dropdown d-none d-sm-block d-sm-none d-md-block">
                     <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Ваш профиль
@@ -92,7 +103,7 @@
 
     <div id="content" class="container-fluid flex-grow-1">
         {% block content %}
-            <h1>If you see this, please report.dj</h1>
+            <h1>If you see this, please report.</h1>
         {% endblock %}
     </div>
     <footer class="bg-dark text-white text-center">

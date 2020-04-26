@@ -98,8 +98,7 @@ def login_page(request):
             if errors:
                 return render(request, 'login_register.html', context={'errors': errors, 'menu': request.POST['type']})
 
-            new_user = User(username=request.POST['username'], password=request.POST['password'])
-            new_user.save()
+            new_user = User.objects.create_user(request.POST['username'], '', request.POST['password'])
             login(request, new_user)
 
             if request.GET.get('next') and request.GET.get('next') != '/':
@@ -141,7 +140,7 @@ def personal(request):
             errors += password_valid_checks(request.POST['new_password'], request.POST['new_password_repeat'])
 
             if not errors:
-                request.user.password = request.POST['new_password']
+                request.user.set_password(request.POST['new_password'])
                 request.user.save()
 
                 context['success'] = 'Пароль успешно изменен!'
