@@ -23,44 +23,33 @@
                        value="{{ request.POST.long_url }}">
             </div>
 
-            {% if user.is_authenticated %}
                 {# TODO: remove authentication requirment #}
                 {# TODO: ADD SO IT'S READONLY UNLESS YOU REGISTER, WOULD BE REAAAALLLYYY COOL #}
-                <div class="form-group">
-                    <label for="basic-url">Персональная ссылка</label>
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">https://l.{{ static.HOSTNAME }}/</span>
-                        </div>
-                        <input id="basic-url" type="text" class="form-control" name="alias">
+            <div class="form-group">
+                <label for="basic-url">Персональная ссылка</label>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">https://l.{{ static.HOSTNAME }}/</span>
                     </div>
+                    <input id="basic-url" type="text" class="form-control" name="alias">
                 </div>
-                <div class="form-group">
-                    <label for="checkbox">Позволить собирать данные о переходах? - </label>
-                    <input class="form-check-label" id="checkbox" type="checkbox" name="do_collect_meta" value="true"
-                           checked>
+            </div>
+
+            {% if user.is_authenticated %}
+                <div class="custom-control custom-checkbox">
+                    <input class="custom-control-input" id="checkbox" type="checkbox" name="do_collect_meta" checked>
+                    <label class="custom-control-label" for="checkbox">Позволить собирать данные о переходах?</label>
                 </div>
             {% else %}
                 <small class="text-muted pd-0 md-0 pt-5 mt-5">Только для авторизованных пользователей</small>
                 <hr class="pt-0 mt-0">
-                <div class="form-group">
-                    <label for="basic-url">Персональная ссылка</label>
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">https://l.{{ static.HOSTNAME }}/</span>
-                        </div>
-                        <input id="basic-url" type="text" class="form-control" name="alias"
-                               value="Только для авторизованных пользователей" readonly>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="checkbox">Позволить собирать данные о переходах? - </label>
-                    <input class="form-check-label" id="checkbox" type="checkbox" name="do_collect_meta" value="true"
-                           checked disabled>
+                <div class="custom-control custom-checkbox">
+                    <input class="custom-control-input" id="checkbox" type="checkbox" name="do_collect_meta" disabled>
+                    <label class="custom-control-label" for="checkbox">Позволить собирать данные о переходах?</label>
                 </div>
             {% endif %}
 
-            <button class="btn btn-primary btn-lg btn-block" type="submit">Создать короткую ссылку</button>
+            <button class="btn btn-primary btn-lg btn-block mt-4" type="submit">Создать короткую ссылку</button>
 
         </form>
     </div>

@@ -1,5 +1,5 @@
 from django.core.exceptions import PermissionDenied
-from django.shortcuts import render, HttpResponseRedirect, Http404
+from django.shortcuts import render, Http404, redirect, get_object_or_404
 from django.http.response import HttpResponseForbidden
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
@@ -39,42 +39,31 @@ def create_new_link(request):
         if errors:
             return render(request, 'new_shorten_url_form.html', context={'errors': errors})
 
-        if not request.POST.get('do_collect_meta') and request.user.is_authenticated:
-            url = reverse('shorturl-a-p-redirect', kwargs={'short_id': short_code})
-            # return render(request, 'preview.html', context={'long_url': short_obj.long_url, 'do_collect_meta':
-            # short_obj.do_collect_meta, 'short_code': short_obj.short_id, 'view_data_code': short_obj.view_data_code})
-        else:
-            # return render(request, 'preview.html', context={'long_url': short_obj.long_url, 'do_collect_meta':
-            # short_obj.do_collect_meta, 'short_code': short_obj.short_id, 'view_data_code': short_obj.view_data_code})
-            url = reverse('shorturl-p-redirect', kwargs={'short_id': short_code})
+        url = reverse('urlshortner:preview', kwargs={'short_id': short_code})
+        if short_obj.view_data_code:
             url += '?view_data_code=' + short_obj.view_data_code
-        # TODO: replace render() with reverse() and redirect()
-        return HttpResponseRedirect(url)
+
+        return redirect(url)
 
     else:
         return render(request, 'new_shorten_url_form.html', context={})
 
 
-@login_required()
 def view_data(request, view_data_code):
-    shorturl = ShortUrl.objects.filter(view_data_code=view_data_code)
-    if shorturl.exists():
-        return render(request, 'view_data.html', context={'shorturl': shorturl[0],
-                                                          'visits': Visit.objects.filter(shorturl=shorturl[0])})
-    else:
-        raise Http404
+    shorturl = get_object_or_404(ShortUrl, view_data_code=view_data_code)
+
+    return render(request, 'view_data.html', context={
+        'shorturl': shorturl, 'visits': Visit.objects.filter(shorturl=shorturl)})
 
 
-def redirect(request, short_id, view_data_code=None, preview=False, anonymous=False):
-    url_object = ShortUrl.objects.filter(short_code=short_id, do_collect_meta=not anonymous)
+def redirect_to_long_url(request, short_id):
+    url_object = ShortUrl.objects.filter(short_code=short_id)
     if not url_object.exists():
-        url_object = ShortUrl.objects.filter(short_code=short_id.lower(), do_collect_meta=not anonymous, alias=True)
+        url_object = ShortUrl.objects.filter(short_code=short_id.lower(), alias=True)
         if not url_object.exists():
-            return render(request, '404error.html', context={'description': 'We are unable to find this shorturl.'
-                                                                            ' Please check that url is entered'
-                                                                            ' correctly.'}, status=404)
-            # raise Http404
-    print(url_object)
+            raise Http404('We are unable to find this shorturl.'
+                          ' Please check that url is entered'
+                          ' correctly.')
     url_object = url_object[0]
     long_url = url_object.full_url
 
@@ -83,8 +72,12 @@ def redirect(request, short_id, view_data_code=None, preview=False, anonymous=Fa
                          user_agent=request.META['HTTP_USER_AGENT'], http_referer=request.META.get('HTTP_REFERER'))
         meta_obj.save()
 
-    if preview:
-        return render(request, 'preview.html', context={'long_url': long_url, 'do_collect_meta': not anonymous,
-                                                        'short_code': short_id, 'view_data_code': view_data_code})
+    return redirect(long_url)
 
-    return HttpResponseRedirect(long_url)
+
+def preview(request, short_id):
+    obj = get_object_or_404(ShortUrl, short_code=short_id)
+
+    # TODO: send view_data_code var only if author created it.
+    return render(request, 'preview.html', context={'long_url': obj.full_url, 'do_collect_meta': obj.do_collect_meta,
+                                                    'short_code': short_id, 'view_data_code': obj.view_data_code})

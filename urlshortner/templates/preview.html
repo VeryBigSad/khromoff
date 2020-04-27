@@ -7,21 +7,21 @@
             {% if request.GET.new %}
                 <div class="alert alert-success mt-2 pt-3 pd-2 pl-3 pr-3 d-inline-flex"><h6>ShortURL had been created successfully!</h6></div>
             {% endif %}
-            <h1>You are previewing a redirect to:</h1>
+            <h1>Эта ссылка это превью перенаправления на:</h1>
             <a class="font-weight-bold h3 text-break" href="{{ long_url }}">{{ long_url }}</a>
             <br>
-            <small class="text-muted">Click the blue URL to proceed to the site</small>
+            <small class="text-muted">Кликни на синюю URL чтобы попасть на сайт</small>
             <hr>
-            {% if '/a/' in request.path %}
-                <p class="text-muted mt-auto">By the way, this link is 100% anonymous, so we don't collect any data of you here.</p>
-            {% endif %}
-            {% if request.GET.view_data_code %}
+            {% if not do_collect_meta %}
+                <p class="text-muted mt-auto">Кстати, эта ссылка 100% анонимна, что означает мы не собираем никакой
+                    информации о вас здесь.</p>
+            {% elif request.GET.view_data_code %}
                 <h4 class="font-weight-normal">Чтобы посмотреть информацию о переходах по этой короткой ссылке, кликните
-                    <a href="{% url 'urlshortner-data' request.GET.view_data_code %}">сюда</a>.
+                    <a href="{% url 'urlshortner:data' request.GET.view_data_code %}">сюда</a>.
                 </h4>
                 <div class="mt-5"></div>
             {% endif %}
-            <h3>To share the link with anyone, copy and paste it to them: </h3>
+            <h3>Чтобы поделиться ссылкой с кем-то, скопируйте и отправьте ее им: </h3>
             <a class="font-weight-bold h3 text-break" href="https://l.{{ static.HOSTNAME }}/{% if '/a/' in request.path %}a/{% endif %}{{ short_code }}">https://l.{{ static.HOSTNAME }}/{% if '/a/' in request.path %}a/{% endif %}{{ short_code }}</a>
         </div>
     </div>

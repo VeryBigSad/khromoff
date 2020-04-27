@@ -5,18 +5,21 @@
 {% block content %}
     {# TODO: make it responsible #}
     <div class="container-fluid text-center">
-        <h4 class="font-weight-normal">Информация о переадресации на <a class="font-weight-bold" href="{% url 'shorturl-redirect' shorturl.short_code %}">{{ shorturl.full_url }}</a></h4>
-        <h4>Всего было {{ visits.count }} переходов</h4>
-        <table class="table table-hover table-bordered table-sm-responsive">
-            <thead>
+        <h4 class="font-weight-normal">Информация о переадресации на <a class="font-weight-bold"
+                                                                        href="{% url 'urlshortner:redirect' shorturl.short_code %}">{{ shorturl.full_url }}</a>
+        </h4>
+        {% if visits %}
+            <h4>Всего было {{ visits.count }} переходов</h4>
+            <table class="table table-hover table-bordered table-sm-responsive">
+                <thead>
                 <tr>
                     <th>Время</th>
                     <th scope="col">IP-адрес</th>
                     <th scope="col">Сайт с которого перешли</th>
                     <th scope="col">User-agent</th>
                 </tr>
-            </thead>
-            <tbody>
+                </thead>
+                <tbody>
                 {% for i in visits %}
                     <tr>
                         <th>
@@ -34,7 +37,10 @@
 
                     </tr>
                 {% endfor %}
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        {% else %}
+            <h3>Пока еще никто не перешел по ссылке :(. Поделись ей с друзьями!</h3>
+        {% endif %}
     </div>
 {% endblock %}
