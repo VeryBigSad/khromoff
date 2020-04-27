@@ -4,7 +4,7 @@
 
 {% load static %}
 {% block head %}
-    <link rel="stylesheet" href="{% static "profile_styles.css" %}">
+    <link rel="stylesheet" href="{% static "khromoff/profile_styles.css" %}">
 {% endblock %}
 
 {% block content %}
@@ -74,25 +74,32 @@
                             {# TODO: on click we redirect to visits of this url, link: #}
                             <tr>
                                 <th>
-                                    <a href="{% url 'shorturl-redirect' i.obj.short_code %}">
+                                    <a href="{% url 'urlshortner:redirect' i.obj.short_code %}">
                                         {{ i.obj.full_url }}
                                     </a>
                                 </th>
-                                <th>
-                                    <a href="{% url 'urlshortner-data' i.obj.view_data_code %}">
-                                        Подробная информация о переходах
-                                    </a>
-                                </th>
-                                <th>
-                                    {{ i.times_visited }}
-                                </th>
+                                {% if i.obj.do_collect_meta %}
+                                    <td>
+                                        <a href="{% url 'urlshortner:data' i.obj.view_data_code %}">
+                                            Подробная информация о переходах
+                                        </a>
+                                    </td>
+                                    <td>
+                                        {{ i.times_visited }}
+                                    </td>
+                                {% else %}
+                                    <td colspan="2">
+                                        Это анонимный редирект, вы не можете посмотреть информацию о нем.
+                                    </td>
+                                {% endif %}
                             </tr>
                         {% endfor %}
                         </tbody>
                    </table>
                 {% else %}
                     <h4 class="font-weight-normal">Вы еще не создавали ссылок...</h4>
-                    <h4 class="font-weight-normal">Нажми <a href="{% url 'urlshortner-index' %}">сюда</a> чтобы создать такую!</h4>
+                    <h4 class="font-weight-normal">Нажми <a href="{% url 'urlshortner:index' %}">сюда</a> чтобы создать
+                        такую!</h4>
                 {% endif %}
 
             </div>
@@ -111,25 +118,31 @@
                         <tbody>
                             {% for i in keys %}
                                 <tr>
-                                    <th class="font-weight-normal">
+                                    <th>
                                         {{ i.name }}
                                     </th>
-                                    <th class="font-weight-normal">
+                                    <td>
                                         {{ i.prefix }}
-                                    </th>
-                                    <th class="font-weight-normal">
-                                        Создавать ShortURL; Смотреть информацию о Visit;
-                                    </th>
-                                    <th class="font-weight-normal">
+                                    </td>
+                                    <td>
+                                        <ul>
+                                            {# TODO: API reference here. #}
+                                            <li>Создавать <span class="font-weight-bold"><a href="#">ShortURL</a></span>
+                                            </li>
+                                            <li>Смотреть информацию о <span class="font-weight-bold"><a
+                                                    href="#">Visit</a></span></li>
+                                        </ul>
+                                    </td>
+                                    <td>
                                         &infin;
-                                    </th>
+                                    </td>
                                 </tr>
                             {% endfor %}
                         </tbody>
                     </table>
                 {% else %}
                     <h4 class="font-weight-normal">У вас нет активных ключей</h4>
-                    {# TODO: add this thing #}
+                    {# TODO: add accessbility to create keys #}
                     <h4 class="font-weight-normal">В данный момент нет возможности их получить, но когда-нибудь появится.</h4>
                 {% endif %}
             </div>

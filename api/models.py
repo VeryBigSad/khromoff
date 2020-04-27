@@ -7,4 +7,3 @@ User = get_user_model()
 
 class UserAPIKey(AbstractAPIKey):
     user = models.ForeignKey(User, on_delete=models.CASCADE)  # who owns the key
-    # TODO: not cascade, but set to "revoked".

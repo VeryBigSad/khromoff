@@ -5,6 +5,10 @@
 /*    min-height: 10rem;*/
 /*}*/
 
-body {
-    min-height: 100vh;
+/*body {*/
+/*    min-height: 100vh;*/
+/*}*/
+
+.shorturl-form {
+    max-width: 40px;
 }

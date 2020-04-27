@@ -10,7 +10,7 @@
     <script src="https://netdna.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
-    <link rel="stylesheet" href="{% static "basic_styles.css" %}">
+    <link rel="stylesheet" href="{% static "general/basic_styles.css" %}">
 
     <title>{% block title %} Khromoff's site {% endblock %} - Khromoff</title>
 
@@ -27,7 +27,7 @@
 
                 <li class="nav-item d-block d-sm-none d-none d-sm-block d-md-none">
                     <h6>Интересное:</h6>
-                    <a class="btn btn-primary btn-lg" href="{% url 'urlshortner-index' %}">Сокращатель ссылок</a>
+                    <a class="btn btn-primary btn-lg" href="{% url 'urlshortner:index' %}">Сокращатель ссылок</a>
                     {% if debug %}
                         <a class="btn btn-primary btn-lg" href="{% url 'api-docs-index' %}">Документация API</a>
                     {% endif %}
@@ -55,7 +55,7 @@
                         Интересное
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton12">
-                        <a class="dropdown-item" href="{% url 'urlshortner-index' %}">Сокращатель ссылок</a>
+                        <a class="dropdown-item" href="{% url 'urlshortner:index' %}">Сокращатель ссылок</a>
                         {% if debug %}
                             <a class="dropdown-item" href="{% url 'api-docs-index' %}">API (для разработчиков)</a>
                         {% endif %}
@@ -111,13 +111,15 @@
             <span class="contact-me">Contact me - </span>
 
             <span class="contact-me-icons vk-icon">
-                <a href="{% url 'my-vk-redirect' %}" class="text-reset"><i class="fab fa-vk"></i></a>
+                <a href="{% url 'urlshortner:redirect' 'my-vk-redirect' %}" class="text-reset"><i class="fab fa-vk"></i></a>
             </span>
             <span class="contact-me-icons telegram-icon">
-                <a href="{% url 'my-telegram-redirect' %}" class="text-reset"><i class="fab fa-telegram"></i></a>
+                <a href="{% url 'urlshortner:redirect' 'my-telegram-redirect' %}" class="text-reset"><i
+                        class="fab fa-telegram"></i></a>
             </span>
             <span class="contact-me-icons github-icon">
-                <a href="{% url 'my-github-redirect' %}" class="text-reset"><i class="fab fa-github"></i></a>
+                <a href="{% url 'urlshortner:redirect' 'my-github-redirect' %}" class="text-reset"><i
+                        class="fab fa-github"></i></a>
             </span>
             <span class="contact-me-icons email-icon">
                 <a href="mailto:khromov05@gmail.com" class="text-reset"><i class="far fa-envelope"></i></a>

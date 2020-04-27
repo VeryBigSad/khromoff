@@ -4,8 +4,8 @@ import string
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
-from django.shortcuts import render
-from django.http import HttpResponseRedirect
+from django.shortcuts import render, redirect
+from django.http import HttpResponseRedirect, HttpResponseServerError
 from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.urls import reverse
 from datetime import datetime
@@ -63,7 +63,7 @@ def username_valid_checks(username):
 
 
 def error404(request, exception):
-    return render(request, '404error.html', status=404)
+    return render(request, '404error.html', context={'description': str(exception)}, status=404)
 
 
 def error500(request):
@@ -103,13 +103,12 @@ def login_page(request):
             login(request, new_user)
 
             if request.GET.get('next') and request.GET.get('next') != '/':
-                return HttpResponseRedirect(request.GET['next'])
+                return redirect(request.GET['next'])
             else:
-                return HttpResponseRedirect(reverse('personal') + '?new')
+                return redirect(reverse('personal') + '?new')
 
         else:
-            # TODO: error, not login and not register methods
-            pass
+            return HttpResponseServerError()
 
     elif request.method == 'GET':
         return render(request, 'login_register.html')
