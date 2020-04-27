@@ -6,8 +6,8 @@
     {# TODO: make it responsible #}
     <div class="container-fluid text-center">
         <h4 class="font-weight-normal">Информация о переадресации на <a class="font-weight-bold" href="{% url 'shorturl-redirect' shorturl.short_code %}">{{ shorturl.full_url }}</a></h4>
-        <h4>Всего было {{ visits|length }} переходов</h4>
-        <table class="table table-hover table-bordered table-responsive">
+        <h4>Всего было {{ visits.count }} переходов</h4>
+        <table class="table table-hover table-bordered table-sm-responsive">
             <thead>
                 <tr>
                     <th>Время</th>

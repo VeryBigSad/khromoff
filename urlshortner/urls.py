@@ -4,11 +4,8 @@ urlpatterns = [
     path('', views.create_new_link, name='urlshortner-index'),
 
     # auth only
-    # TODO: make views
-
     path('view_data/<str:view_data_code>', views.view_data, name='urlshortner-data'),  # data about
     # particular shorturl obj
-
 
     # my social media redirects (why here? idk)
     path('my-github-redirect', views.redirect, name='my-github-redirect'),
