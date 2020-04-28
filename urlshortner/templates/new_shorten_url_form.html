@@ -3,10 +3,10 @@
 
 {% load static %}
 {% block head %}
-    <link rel="stylesheet" href="{% static 'urlshortner_styles.css' %}">{% endblock %}
+    <link rel="stylesheet" href="{% static 'urlshortner/styles.css' %}">{% endblock %}
 
 {% block content %}
-    <div class="container-lg text-center">
+    <div class="container text-center shorturl-form">
         <h1 class="">Создать короткую ссылку</h1>
         <div class="errors">
             {% for i in errors %}
@@ -15,23 +15,22 @@
                 </div>
             {% endfor %}
         </div>
-        <form action="" method="POST" class="form shorturl-form">
+        <form action="" method="POST" class="form text-center">
             {% csrf_token %}
             <div class="form-group">
-                <label for="url_input">Длинная ссылка: </label>
+                <label for="url_input" class="h5 font-weight-normal">Длинная ссылка: </label>
                 <input class="form-control text-monospace" id="url_input" name="long_url" type="text"
-                       value="{{ request.POST.long_url }}">
+                       value="{{ request.POST.long_url }}" placeholder="https://google.com">
             </div>
 
-                {# TODO: remove authentication requirment #}
-                {# TODO: ADD SO IT'S READONLY UNLESS YOU REGISTER, WOULD BE REAAAALLLYYY COOL #}
             <div class="form-group">
-                <label for="basic-url">Персональная ссылка</label>
+                <label for="basic-url" class="h5 font-weight-normal">Персональная ссылка</label>
+                <small>Не обязательно</small>
                 <div class="input-group">
                     <div class="input-group-prepend">
                         <span class="input-group-text">https://l.{{ static.HOSTNAME }}/</span>
                     </div>
-                    <input id="basic-url" type="text" class="form-control" name="alias">
+                    <input id="basic-url" type="text" class="form-control" name="alias" placeholder="my_url">
                 </div>
             </div>
 

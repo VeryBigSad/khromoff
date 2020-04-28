@@ -1,14 +1,16 @@
 {% extends "base_shortner.html" %}
-{% block title %} Preview of {{ long_url }} redirect {% endblock %}
+{% block title %} Перенаправление на {{ long_url }} {% endblock %}
 
 {% block content %}
     <div class="container text-center">
         <div class="">
             {% if request.GET.new %}
-                <div class="alert alert-success mt-2 pt-3 pd-2 pl-3 pr-3 d-inline-flex"><h6>ShortURL had been created successfully!</h6></div>
+                <div class="alert alert-success mt-2 pt-3 pd-2 pl-3 pr-3 d-inline-flex"><h6>Короткая ссылка была
+                    создана!</h6></div>
             {% endif %}
-            <h1>Эта ссылка это превью перенаправления на:</h1>
-            <a class="font-weight-bold h3 text-break" href="{{ long_url }}">{{ long_url }}</a>
+            <h1>Превью перенаправления на:</h1>
+            <a class="font-weight-bold h3 text-break"
+               href="{% url 'urlshortner:redirect' short_code %}">{{ long_url }}</a>
             <br>
             <small class="text-muted">Кликни на синюю URL чтобы попасть на сайт</small>
             <hr>
@@ -22,7 +24,8 @@
                 <div class="mt-5"></div>
             {% endif %}
             <h3>Чтобы поделиться ссылкой с кем-то, скопируйте и отправьте ее им: </h3>
-            <a class="font-weight-bold h3 text-break" href="https://l.{{ static.HOSTNAME }}/{% if '/a/' in request.path %}a/{% endif %}{{ short_code }}">https://l.{{ static.HOSTNAME }}/{% if '/a/' in request.path %}a/{% endif %}{{ short_code }}</a>
+            <a class="font-weight-bold h3 text-break"
+               href="https://l.{{ static.HOSTNAME }}/{{ short_code }}">https://l.{{ static.HOSTNAME }}/{{ short_code }}</a>
         </div>
     </div>
 {% endblock %}
