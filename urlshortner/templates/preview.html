@@ -1,32 +1,45 @@
 {% extends "base_shortner.html" %}
+{% load static %}
+
 {% block title %} Перенаправление на {{ long_url }} {% endblock %}
+{% block scripts %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js"></script>
+
+    <script src="{% static 'urlshortner/scripts.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'urlshortner/styles.css' %}">
+{% endblock %}
 
 {% block content %}
     <div class="container text-center">
-        <div class="">
-            {% if request.GET.new %}
-                <div class="alert alert-success mt-2 pt-3 pd-2 pl-3 pr-3 d-inline-flex"><h6>Короткая ссылка была
-                    создана!</h6></div>
-            {% endif %}
-            <h1>Превью перенаправления на:</h1>
-            <a class="font-weight-bold h3 text-break"
-               href="{% url 'urlshortner:redirect' short_code %}">{{ long_url }}</a>
-            <br>
-            <small class="text-muted">Кликни на синюю URL чтобы попасть на сайт</small>
-            <hr>
-            {% if not do_collect_meta %}
-                <p class="text-muted mt-auto">Кстати, эта ссылка 100% анонимна, что означает мы не собираем никакой
-                    информации о вас здесь.</p>
-            {% elif request.GET.view_data_code %}
-                <h4 class="font-weight-normal">Чтобы посмотреть информацию о переходах по этой короткой ссылке, кликните
-                    <a href="{% url 'urlshortner:data' request.GET.view_data_code %}">сюда</a>.
-                </h4>
-                <div class="mt-5"></div>
-            {% endif %}
-            <h3>Чтобы поделиться ссылкой с кем-то, скопируйте и отправьте ее им: </h3>
-            <a class="font-weight-bold h3 text-break"
-               href="https://l.{{ static.HOSTNAME }}/{{ short_code }}">https://l.{{ static.HOSTNAME }}/{{ short_code }}</a>
-        </div>
+        {% if request.GET.new %}
+            <div class="alert alert-success mt-2 pt-3 pd-2 pl-3 pr-3 d-inline-flex">
+                <h6>Короткая ссылка создана!</h6>
+            </div>
+        {% endif %}
+        <h2>Перенаправление на:</h2>
+        <a class="font-weight-bold h3 text-break"
+                {#            TODO: when finished with shit with multi-domains, replace this with {% url %} #}
+           href="https://l.{{ static.HOSTNAME }}/{{ short_code }}">{{ long_url }}</a>
+        <br>
+        <small class="text-muted">Кликни на синюю URL чтобы попасть на сайт</small>
+        <hr>
+        {% if not do_collect_meta %}
+            <p class="text-muted mt-auto">Кстати, эта ссылка 100% анонимна, что означает мы не собираем никакой
+                информации о вас здесь.</p>
+        {% elif request.GET.view_data_code %}
+            <h4 class="font-weight-normal">Чтобы посмотреть информацию о переходах по этой короткой ссылке, кликните
+                <a href="{% url 'urlshortner:data' request.GET.view_data_code %}">сюда</a>.
+            </h4>
+        {% endif %}
+        <h3>Короткая ссылка: </h3>
+        <a id="shorturl-url" class="font-weight-bold h4 text-break"
+           href="https://l.{{ static.HOSTNAME }}/{{ short_code }}">
+            https://l.{{ static.HOSTNAME }}/{{ short_code }}
+        </a>
+        <button id="shorturl-copy" class="btn-success btn btn-lg" data-placement="top"
+                data-toggle="tooltip" data-clipboard-target="#shorturl-url">
+            Скопировать
+        </button>
     </div>
 {% endblock %}
 

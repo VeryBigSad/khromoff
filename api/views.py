@@ -26,3 +26,8 @@ def make_request(request):
             return render(request, 'make_request.html', context={'resp': r.text})
     else:
         return render(request, 'make_request.html')
+
+
+def create_key(request):
+    # TODO: do it
+    return render(request, 'create_key.html', context={})
