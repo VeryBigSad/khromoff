@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load hosts %}
+{% load hosts_override %}
+{% load static %}
+
+{% block scripts %}
+    <link rel="stylesheet" href="{% static 'api/default.css' %}">
+{% endblock %}
+
+{% block brand-name %}
+    Документация API
+{% endblock %}
+{% block brand-name-url %}
+    {% host_url 'docs-index' host 'api' %}
+{% endblock %}
+
+{% block content %}
+    <div class="row mb-5">
+        <div class="col-12 mt-3"></div>
+        <div class="col-lg-2">
+            <h1>Навигация</h1>
+            <ul class="left-nav-list">
+                <li><a href="{% url 'docs-index' host 'api' %}">Начало</a></li>
+                <li><a href="{% url 'create-api-key' host 'api' %}">Создать ключ доступа</a></li>
+                <li><a href="{% url 'docs-methods' host 'api' %}">Список методов</a></li>
+                <li><a href="{% url 'docs-objects' host 'api' %}">Список объектов</a></li>
+                <li><a href="{% url 'docs-errors' host 'api' %}">Возможные ошибки</a></li>
+            </ul>
+        </div>
+        <div class="col-lg-10">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    {% block breadcumb %}
+                        <li class="breadcrumb-item"><a href="{% host_url 'docs-index' host 'api' %}">Главная</a></li>
+                        {% block breadcumb-items %}{% endblock %}
+                        <li class="breadcrumb-item active" aria-current="page">{% block title %}{% endblock %}</li>
+                    {% endblock %}
+                </ol>
+            </nav>
+            {% block content2 %}{% endblock %}
+        </div>
+    </div>
+{% endblock %}
+

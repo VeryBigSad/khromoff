@@ -1,7 +1,6 @@
-/*.shorturl-form {*/
-/*    max-width: 700px;*/
-/*}*/
-
-.shorturl-form {
+.form-width-700 {
     max-width: 700px;
+}
+.form-width-500 {
+    max-width: 500px;
 }

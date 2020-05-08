@@ -1,45 +1,53 @@
 from rest_framework import permissions
 
 
-class IsShortURLOwner(permissions.BasePermission):
+class DoCollectMetaPermission(permissions.BasePermission):
     """
-        Object-level permission to only allow owners of an object to view or edit it.
-        Only for ShortURL objects.
+        Global permission which checks if you can create ShortURL
+        depending on did you collect metadata or not
+        Only for POST and GET requests.
     """
 
-    def has_object_permission(self, request, view, obj):
-        # if user has created object, allow.
+    message = 'Only authorised users can create URLs which are collecting metadata.'
 
-        # thinks that
+    def has_permission(self, request, view):
+        if request.method == 'POST':
+            do_collect_meta = request.POST.get('do_collect_meta')
+        else:
+            do_collect_meta = request.GET.get('do_collect_meta')
+
+        if do_collect_meta == 'false':
+            do_collect_meta = False
         try:
-            return obj.author == request.user
-            # auth on site
-        except KeyError:
-            try:
-                return obj.key == request.POST['key']
-                # it was api-generated
-            except KeyError:
-                # link was generated anonymously, no owner
-                return False
+            if int(do_collect_meta) <= 0:
+                do_collect_meta = False
+        except ValueError:
+            pass
+        except TypeError:
+            pass
+
+        if not bool(do_collect_meta) or request.user.is_authenticated:
+            return True
+        return False
 
 
 class IsVisitOwner(permissions.BasePermission):
     """
-        Object-level permission to only allow owners of an object to view or edit it.
-        Only for Visit objects.
+        Permission for Visit model, which tells if
+        you are it's owner or not.
     """
 
-    def has_object_permission(self, request, view, obj):
-        # if user has created object, allow.
+    message = 'Only owners of this shorturl can see it\'s visits.'
 
-        # thinks that
-        try:
-            return obj.shorturl.author == request.user
-            # auth on site
-        except KeyError:
+    def has_object_permission(self, request, view, obj):
+        user = request.user
+        if obj.shorturl.author == user:
+            return True
+        else:
             try:
-                return obj.shorturl.key == request.POST['key']
-                # it was api-generated
-            except KeyError:
-                # link was generated anonymously, no owner
-                return False
+                if obj.shorturl.key == request.auth.key:
+                    return True
+            except AttributeError:
+                pass
+        return False
+

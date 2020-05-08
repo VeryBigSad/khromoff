@@ -1,11 +1,10 @@
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path
 
 from . import views
 
 urlpatterns = [
     path('admin/', admin.site.urls, name='admin'),
-    path('shorturl/', include('urlshortner.urls', namespace='urlshortner')),
 
     # accounts shit
     path('', views.index, name='index'),
@@ -16,8 +15,8 @@ urlpatterns = [
     path('logout', views.logout_page, name='logout'),
 
     # api
-    path('api-docs/', include('api.urls')),
-    path('api/shorturl/', include('urlshortner.api.urls'))
+    # path('api-docs/', include('api.urls')),
+    # path('api/', include('urlshortner.api.urls'))
 ]
 
 handler404 = 'khromoff.views.error404'

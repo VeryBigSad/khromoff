@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load static %}
+{% load hosts %}
+
+{% block title %} URLshortner {% endblock %}
+
+{# Header #}
+{% block brand-name %}
+    Сокращатель ссылок
+{% endblock %}
+{% block brand-name-url %}
+    {% host_url 'index' host 'urlshortner' %}
+{% endblock %}
+{% block right-nav-items %}
+    <li class="nav-item mr-3 text-center">
+        <a href="{% host_url 'about' host 'urlshortner' %}" class="nav-link">О сервисе</a>
+    </li>
+{% endblock %}
+
+

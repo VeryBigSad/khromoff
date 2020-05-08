@@ -1,0 +1,121 @@
+{% extends 'api_base.html' %}
+{% load hosts %}
+
+{% block title %}Объекты API{% endblock %}
+
+{% block content2 %}
+    <div class="container-fluid">
+        <p class="display-3">Объекты API</p>
+        <h4 class="mb-5 font-weight-normal text-muted">Объекты, с которыми вам придется работать в API</h4>
+        <div class="object" id="shorturl">
+            <p class="h2" id="obj-header">ShortURL <small class="text-muted">Объект короткой ссылки</small></p>
+            <div id="description">
+                <div id="attributes">
+                    <p>
+                        <span class="font-weight-bold">short_code</span>
+                        <strong class="text-monospace">(string)</strong>
+                        - символы после l.khrmff.ru/, можно сказать айди ссылки
+                        (по ней будет производиться определение). <br>
+
+                        <small>Примеры - VcF, cat_pictures</small>
+                    </p>
+                    <p>
+                        <span class="font-weight-bold">full_url</span>
+                        <strong class="text-monospace">(string)</strong>
+                        - ссылка на основной сайт. <br>
+                        <small>Примеры - https://google.com, https://duckduckgo.com/?q=some+query&atb=v208-1</small>
+                    </p>
+                    <p>
+                        <span class="font-weight-bold">do_collect_meta</span>
+                        <strong class="text-monospace">(boolean)</strong>
+                        - можно-ли собирать объекты мета-данных <a href="#Visit">Visit</a>,
+                        также создавать ссылку на список метаданных (<span class="text-monospace">view_data_code</span>)
+                    </p>
+                    <p>
+                        <span class="font-weight-bold">active</span>
+                        <strong class="text-monospace">(boolean)</strong>
+                        - работает-ли ссылка
+                    </p>
+                    <p>
+                        <span class="font-weight-bold">alias</span>
+                        <strong class="text-monospace">(boolean)</strong>
+                        - является-ли <span class="text-monospace">short_code</span> заданным человеком (True) или
+                        сгенерированным автоматически (False).
+                    </p>
+                    <div class="mt-5 alert alert-dark text-center">
+                        Все ниже можно получить только будучи авторизованным, и будучи
+                        создателем самой ссылки
+                    </div>
+                    {# TODO: creator_ip #}
+                    <p>
+                        <span class="font-weight-bold">time_created</span>
+                        <strong class="text-monospace">(datetime)</strong>
+                        - время создания ссылки <br>
+                        <small>Пример: 12.03.2020 12:43:19</small>
+                    </p>
+                    <p>
+                        <span class="font-weight-bold">key</span>, <span class="font-weight-bold">author</span>
+                        <strong class="text-monospace">(string)</strong>, <strong class="text-monospace">(string)</strong>
+                        - только одно из полей может быть заполненно, либо префикс ключа которым была созданна ссылка,
+                        либо имя пользователя который ее создал. <br>
+                        <small>Пример: admin; {# TODO: перфикс ключа #}</small>
+                    </p>
+                    <p>
+                        <span class="font-weight-bold">view_data_code</span>
+                        <strong class="text-monospace">(string)</strong>
+                        - код, который вставив после l.khrmff.ru/view-data/ можно получить
+                        ссылку на информацию о проходах по ссылке <br>
+                        <small>Пример: uP6uEVAGMcK61clVdtJm71SJFmAMn36{# TODO:  #}</small>
+
+                    </p>
+                </div>
+            </div>
+        </div>
+        <hr class="mb-5">
+        <div class="object" id="visit">
+            <p class="h2" id="obj-header">Visit <small class="text-muted">Объект перехода по короткой ссылке</small></p>
+            <div id="description">
+                <div id="attributes">
+                    <p>
+                        <span class="font-weight-bold">shorturl</span>
+                        <strong class="text-monospace">(string)</strong>
+                        - short_code объекта shorturl, которому принадлежит Visit <br>
+
+                        <small>Примеры - VcF, cat_pictures</small>
+                    </p>
+                    <p>
+                        <span class="font-weight-bold">time</span>
+                        <strong class="text-monospace">(datetime)</strong>
+                        - время перехода <br>
+                        <small>Пример: 12.03.2020 12:46:27</small>
+                    </p>
+                    <p>
+                        <span class="font-weight-bold">user_agent</span>
+                        <strong class="text-monospace">(useragent)</strong>
+                        - User-Agent человека который перешел по ссылке <br>
+                        <small>Пример: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:73.1) Gecko/20100101 Firefox/73.1</small>
+                    </p>
+                    <p>
+                        <span class="font-weight-bold">http_referer</span>
+                        <strong class="text-monospace">(URL)</strong>
+                        - URL, на котором пользователь был перед тем как попасть на перенаправление.<br>
+
+                        <small>Пример: https://site.com/this-page-has-redirect</small>
+                    </p>
+                    <p>
+                        <span class="font-weight-bold">IP</span>
+                        <strong class="text-monospace">(IP)</strong>
+                        - IP-адрес пользователя которй перешел по ссылке.<br>
+
+                        <small>Пример: 127.0.0.1</small>
+                    </p>
+                    <p>
+                        <span class="font-weight-bold">id</span>
+                        <strong class="text-monospace">(positive_int)</strong>
+                        - ID перехода, начинается от 1.<br>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

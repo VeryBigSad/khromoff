@@ -1,4 +1,4 @@
-{% extends "base_shortner.html" %}
+{% extends "urlshortner/base_shortner.html" %}
 {% block title %}Сократить ссылку{% endblock %}
 
 {% load static %}
@@ -7,9 +7,10 @@
 {% endblock %}
 
 {% block content %}
-    <div class="container text-center shorturl-form">
-        <h1 class="">Создать короткую ссылку</h1>
-        <div class="errors">
+    <div class="container text-center form-width-700">
+        <h1 class="mb-0">Создать короткую ссылку</h1>
+        <small class="text-muted">Без регистрации. Навсегда.</small>
+        <div class="errors mt-2">
             {% for i in errors %}
                 <div class="alert alert-danger">
                     Ошибка! {{ i.description }}
@@ -20,8 +21,8 @@
             {% csrf_token %}
             <div class="form-group">
                 <label for="url_input" class="h5 font-weight-normal">Длинная ссылка: </label>
-                <input class="form-control text-monospace" id="url_input" name="long_url" type="text"
-                       value="{{ request.POST.long_url }}" placeholder="https://google.com">
+                <input class="form-control text-monospace" id="url_input" name="full_url" type="text"
+                       value="{{ post.full_url }}" placeholder="https://google.com">
             </div>
 
             <div class="form-group">
@@ -29,15 +30,15 @@
                 <small>Не обязательно</small>
                 <div class="input-group">
                     <div class="input-group-prepend">
-                        <span class="input-group-text">https://l.{{ static.HOSTNAME }}/</span>
+                        <span class="input-group-text">https://{{ static.HOSTNAME }}/</span>
                     </div>
-                    <input id="basic-url" type="text" class="form-control" name="alias" placeholder="my_url">
+                    <input id="basic-url" type="text" class="form-control" name="short_code" placeholder="my_url" value="{{ post.short_code }}">
                 </div>
             </div>
 
             {% if user.is_authenticated %}
                 <div class="custom-control custom-checkbox">
-                    <input class="custom-control-input" id="checkbox" type="checkbox" name="do_collect_meta" checked>
+                    <input class="custom-control-input" id="checkbox" type="checkbox" name="do_collect_meta" value="true" checked>
                     <label class="custom-control-label" for="checkbox">Позволить собирать данные о переходах?</label>
                 </div>
             {% else %}

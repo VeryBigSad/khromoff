@@ -3,7 +3,11 @@
 
 {% block content %}
     <div class="container text-center">
-        <h1>{{ description|default:"This page doesn't exist." }}</h1>
-        <h3><a href="/">Click here to get to homepage</a></h3>
+        {% if description|length < 35 %}
+            <h1>{{ description }}</h1>
+            {% else %}
+            <h1>Этой страницы не существует. <small>Это все что мы знаем</small></h1>
+        {% endif %}
+        <h3><a href="{% url 'index' %}">Нажми сюда чтобы попасть на главную страницу</a></h3>
     </div>
 {% endblock %}
