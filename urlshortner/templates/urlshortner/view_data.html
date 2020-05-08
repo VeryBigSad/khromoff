@@ -1,12 +1,15 @@
-{% extends "base_shortner.html" %}
+{% extends "urlshortner/base_shortner.html" %}
 
 {% block title %}Посмотреть информацию о переадресации{% endblock %}
 
 {% block content %}
     {# TODO: make it responsible #}
     <div class="container-fluid text-center">
-        <h4 class="font-weight-normal">Информация о переадресации на <a class="font-weight-bold"
-                                                                        href="{% url 'urlshortner:redirect' shorturl.short_code %}">{{ shorturl.full_url }}</a>
+        <h4 class="font-weight-normal">
+            Информация о переадресации на
+            <a class="font-weight-bold" href="{% url 'redirect' shorturl.short_code host 'urlshortner' %}">
+                {{ shorturl.full_url }}
+            </a>
         </h4>
         {% if visits %}
             <h4>Всего было {{ visits.count }} переходов</h4>

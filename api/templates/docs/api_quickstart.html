@@ -1,0 +1,76 @@
+{% extends 'api_base.html' %}
+
+{% block title %}Начало работы с API{% endblock %}
+
+{% block breadcumb %}
+    <li class="breadcrumb-item" aria-current="page"><a class="text-muted" href="">Главная</a></li>
+{% endblock %}
+
+{% block content2 %}
+    <p class="display-3">Начало работы с API</p>
+    <h4 class="mb-5 font-weight-normal text-muted">Это для программистов</h4>
+    <h4>Общее</h4>
+    <p>
+        Чтобы сделать любой запрос, нужно ввести имя метода в такую ссылку - https://api.khrmff.ru/method/(имя метода),
+        и отправить данные через POST или GET запрос.
+    </p>
+    <h4>Создать короткую ссылку с Python</h4>
+    {# TODO: highlighting #}
+    <pre>
+        <code>
+            import requests
+
+            data = {'full_url': 'https://google.com'}{# TODO: specify URL #}
+            r = requests.post('https://api.khrmff.ru/method/shorturl.create', data=data)
+
+            print(r.json())
+        </code>
+    </pre>
+    <h5>Выведет:
+        <pre class="text-monospace font-weight-normal">
+            {
+             "short_code": "gdt",
+             "full_url": "https://google.com",
+             "do_collect_meta": False,
+             "alias": False,
+             "active": True
+            }
+        </pre>
+    </h5>
+    <p>
+        Что значит, что введя в браузере
+        https://l.khrmff.ru/<span class="font-italic">gdt</span>,
+        мы попадем на https://google.com, и т.к. <span class="text-monospace">do_collect_meta = False</span>,
+        то наш переход был анонимен и о нас ничего неизвестно.
+    </p>
+
+    <div class="mt-4"></div>
+    <h4>Уточнить личную ссылку</h4>
+    <code>data = {'full_url': 'https://google.com', 'short_code': 'google_link'}</code>
+    <p>Теперь наша ссылка будет https://l.khrmff.ru/<span class="font-italic">google_link</span>.</p>
+
+    <div class="mt-4"></div>
+    <h4>Чтобы использвать токен, в каждом запросе уточните поле token, например:</h4>
+    <code>data = {'full_url': 'https://google.com', 'short_code': 'google_link', 'token': 'Ваш токен'}</code>
+
+    <p>
+        Теперь мы можем указать <span class="text-monospace">do_collect_meta</span> как
+        <span class="text-monospace">True</span>. Тогда получается такой запрос:
+    </p>
+    <code>data = {'full_url': 'https://google.com', 'short_code': 'google_link', 'token': 'Ваш токен', 'do_collect_meta': True}</code>
+    <p>И отправив его, мы получим это:</p>
+    <h5>Выведет: </h5>
+    <pre class="text-monospace font-weight-normal">
+        {
+         "short_code": "google_link",
+         "full_url": "https://google.com",
+         "do_collect_meta": True,
+         "alias": True,
+         "time_created": "08.05.2020 22:53:35",
+         "author": None,
+         "active": True,
+         "key": "Префикс ключа",
+         "view_data_code": "30 символов"
+        }
+    </pre>
+{% endblock %}

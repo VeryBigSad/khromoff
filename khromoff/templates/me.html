@@ -3,8 +3,8 @@
 
 {% block title %}Обо мне{% endblock %}
 
-{% block head %}
-    <link rel="stylesheet" href="{% static "about_styles.css" %}">
+{% block scripts %}
+    <link rel="stylesheet" href="{% static "khromoff/about_styles.css" %}">
 {% endblock %}
 
 {% block content %}
@@ -23,5 +23,12 @@
             Предпочтительно писать в телеграм, т.к. там я скорее всего отвечу мгновенно, но и в других местах долго ждать ответа вам
             не придется.
         </p>
+
+        <div>
+            {#            <video src="https://giphy.com/gifs/konosuba-LZmMH7lmHeNFe/tile"></video>#}
+            {#            <img src="https://media.giphy.com/media/LZmMH7lmHeNFe/giphy.gif" alt="">#}
+{#            <video src="https://i.imgur.com/RKN35tB.mp4"></video>#}
+            <img src="https://i.imgur.com/RKN35tB.gif" alt="">
+        </div>
     </div>
 {% endblock %}

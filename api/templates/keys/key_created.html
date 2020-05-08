@@ -1,0 +1,12 @@
+{% extends 'api_base.html' %}
+{% load hosts %}
+
+{% block title %}Ключ создан{% endblock %}
+
+{% block content2 %}
+    <h1>Ключ успешно создан!</h1>
+    <h5 class="font-weight-normal">Это первый и последний раз когда вы его видите, <span class="font-italic">сохраните его</span> для дальнейшего использования.</h5>
+    <h4 class="font-weight-normal mt-3">Ключ API: <strong class="text-break">{{ raw_api_key }}</strong></h4>
+    <div class="mt-5"></div>
+    <h3><a href="{% host_url 'docs-index' host 'api' %}">Вернуться к документации</a></h3>
+{% endblock %}

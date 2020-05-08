@@ -1,20 +1,22 @@
 import datetime
 import string
+from datetime import datetime
 
+from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
-from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect, HttpResponseServerError
-from django.contrib.auth import authenticate, login, logout, get_user_model
-from django.urls import reverse
-from datetime import datetime
+from django.shortcuts import render, redirect
+from django_hosts import reverse
 
-from urlshortner.models import ShortUrl, Visit
 from api.models import UserAPIKey
+from khromoff.utils import next_redirect_or_main
+from urlshortner.models import ShortUrl, Visit
 
 User = get_user_model()
 
+# TODO: if ?next= doesnt route to out site, then block it.
 
 # functions for username and password validation on symbols
 def password_valid_checks(password, password_repeat):
@@ -72,7 +74,7 @@ def error500(request):
 
 def login_page(request):
     if request.user.is_authenticated:
-        return HttpResponseRedirect(reverse('personal'))
+        return HttpResponseRedirect(reverse('personal', host='index'))
 
     if request.method == 'POST':
         if request.POST['type'] == 'login':
@@ -92,7 +94,6 @@ def login_page(request):
                                                                        'menu': request.POST['type']})
         elif request.POST['type'] == 'register':
             errors = []
-            # TODO: send in post data request.POST so we dont have to refill the fields
             errors += username_valid_checks(request.POST['username'])
             errors += password_valid_checks(request.POST['password'], request.POST['password_repeat'])
 
@@ -105,7 +106,7 @@ def login_page(request):
             if request.GET.get('next') and request.GET.get('next') != '/':
                 return redirect(request.GET['next'])
             else:
-                return redirect(reverse('personal') + '?new')
+                return redirect(reverse('personal', host='index') + '?new')
 
         else:
             return HttpResponseServerError()
@@ -162,10 +163,7 @@ def me(request):
 
 def logout_page(request):
     logout(request)
-    if request.GET.get('next'):
-        return HttpResponseRedirect(request.GET['next'])
-    else:
-        return HttpResponseRedirect('/')
+    return next_redirect_or_main(request)
 
 
 def index(request):

@@ -1,14 +1,6 @@
-/*#content {*/
-/*    min-height: 30rem;*/
-/*}*/
-/*#preview-redirect-footer {*/
-/*    min-height: 10rem;*/
-/*}*/
-
-/*body {*/
-/*    min-height: 100vh;*/
-/*}*/
-
-.shorturl-form {
-    max-width: 40px;
+.form-width-700 {
+    max-width: 700px;
+}
+.form-width-500 {
+    max-width: 500px;
 }

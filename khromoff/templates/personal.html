@@ -1,9 +1,11 @@
 {% extends "base.html" %}
 
+{% load static %}
+{% load hosts_override %}
+
 {% block title %}Личный кабинет{% endblock %}
 
-{% load static %}
-{% block head %}
+{% block scripts %}
     <link rel="stylesheet" href="{% static "khromoff/profile_styles.css" %}">
 {% endblock %}
 
@@ -74,13 +76,13 @@
                             {# TODO: on click we redirect to visits of this url, link: #}
                             <tr>
                                 <th>
-                                    <a href="{% url 'urlshortner:redirect' i.obj.short_code %}">
+                                    <a href="{% url 'redirect' i.obj.short_code host 'urlshortner' %}">
                                         {{ i.obj.full_url }}
                                     </a>
                                 </th>
                                 {% if i.obj.do_collect_meta %}
                                     <td>
-                                        <a href="{% url 'urlshortner:data' i.obj.view_data_code %}">
+                                        <a href="{% url 'data' i.obj.view_data_code host 'urlshortner' %}">
                                             Подробная информация о переходах
                                         </a>
                                     </td>
@@ -98,7 +100,7 @@
                    </table>
                 {% else %}
                     <h4 class="font-weight-normal">Вы еще не создавали ссылок...</h4>
-                    <h4 class="font-weight-normal">Нажми <a href="{% url 'urlshortner:index' %}">сюда</a> чтобы создать
+                    <h4 class="font-weight-normal">Нажми <a href="{% url 'index' host 'urlshortner' %}">сюда</a> чтобы создать
                         такую!</h4>
                 {% endif %}
 
@@ -134,7 +136,11 @@
                                         </ul>
                                     </td>
                                     <td>
-                                        &infin;
+                                        {% if i.requests_per_minute == 999 %}
+                                            &infin;
+                                        {% else %}
+                                            {{ i.requests_per_minute }}
+                                        {% endif %}
                                     </td>
                                 </tr>
                             {% endfor %}
@@ -142,9 +148,15 @@
                     </table>
                 {% else %}
                     <h4 class="font-weight-normal">У вас нет активных ключей</h4>
-                    {# TODO: add accessbility to create keys #}
-                    <h4 class="font-weight-normal">В данный момент нет возможности их получить, но когда-нибудь появится.</h4>
+                    <h4 class="font-weight-normal">Чтобы получить такой, нажмите <a href="{% url 'create-api-key' host 'api' %}">сюда</a></h4>
                 {% endif %}
+                {% if keys|length >= 5 %}
+                    <h4 class="font-weight-normal">Вы не можете иметь больше 5 ключей.
+                        Если вы не используйте какой-то из них, удалите его и добавьте другой.</h4>
+                {% elif keys %}
+                    <h4 class="font-weight-normal">Чтобы получить еще один, нажмите <a href="{% url 'create-api-key' host 'api' %}">сюда</a></h4>
+                {% endif %}
+
             </div>
 
         </div>

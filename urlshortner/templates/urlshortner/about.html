@@ -1,0 +1,27 @@
+{% extends "urlshortner/base_shortner.html" %}
+{% load static %}
+{% load hosts %}
+
+{% block content %}
+    <div class="container-md text-center">
+        <p>
+            Это сокращатель ссылок.
+        </p>
+        <p>
+            {# TODO: add pictures #}
+            Допустим, вы хотите поделиться с другом ссылкой на сайт про число пи. Ссылка на него -  <span class="text-break text-monospace">https://3.141592653589793238462643383279502884197169399375105820974944592.eu/</span>
+        </p>
+        <p>Довольно большая, но этот сервис позволит ее сократить</p>
+        <p>
+            Введите
+        </p>
+        <p>
+            Этот сайт может сделать из этого это - <a href="{% host_url 'redirect' 'cat-pictures' host 'urlshortner' %}">https://{{ static.HOST }}/cat-pictures</a>.
+            <br>
+            Или это - <a href="{% host_url 'redirect' 'G1s' host 'urlshortner' %}">https://{{ static.HOST }}/G1s</a>.
+        </p>
+        <a href="{% host_url 'docs-index' host 'api' %}#urlshortner" class="text-muted">Информация для разработчиков</a>
+    </div>
+{% endblock %}
+
+

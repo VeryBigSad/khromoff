@@ -11,4 +11,3 @@ Disallow: /me
 Clean-Param: utm_source&utm_medium&utm_campaign
 Clean-Param: ?next
 
-# TODO: use smart subdomain, not just redirecting (l.khrmff->khrmff/shorturl)

@@ -1,0 +1,69 @@
+{% extends "api_base.html" %}
+{% load hosts %}
+
+{% block title %}
+    Методы API
+{% endblock %}
+
+{% block content2 %}
+    <p class="display-3 mb-5">Методы API</p>
+    <div>
+        <div class="">
+            <p class="method-name h2">shorturl.get</p>
+            <h6>Параметры</h6>
+            <ul>
+                <li>
+                    shortcode <span class="font-weight-bold">(string)</span>
+                    <span class="font-weight-bold">(required)</span>
+                    - короткий код. <br>
+                    <small>пример для ссылки https://l.khrmff.ru/Df2 - <span class="text-monospace">shortcode=Df2</span></small>
+                </li>
+            </ul>
+            <h6>Возвращает: <a href="{% host_url 'docs-objects' host 'api' %}#shorturl">ShortURL object</a></h6>
+        </div>
+        <div class="mt-4">
+            <p class="method-name h2">shorturl.create</p>
+            <h6 class="mt-0">Параметры</h6>
+            <ul>
+                <li>
+                    full_url <span class="font-weight-bold">(string)</span>
+                    <span class="font-weight-bold">(required)</span>
+                    - ссылка на изначальную страницу. <br>
+
+                    <small>Пример: https://google.com</small>
+                </li>
+                <li>
+                    short_code <span class="font-weight-bold">(string)</span>
+                    - предпочтительная персональная ссылка. <br>
+
+                    <small>Пример: VcF, cat-pictures</small>
+                </li>
+                <li>
+                    do_collect_meta <span class="font-weight-bold">(bool)</span>
+                    <span class="font-weight-bold">(authorised-only)</span>
+                    - собирать ли информацию о переходах людей по ссылке,
+                    а также создавать-ли ссылку на страницу с этой информацией. <br>
+                </li>
+            </ul>
+            <h6>Возвращает: <a href="{% host_url 'docs-objects' host 'api' %}#shorturl">ShortURL object</a></h6>
+        </div>
+        <div class="mt-4">
+            <p class="method-name h2">visit.get</p>
+            <h6>Параметры</h6>
+            <ul>
+                <li>
+                    shortcode <span class="font-weight-bold">(string)</span>
+                    <span class="font-weight-bold">(required)</span>
+                    - короткий код ссылки, по которой был произведен визит.<br>
+
+                    <small>Пример: VcF, cat-pictures</small>
+                </li>
+                <li>
+                    id <span class="font-weight-bold">(positive_int)</span>
+                    - ид объекта (если не указано, вернет все Visit которые были записаны)<br>
+                </li>
+            </ul>
+            <h6>Возвращает: <a href="{% host_url 'docs-objects' host 'api' %}#visit">Visit object</a></h6>
+        </div>
+    </div>
+{% endblock %}

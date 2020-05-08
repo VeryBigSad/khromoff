@@ -1,0 +1,35 @@
+{% extends "api_base.html" %}
+{% load static %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'urlshortner/styles.css' %}">
+    <script src="{% static 'api/scripts.js' %}"></script>
+{% endblock %}
+
+{% block title %}Получить ключ доступа API{% endblock %}
+
+{% block content2 %}
+    <div class="container text-center form-width-500">
+        <h1 class="mb-0">Получить ключ доступа API</h1>
+        <div class="mb-3 mt-0"></div>
+        <div class="errors">
+            {% for i in errors %}
+                <div class="alert alert-danger">Ошибка! {{ i.description }}</div>
+            {% endfor %}
+        </div>
+        <form method="POST" novalidate>
+            {% csrf_token %}
+            <label for="key-name">Имя для ключа (50 символов макс.)</label>
+            <input placeholder="Телеграм-бот сокращатель ссылок" id="key-name" name="name" type="text" class="form-control" required>
+            <div class="invalid-feedback">
+                Выберите имя для ключа.
+            </div>
+            <label for="r-per-minute" class="mt-3">Сколько запросов в минуту максимум (от 1 до 30)</label>
+            <input type="number" class="form-control" min="1" max="30" id="r-per-minute" name="requests_per_minute" value="30" required>
+{#            <label for="">Права</label>#}
+            {# TODO: Add rights to tokens #}
+            {# TODO: Add expire-time to tokens (not required though) #}
+            <button class="btn btn-primary mt-2" type="submit">Получить</button>
+        </form>
+    </div>
+{% endblock %}
