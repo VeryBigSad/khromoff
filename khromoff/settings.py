@@ -27,6 +27,11 @@ SESSION_COOKIE_DOMAIN = DOMAIN_NAME
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse'
+        }
+    },
     'formatters': {
         'verbose': {
             'format': '{levelname} - {asctime} | {module}: {message}',
@@ -48,21 +53,30 @@ LOGGING = {
             'class': 'logging.FileHandler',
             'filename': os.path.join(BASE_DIR, 'logs/django.log'),
             'formatter': 'verbose'
-
         },
-        # TODO: add telegram-message-to-me handler.
+        'telegram_log': {
+            'level': 'ERROR',
+            'filters': ['require_debug_false'],
+            'class': 'khromoff.utils.TelegramLogHandler',
+            'bot_token': secrets.bot_token,
+        }
     },
     'loggers': {
         'django': {
             'handlers': ['console', 'file'],
             'propagate': True,
         },
+        'django.request': {
+            'handlers': ['console', 'file', 'telegram_log'],
+            'level': 'ERROR',
+        }
     }
 }
 
 
 INSTALLED_APPS = [
     'django.contrib.admin',
+    'django_log_to_telegram',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
