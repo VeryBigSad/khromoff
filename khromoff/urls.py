@@ -6,7 +6,7 @@ from . import views
 urlpatterns = [
     path('admin/', admin.site.urls, name='admin'),
 
-    # accounts shit
+    # accounts
     path('', views.index, name='index'),
     path('about', views.about, name='about'),
     path('me', views.me, name='me'),
@@ -14,9 +14,9 @@ urlpatterns = [
     path('login', views.login_page, name='login'),
     path('logout', views.logout_page, name='logout'),
 
-    # api
-    # path('api-docs/', include('api.urls')),
-    # path('api/', include('urlshortner.api.urls'))
+    # error 500
+    path('500', views.error500, name='error500'),
+
 ]
 
 handler404 = 'khromoff.views.error404'

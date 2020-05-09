@@ -5,8 +5,10 @@ from khromoff import secrets
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 SECRET_KEY = secrets.SECRET_KEY
+DEBUG = False
 
 if not DEBUG:
+    DOMAIN_NAME = 'khrmff.ru'
     CSRF_COOKIE_SECURE = True
     SESSION_COOKIE_SECURE = True
     SECURE_SSL_REDIRECT = True
@@ -14,19 +16,22 @@ if not DEBUG:
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_SECONDS = 3600
     SECURE_REFERRER_POLICY = 'no-referrer-when-downgrade'
+else:
+    DOMAIN_NAME = 'khrmff.test'
 
 ALLOWED_HOSTS = ['*']
-DOMAIN_NAME = 'khrmff.test'
 LOGIN_URL = '//%s/login' % DOMAIN_NAME
 
-ALLOWED_HOSTS = ['*']
-HOSTNAME = 'khrmff.ru'
-DEBUG = False
 SESSION_COOKIE_DOMAIN = DOMAIN_NAME
 
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse'
+        }
+    },
     'formatters': {
         'verbose': {
             'format': '{levelname} - {asctime} | {module}: {message}',
@@ -48,15 +53,23 @@ LOGGING = {
             'class': 'logging.FileHandler',
             'filename': os.path.join(BASE_DIR, 'logs/django.log'),
             'formatter': 'verbose'
-
         },
-        # TODO: add telegram-message-to-me handler.
+        'telegram_log': {
+            'level': 'ERROR',
+            'filters': ['require_debug_false'],
+            'class': 'khromoff.utils.TelegramLogHandler',
+            'bot_token': secrets.bot_token,
+        }
     },
     'loggers': {
         'django': {
             'handlers': ['console', 'file'],
             'propagate': True,
         },
+        'django.request': {
+            'handlers': ['console', 'file', 'telegram_log'],
+            'level': 'ERROR',
+        }
     }
 }
 

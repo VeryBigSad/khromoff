@@ -2,6 +2,10 @@
 {% load static %}
 {% load hosts %}
 
+{% block head %}
+    <link rel="stylesheet" href="{% static 'general/default.css' %}">
+{% endblock %}
+
 {% block content %}
     <div class="container-md text-center">
         <p>
@@ -11,16 +15,13 @@
             {# TODO: add pictures #}
             Допустим, вы хотите поделиться с другом ссылкой на сайт про число пи. Ссылка на него -  <span class="text-break text-monospace">https://3.141592653589793238462643383279502884197169399375105820974944592.eu/</span>
         </p>
-        <p>Довольно большая, но этот сервис позволит ее сократить</p>
+        <p>В ней 77 символов. Можно сделать короче.</p>
         <p>
-            Введите
-        </p>
-        <p>
-            Этот сайт может сделать из этого это - <a href="{% host_url 'redirect' 'cat-pictures' host 'urlshortner' %}">https://{{ static.HOST }}/cat-pictures</a>.
+            Этот сервис может сделать из такой большой ссылки это (29 символов) - <a href="{% host_url 'redirect' 'pi-number' host 'urlshortner' %}" class="text-break">https://{{ static.HOST }}/pi-number</a>.
             <br>
-            Или это - <a href="{% host_url 'redirect' 'G1s' host 'urlshortner' %}">https://{{ static.HOST }}/G1s</a>.
+            Или это (25 символов) - <a href="{% host_url 'redirect' 'G1s' host 'urlshortner' %}">https://{{ static.HOST }}/G1s</a>.
         </p>
-        <a href="{% host_url 'docs-index' host 'api' %}#urlshortner" class="text-muted">Информация для разработчиков</a>
+        <a href="{% host_url 'docs-index' host 'api' %}" class="text-muted">API для разработчиков</a>
     </div>
 {% endblock %}
 
