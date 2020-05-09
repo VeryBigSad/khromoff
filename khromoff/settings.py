@@ -6,6 +6,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 SECRET_KEY = secrets.SECRET_KEY
 DEBUG = True
+DOMAIN_NAME = 'khrmff.ru'
 
 if not DEBUG:
     CSRF_COOKIE_SECURE = True
@@ -15,9 +16,10 @@ if not DEBUG:
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_SECONDS = 3600
     SECURE_REFERRER_POLICY = 'no-referrer-when-downgrade'
+else:
+    DOMAIN_NAME = 'khrmff.test'
 
 ALLOWED_HOSTS = ['*']
-DOMAIN_NAME = 'khrmff.test'
 LOGIN_URL = '//%s/login' % DOMAIN_NAME
 
 SESSION_COOKIE_DOMAIN = DOMAIN_NAME
