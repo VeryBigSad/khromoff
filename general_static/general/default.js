@@ -12,6 +12,11 @@ $('#report-modal').on('hidden.bs.modal', function (e) {
 });
 
 $('#bug-report-form').on('submit', function(){
+
+    $("<input />").attr("type", "hidden")
+        .attr("name", "location")
+        .attr("value", window.location.href)
+        .appendTo("#bug-report-form");
     $.post($(this).attr('action'), $(this).serialize(), function(response){
     },'json');
     $('#report-modal').modal('hide');
