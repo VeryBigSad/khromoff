@@ -12,8 +12,7 @@ class APITokenAuth(authentication.BaseAuthentication):
             token = request.POST.get('token')
         else:
             if not request.method == 'GET':
-                # TODO: raise exception that method is not post or get
-                pass
+                raise exceptions.AuthenticationFailed('Method not POST or GET')
             token = request.GET.get('token')
 
         if not token:
@@ -22,7 +21,7 @@ class APITokenAuth(authentication.BaseAuthentication):
         try:
             api_key = UserAPIKey.objects.get_from_key(token)
         except UserAPIKey.DoesNotExist:
-            raise exceptions.AuthenticationFailed('No such token')
+            raise exceptions.AuthenticationFailed('Invalid token')
 
         return AnonymousUser, {'key': api_key}
 

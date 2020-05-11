@@ -7,7 +7,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 from django.http import HttpResponseRedirect, HttpResponseServerError
-from django.shortcuts import render, redirect
+from django.shortcuts import render
+from django.utils.translation import gettext
 from django_hosts import reverse
 
 from api.models import UserAPIKey
@@ -16,7 +17,6 @@ from urlshortner.models import ShortUrl, Visit
 
 User = get_user_model()
 
-# TODO: if ?next= doesnt route to out site, then block it.
 
 # functions for username and password validation on symbols
 def password_valid_checks(password, password_repeat):
@@ -29,17 +29,17 @@ def password_valid_checks(password, password_repeat):
         errors.append({'type': 'password_too_long',
                        'description': 'Пароль не может быть длиннее 100 символов.'})
     for i in password.lower():
-        if i not in string.ascii_lowercase + '0123456789-_':
+        if i not in string.ascii_lowercase + '0123456789_':
             errors.append({'type': 'invalid_password',
                            'description': 'Пароль должен содержать'
-                                          ' только латиницу, цифры, тире и нижнее подчеркивание.'})
+                                          ' только латиницу, цифры и нижнее подчеркивание.'})
             break
     try:
         validate_password(password)
     except ValidationError as e:
         for i in e:
             errors.append({'type': 'weak_password',
-                           'description': i})
+                           'description': gettext(i)})
     return errors
 
 
@@ -55,12 +55,11 @@ def username_valid_checks(username):
                        'description': 'Имя пользователя должно'
                                       ' быть длинной от 5 до 30 символов.'})
     for i in username.lower():
-        if i not in string.ascii_lowercase + '0123456789-_':
+        if i not in string.ascii_lowercase + '0123456789_':
             errors.append({'type': 'invalid_username',
                            'description': 'Имя пользователя должно содержать'
-                                          ' только латиницу, цифры, тире и нижнее подчеркивание.'})
+                                          ' только латиницу, цифры и нижнее подчеркивание.'})
             break
-
     return errors
 
 
@@ -83,10 +82,7 @@ def login_page(request):
             # This user should always exist. Otherwise, idk create it manually, this is TEMP so not coding it :shrug:
             if user:
                 login(request, user)
-                if request.GET.get('next'):
-                    return HttpResponseRedirect(request.GET['next'])
-                else:
-                    return HttpResponseRedirect('/')
+                return next_redirect_or_main(request)
             else:
                 return render(request, 'login_register.html', context={'errors': [{'type': 'wrong_credentials',
                                                                                    'description': 'Неверный логин или'
@@ -100,13 +96,9 @@ def login_page(request):
             if errors:
                 return render(request, 'login_register.html', context={'errors': errors, 'menu': request.POST['type']})
 
-            new_user = User.objects.create_user(request.POST['username'], '', request.POST['password'])
+            new_user = User.objects.create_user(request.POST['username'], password=request.POST['password'])
             login(request, new_user)
-
-            if request.GET.get('next') and request.GET.get('next') != '/':
-                return redirect(request.GET['next'])
-            else:
-                return redirect(reverse('personal', host='index') + '?new')
+            return next_redirect_or_main(request)
 
         else:
             return HttpResponseServerError()

@@ -1,4 +1,5 @@
 from django.shortcuts import render, Http404, redirect, get_object_or_404
+from django.views.decorators.cache import cache_page
 from django_hosts import reverse
 
 from urlshortner.api.serializers import ShorturlSerializer
@@ -48,24 +49,6 @@ def create_new_link(request):
                                'description': error_codes[str(desc[0])]})
             return render(request, 'urlshortner/new_shorten_url_form.html', context={'errors': errors,
                                                                                      'post': request.POST})
-        # 'description': 'This alias already exists, try another or random.'})
-        # except NameExistsError:
-        #     errors.append({'type': 'invalid_alias',
-        #                    'description': 'This alias already exists, try another or random.'})
-        #
-        # # TODO: replace this with rest exception
-        # except PermissionDenied:
-        #     errors.append({'type': 'permission_denied',
-        #                    'description': 'You don\'t have enough permissions to do that.'})
-        # except InvalidAliasError:
-        #     errors.append({'type': 'alias_too_short',
-        #                    'description': 'Please, use alias from 3 to 30 symbols length, '
-        #                                   'and only letters, numbers, and underscore.'})
-        # except InvalidUrlError:
-        #     errors.append({'type': 'invalid_url',
-        #                    'description': 'URL you passed is either invalid or '
-        #                                   'links to this site. Please check the correctness.'})
-
         url = reverse('preview', kwargs={'short_id': short_code}, host='urlshortner')
         if short_obj.data['do_collect_meta']:
             url += '?view_data_code=' + short_obj.data['view_data_code']
@@ -83,6 +66,7 @@ def view_data(request, view_data_code):
         'shorturl': shorturl, 'visits': Visit.objects.filter(shorturl=shorturl)})
 
 
+@cache_page(60 * 15)
 def redirect_to_long_url(request, short_id):
     url_object = ShortUrl.objects.filter(short_code=short_id)
     if not url_object.exists():
@@ -92,6 +76,8 @@ def redirect_to_long_url(request, short_id):
                           ' Please check that url is entered'
                           ' correctly.')
     url_object = url_object[0]
+    if not url_object.active:
+        raise Http404('This URL is blocked by site owners or ShortURL author.')
     long_url = url_object.full_url
 
     if url_object.do_collect_meta:
@@ -108,10 +94,9 @@ def preview(request, short_id):
     except Http404:
         obj = get_object_or_404(ShortUrl, short_code=short_id)
 
-    # TODO: send view_data_code var only if author created it.
     return render(request, 'urlshortner/preview.html',
                   context={'long_url': obj.full_url, 'do_collect_meta': obj.do_collect_meta,
-                           'short_code': short_id, 'view_data_code': obj.view_data_code})
+                           'short_code': short_id})
 
 
 def about(request):

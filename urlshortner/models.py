@@ -7,8 +7,6 @@ from urlshortner.constants import MAX_SHORTCODE_LENGTH, MAX_URL_LENGTH
 
 User = get_user_model()
 
-# TODO: activate/deactivate functionality
-
 
 class ShortUrl(models.Model):
     # key - key with which url was created

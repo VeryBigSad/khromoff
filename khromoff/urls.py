@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 
 from . import views
 
@@ -14,6 +14,8 @@ urlpatterns = [
     path('login', views.login_page, name='login'),
     path('logout', views.logout_page, name='logout'),
 
+    # bugs
+    path('bugs/', include('bughunter.urls')),
     # error 500
     path('500', views.error500, name='error500'),
 
