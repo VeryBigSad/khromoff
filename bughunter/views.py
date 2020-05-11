@@ -19,7 +19,7 @@ def report(request):
                     'user_ip: %s\n'
                     'user: %s\n'
                     'error_type: %s'
-                    % (request.build_absolute_uri(), request.META['REMOTE_ADDR'],
+                    % (request.POST.get('location'), request.META['REMOTE_ADDR'],
                        request.user, request.POST.get('error_type')))
         # TODO: save in DB, create page about it. more info there
         return HttpResponse('thx doode')

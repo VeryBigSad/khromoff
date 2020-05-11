@@ -74,7 +74,15 @@ LOGGING = {
             'handlers': ['console', 'file'],
             'level': 'DEBUG',
             'propagate': False
-        }
+        },
+        'khromoff': {
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG',
+        },
+        'khromoff.bugs': {
+            'handlers': ['telegram_log'],
+            'level': 'INFO',
+        },
     }
 }
 
