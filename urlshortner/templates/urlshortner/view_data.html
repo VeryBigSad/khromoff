@@ -3,23 +3,22 @@
 {% block title %}Посмотреть информацию о переадресации{% endblock %}
 
 {% block content %}
-    {# TODO: make it responsible #}
     <div class="container-fluid text-center">
         <h4 class="font-weight-normal">
             Информация о переадресации на
-            <a class="font-weight-bold" href="{% url 'redirect' shorturl.short_code host 'urlshortner' %}">
+            <a class="font-weight-bold text-break" href="{% url 'redirect' shorturl.short_code host 'urlshortner' %}">
                 {{ shorturl.full_url }}
             </a>
         </h4>
         {% if visits %}
             <h4>Всего было {{ visits.count }} переходов</h4>
-            <table class="table table-hover table-bordered table-sm-responsive">
+            <table class="table table-hover table-bordered table-responsive-md">
                 <thead>
                 <tr>
                     <th>Время</th>
-                    <th scope="col">IP-адрес</th>
-                    <th scope="col">Сайт с которого перешли</th>
-                    <th scope="col">User-agent</th>
+                    <td scope="col">IP-адрес</td>
+                    <td scope="col">Сайт с которого перешли</td>
+                    <td scope="col">User-agent</td>
                 </tr>
                 </thead>
                 <tbody>
@@ -28,15 +27,15 @@
                         <th>
                             {{ i.time }}
                         </th>
-                        <th>
+                        <td>
                             {{ i.IP }}
-                        </th>
-                        <th>
+                        </td>
+                        <td>
                             <a href="{{ i.http_referer }}">{{ i.http_referer }}</a>
-                        </th>
-                        <th>
+                        </td>
+                        <td>
                             {{ i.user_agent }}
-                        </th>
+                        </td>
 
                     </tr>
                 {% endfor %}

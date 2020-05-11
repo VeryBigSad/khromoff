@@ -20,12 +20,14 @@ def next_redirect_or_main(request):
 
 class TelgramLogFormatter(TelegramFormatter):
     def format(self, record):
-        a = super().format(record)
-        r = record.request
-        a += '\n'
-        a += 'view_name: %s\n' % r.resolver_match.view_name
-        a += 'POST data: %s\n' % dict(r.POST)
-        a += 'GET data: %s\n' % dict(r.GET)
+        try:
+            a = 'ERROR: http500 page:\n' + super().format(record) + '\n'
+            request = record.request
+            a += 'view_name: %s\n' % request.resolver_match.view_name
+            a += 'POST data: %s\n' % dict(request.POST)
+            a += 'GET data: %s' % dict(request.GET)
+        except AttributeError:
+            a = record.message
 
         return str(a)
 

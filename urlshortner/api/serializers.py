@@ -9,7 +9,7 @@ from rest_framework.validators import UniqueValidator
 
 from khromoff.settings import DOMAIN_NAME
 from urlshortner.api.permissions import IsVisitOwner
-from urlshortner.constants import SHORTCODE_BASE_LENGTH, MAX_SHORTCODE_LENGTH, MAX_URL_LENGTH
+from urlshortner.constants import SHORTCODE_BASE_LENGTH, MAX_SHORTCODE_LENGTH, MAX_URL_LENGTH, MIN_SHORTCODE_LENGTH
 from urlshortner.models import ShortUrl, Visit
 from urlshortner.utils import get_shorturl
 
@@ -63,11 +63,11 @@ class ShorturlSerializer(serializers.ModelSerializer):
     def validate_short_code(self, short_code):
         if short_code:
             if ShortUrl.objects.filter(short_code=short_code.lower()).exists():
-                raise serializers.ValidationError('This Alias is already taken.')
+                raise serializers.ValidationError('This alias is already taken.')
 
-            if 3 > len(short_code) or len(short_code) > MAX_SHORTCODE_LENGTH:
-                # TODO: don't use 3 as a number, use constant
-                raise serializers.ValidationError('Alias must have length from 4 to %s symbols.' % MAX_SHORTCODE_LENGTH)
+            if MIN_SHORTCODE_LENGTH > len(short_code) or len(short_code) > MAX_SHORTCODE_LENGTH:
+                raise serializers.ValidationError('Alias must have length from %s to %s symbols.' %
+                                                  (MIN_SHORTCODE_LENGTH, MAX_SHORTCODE_LENGTH))
 
             for i in short_code.lower():
                 if i not in string.ascii_lowercase + '0123456789-_':

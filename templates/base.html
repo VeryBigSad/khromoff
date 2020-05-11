@@ -1,5 +1,6 @@
 {% load static %}
 {% load hosts %}
+{% load cache %}
 
 <!DOCTYPE html>
 <html lang="ru">
@@ -14,6 +15,7 @@
     {% block head %} {% endblock %}
 </head>
 <body class="d-flex flex-column min-vh-100 mw-100">
+    {% cache 600 navbar request.user.username %}
     <nav class="navbar navbar-light navbar-expand-md" style="background-color: rgba(56,56,56,0.1);">
         <a href="{% block brand-name-url %}{% url 'index' %}{% endblock %}" class="navbar-brand h1">
             {% block brand-name %}Khromoff{% endblock %}
@@ -25,10 +27,10 @@
             <ul class="nav navbar-nav justify-content-center ">
                 <li class="nav-item d-block d-sm-none d-none d-sm-block d-md-none">
                     <h6>Интересное:</h6>
-                    <a class="btn btn-primary btn-lg mt-2" href="{% host_url 'index' host 'urlshortner' %}">Сокращатель ссылок</a>
+                    <a class="btn btn-primary btn-lg" href="{% host_url 'index' host 'urlshortner' %}">Сокращатель ссылок</a>
                     <a class="btn btn-primary btn-lg mt-2" href="{% host_url 'docs-index' host 'api' %}">Документация API</a>
                     {% if is_subdomain %}
-                        <a class="btn btn-primary btn-lg" href="{% host_url 'index' host 'index' %}">Khromoff (создатель сайта)</a>
+                        <a class="btn btn-primary btn-lg  mt-2" href="{% host_url 'index' host 'index' %}">Khromoff (создатель сайта)</a>
                     {% endif %}
                     <hr>
                 </li>
@@ -96,14 +98,59 @@
             </ul>
         </div>
     </nav>
+    {% endcache %}
+
+    <div class="modal fade" id="report-modal" tabindex="-1" role="dialog" aria-labelledby="report-modalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="report-modalLabel">Сообщить об ошибке</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="{% host_url 'bugreport' host 'index' %}" method="post" id="bug-report-form">
+                    <div class="modal-body">
+                        {% csrf_token %}
+                        <h6>Тип ошибки</h6>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="error_type" id="error_type_radio1" value="error-in-text">
+                            <label class="form-check-label" for="error_type_radio1">
+                                Опечатка/ошибка в тексте
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="error_type" id="error_type_radio2" value="wrong_var">
+                            <label class="form-check-label" for="error_type_radio2">
+                                Какой-то из показателей показывает не то что нужно/не показывает ничего
+                            </label>
+                        </div>
+                        <div class="form-check disabled">
+                            <input class="form-check-input" type="radio" name="error_type" id="error_type_radio9" value="other">
+                            <label class="form-check-label" for="error_type_radio9">
+                                Другое
+                            </label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                        <button type="submit" class="btn btn-primary">Отправить</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
     <div id="content" class="container-fluid flex-grow-1">
         {% block content %}
             <h1>If you see this, please report.</h1>
         {% endblock %}
+        <div class="mb-5"></div>
     </div>
-    <footer class="bg-dark text-white text-center">
-        <div class="text-center container">
+    {% cache 86400 footer %}
+    <footer class="bg-dark text-white row m-0">
+
+        <div class="col-lg-4 offset-lg-4 text-center col-xs-12">
             <span class="contact-me">Contact me - </span>
 
             <span class="contact-me-icons vk-icon">
@@ -121,20 +168,25 @@
                 <a href="mailto:khromov05@gmail.com" class="text-reset"><i class="far fa-envelope"></i></a>
             </span>
         </div>
-
-        <p>
+        <p class="my-auto bug-paragraph col-lg-4 text-lg-right text-center col-xs-12" id="bug-report">
+            <i class="far fa-flag mr-2 email-icon" id="bug-report-flag"></i>
+            <span id="bug-report-text">На странице есть ошибка, баг или неточность?</span>
+        </p>
+        <p class="col-12 text-center mb-0">
             <small class="text-muted">
                 <a class="text-muted" href="//{{ static.HOST }}">{{ static.HOST }}</a> &mdash; 2020
                 - {% now "Y" %} &copy;
             </small>
         </p>
     </footer>
+    {% endcache %}
 
     <script src="{% static 'libs/jquery.1.11.0.min.js' %}"></script>
     <script src="{% static 'libs/popper.1.12.9.popper.min.js' %}"></script>
     <script src="{% static 'libs/bootstrap.4.0.0.min.js' %}"></script>
-
     <script src="https://kit.fontawesome.com/3ca5d1bb23.js" crossorigin="anonymous"></script>
+
+    <script src="{% static 'general/default.js' %}"></script>
 
     {% block scripts %}{% endblock %}
 </body>

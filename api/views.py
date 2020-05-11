@@ -45,7 +45,6 @@ def errors(request):
 
 @login_required()
 def create_key(request):
-    # TODO: do it
     if request.method == 'POST':
         if UserAPIKey.objects.filter(user=request.user).count() >= 5:
             return render(request, 'keys/max_key_amount.html')

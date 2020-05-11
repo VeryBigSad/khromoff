@@ -14,7 +14,6 @@ urlpatterns = [
     # TODO: do it
     # path('docs/test-request', views.make_request, name='api-make-request'),
 
-    # TODO: better url names
     path('method/', include('urlshortner.api.urls')),
     path('method/users.get', views.user_details, name='user-detail'),
 ]

@@ -58,7 +58,7 @@
         <hr class="mx-md-5 mx-xs-4 my-5">
 
         <div class="row mt-5">
-
+            {# TODO: at ShortURLs AND tokens add &times col to delete items (with modal, are you sure?) #}
             <div class="shorturl col-lg-6 col-md-12">
                 <h3>Ваши сокращенные ссылки</h3>
                 {% if created_shorturls %}
@@ -128,15 +128,15 @@
                                     </td>
                                     <td>
                                         <ul>
-                                            {# TODO: API reference here. #}
-                                            <li>Создавать <span class="font-weight-bold"><a href="#">ShortURL</a></span>
+                                            <li>Создавать <span class="font-weight-bold">
+                                                <a href="{% url 'docs-objects' host 'api' %}#shorturl">ShortURL</a></span>
                                             </li>
                                             <li>Смотреть информацию о <span class="font-weight-bold"><a
-                                                    href="#">Visit</a></span></li>
+                                                    href="{% url 'docs-objects' host 'api' %}#visit">Visit</a></span></li>
                                         </ul>
                                     </td>
                                     <td>
-                                        {% if i.requests_per_minute == 999 %}
+                                        {% if i.requests_per_minute >= 1000 %}
                                             &infin;
                                         {% else %}
                                             {{ i.requests_per_minute }}

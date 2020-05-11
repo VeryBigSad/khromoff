@@ -4,13 +4,13 @@ from rest_framework.views import exception_handler
 
 
 def api_exception_handler(exc, context):
-    # # TODO: add all errors into file or something
+    # TODO: make it work not this shit
     # NO_AUTH_ERROR_CODE = 1
 
     response = exception_handler(exc, context)
     errors = {
         'ITEM_NOT_FOUND_ERROR': {
-            'code': 404,
+            'code': 'item_not_found',
             'desc': 'Item filtered by your query wasn\'t found.'
         }
     }
