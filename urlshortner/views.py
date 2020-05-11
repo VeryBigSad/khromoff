@@ -1,4 +1,5 @@
 from django.shortcuts import render, Http404, redirect, get_object_or_404
+from django.views.decorators.cache import cache_page
 from django_hosts import reverse
 
 from urlshortner.api.serializers import ShorturlSerializer
@@ -65,6 +66,7 @@ def view_data(request, view_data_code):
         'shorturl': shorturl, 'visits': Visit.objects.filter(shorturl=shorturl)})
 
 
+@cache_page(60 * 15)
 def redirect_to_long_url(request, short_id):
     url_object = ShortUrl.objects.filter(short_code=short_id)
     if not url_object.exists():
@@ -74,6 +76,8 @@ def redirect_to_long_url(request, short_id):
                           ' Please check that url is entered'
                           ' correctly.')
     url_object = url_object[0]
+    if not url_object.active:
+        raise Http404('This URL is blocked by site owners or ShortURL author.')
     long_url = url_object.full_url
 
     if url_object.do_collect_meta:

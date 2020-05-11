@@ -46,7 +46,7 @@ LOGGING = {
         'console': {
             'level': 'DEBUG',
             'class': 'logging.StreamHandler',
-            'formatter': 'simple'
+            'formatter': 'verbose'
         },
         'file': {
             'level': 'DEBUG',
@@ -69,11 +69,15 @@ LOGGING = {
         'django.request': {
             'handlers': ['console', 'file', 'telegram_log'],
             'level': 'ERROR',
+        },
+        'django.db.backends': {
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG',
+            'propagate': False
         }
     }
 }
 
-# CACHE_MIDDLEWARE_ANONYMOUS_ONLY = True
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',

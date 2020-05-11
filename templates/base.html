@@ -1,6 +1,5 @@
 {% load static %}
 {% load hosts %}
-{% load cache %}
 
 <!DOCTYPE html>
 <html lang="ru">
@@ -15,7 +14,6 @@
     {% block head %} {% endblock %}
 </head>
 <body class="d-flex flex-column min-vh-100 mw-100">
-    {% cache 600 navbar request.user.username %}
     <nav class="navbar navbar-light navbar-expand-md" style="background-color: rgba(56,56,56,0.1);">
         <a href="{% block brand-name-url %}{% url 'index' %}{% endblock %}" class="navbar-brand h1">
             {% block brand-name %}Khromoff{% endblock %}
@@ -98,7 +96,6 @@
             </ul>
         </div>
     </nav>
-    {% endcache %}
 
     <div class="modal fade" id="report-modal" tabindex="-1" role="dialog" aria-labelledby="report-modalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -147,7 +144,6 @@
         {% endblock %}
         <div class="mb-5"></div>
     </div>
-    {% cache 86400 footer %}
     <footer class="bg-dark text-white row m-0">
 
         <div class="col-lg-4 offset-lg-4 text-center col-xs-12">
@@ -179,7 +175,6 @@
             </small>
         </p>
     </footer>
-    {% endcache %}
 
     <script src="{% static 'libs/jquery.1.11.0.min.js' %}"></script>
     <script src="{% static 'libs/popper.1.12.9.popper.min.js' %}"></script>

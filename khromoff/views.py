@@ -9,7 +9,6 @@ from django.core.exceptions import ValidationError
 from django.http import HttpResponseRedirect, HttpResponseServerError
 from django.shortcuts import render
 from django.utils.translation import gettext
-from django.views.decorators.cache import cache_page
 from django_hosts import reverse
 
 from api.models import UserAPIKey
@@ -64,7 +63,6 @@ def username_valid_checks(username):
     return errors
 
 
-@cache_page(24 * 60 * 60 * 30)  # month cache
 def error404(request, exception):
     return render(request, '404error.html', context={'description': str(exception)}, status=404)
 
@@ -147,12 +145,10 @@ def personal(request):
         return render(request, 'personal.html', context=context)
 
 
-@cache_page(24 * 60 * 60 * 30)  # month cache
 def about(request):
     return render(request, 'about.html')
 
 
-@cache_page(24 * 60 * 60 * 30)  # month cache
 def me(request):
     return render(request, 'me.html', context={'age': datetime.today().year - 2005})
 
@@ -162,6 +158,5 @@ def logout_page(request):
     return next_redirect_or_main(request)
 
 
-@cache_page(24 * 60 * 60 * 30)  # month cache
 def index(request):
     return render(request, 'index.html', context={})
