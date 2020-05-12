@@ -6,6 +6,7 @@
 {% block title %}Личный кабинет{% endblock %}
 
 {% block scripts %}
+    <script src="{% static 'general/form-validation.js' %}"></script>
     <link rel="stylesheet" href="{% static "khromoff/profile_styles.css" %}">
 {% endblock %}
 
@@ -32,24 +33,33 @@
         {% endif %}
         <div>
             <div class="">
-                <form action="" class="form-inline form-row" method="post">
+                <form action="" class="form-inline form-row novalidate-form m-0 p-0" method="post" novalidate>
                     <p class="h4 font-weight-normal mr-1 col-md-5 col-lg-3 col-sm-12">Ваш юзернейм: {{ request.user.username }}</p>
                     {% csrf_token %}
                     <input name="type" value="change_username" hidden>
 
                     <label for="new_name" class="sr-only">Новый юзернейм</label>
-                    <input class="form-control mr-md-1 col-md-3 offset-md-1 offset-lg-3 col-lg-4 col-sm-6 md-sm-5" name="new_name" id="new_name" type="text" placeholder="Новый юзернейм">
+                    <input required class="form-control mr-md-1 col-md-3 offset-md-1 offset-lg-3 col-lg-4 col-sm-6 md-sm-5" name="new_name" id="new_name" type="text" placeholder="Новый юзернейм">
+                    <div class="invalid-feedback">
+                        Это поле обязательно.
+                    </div>
                     <button class="btn btn-success col-md-2 col-lg-1 col-sm-6 mt-1" type="submit">Поменять имя</button>
                 </form>
-                <form action="" class="form-inline form-row" method="post">
+                <form action="" class="form-inline form-row novalidate-form" method="post" novalidate>
                     <p class="h4 font-weight-normal mr-1 col-md-5 col-lg-3 col-sm-12">Поменять пароль</p>
                     {% csrf_token %}
                     <input name="type" value="change_password" hidden>
 
                     <label for="new_password" class="sr-only">Новый пароль</label>
-                    <input class="form-control mr-md-1 col-md-3 offset-md-1 offset-lg-3 col-lg-2 col-sm-6 md-sm-5" name="new_password" id="new_password" type="password" placeholder="Новый пароль">
+                    <input required class="form-control mr-md-1 col-md-3 offset-md-1 offset-lg-3 col-lg-2 col-sm-6 md-sm-5" name="new_password" id="new_password" type="password" placeholder="Новый пароль">
+                    <div class="invalid-feedback">
+                        Это поле обязательно.
+                    </div>
                     <label for="new_password2" class="sr-only">Повторите пароль</label>
-                    <input class="form-control mr-md-1 col-md-3 col-lg-2" name="new_password_repeat" id="new_password2" type="password" placeholder="Повторите пароль">
+                    <input required class="form-control mr-md-1 col-md-3 col-lg-2" name="new_password_repeat" id="new_password2" type="password" placeholder="Повторите пароль">
+                    <div class="invalid-feedback">
+                        Это поле обязательно.
+                    </div>
                     <button class="btn btn-success col-md-2 col-lg-1 col-sm-6 mt-1" type="submit">Поменять пароль</button>
                 </form>
             </div>

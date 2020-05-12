@@ -3,6 +3,7 @@
 
 {% load static %}
 {% block scripts %}
+    <script src="{% static 'general/form-validation.js' %}"></script>
     <link rel="stylesheet" href="{% static 'urlshortner/styles.css' %}">
 {% endblock %}
 
@@ -17,12 +18,15 @@
                 </div>
             {% endfor %}
         </div>
-        <form action="" method="POST" class="form text-center">
+        <form action="" method="POST" class="form text-center novalidate-form" novalidate>
             {% csrf_token %}
             <div class="form-group">
                 <label for="url_input" class="h5 font-weight-normal">Длинная ссылка: </label>
                 <input class="form-control text-monospace" id="url_input" name="full_url" type="text"
-                       value="{{ post.full_url }}" placeholder="https://google.com">
+                       value="{{ post.full_url }}" placeholder="https://google.com" required>
+                <div class="invalid-feedback">
+                    Введите корректную ссылку.
+                </div>
             </div>
 
             <div class="form-group">
@@ -32,7 +36,8 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text">https://{{ static.HOSTNAME }}/</span>
                     </div>
-                    <input id="basic-url" type="text" class="form-control" name="short_code" placeholder="my_url" value="{{ post.short_code }}">
+                    <input id="basic-url" type="text" class="form-control" name="short_code" placeholder="my_url" value="{{ post.short_code }}"
+                    maxlength="{{ max_length }}">
                 </div>
             </div>
 

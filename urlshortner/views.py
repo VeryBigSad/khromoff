@@ -3,7 +3,7 @@ from django.views.decorators.cache import cache_page
 from django_hosts import reverse
 
 from urlshortner.api.serializers import ShorturlSerializer
-from urlshortner.constants import MAX_URL_LENGTH, MAX_SHORTCODE_LENGTH
+from urlshortner.constants import MAX_SHORTCODE_LENGTH
 from urlshortner.models import ShortUrl, Visit
 
 
@@ -18,7 +18,7 @@ def create_new_link(request):
         if request.POST.get('short_code'):
             data.update({'short_code': request.POST['short_code']})
 
-        # most people dont type in http://, so that will do it for them (before checks)
+        # most people dont type in http(s)://, so that will do it for them (before checks)
         try:
             if data['full_url'][:4] != 'http':
                 data['full_url'] = 'https://' + data['full_url']
@@ -32,23 +32,16 @@ def create_new_link(request):
             short_obj.save()
             short_code = short_obj.data['short_code']
         else:
-            error_codes = {'Enter a valid URL.': 'Это не настоящая ссылка, проверьте правильность написания.',
-                           'URL can\'t redirect to this same site': 'Ссылка не может указывать на этот сайт.',
-                           'URL is too long (%s symbols max)' % MAX_URL_LENGTH:
-                               'Ссылка слишком длинная, макс. длина - %s символов.' % MAX_URL_LENGTH,
-                           'This Alias is already taken.': 'Эта короткая ссылка уже занята, выберите другую.',
-                           'Alias must have length from 4 to %s symbols.' % MAX_SHORTCODE_LENGTH:
-                               'Короткая ссылка должна быть длинной от 4 до %s символов.' % MAX_SHORTCODE_LENGTH,
-                           'Only letters, numbers, and underscores in alias': 'Только латинские буквы, цифры, '
-                                                                              'и нижние подчеркивания в короткой '
-                                                                              'ссылке.',
-                           }
             for err, desc in short_obj.errors.items():
                 errors.append({'code': desc[0].code,
                                'field': err,
-                               'description': error_codes[str(desc[0])]})
-            return render(request, 'urlshortner/new_shorten_url_form.html', context={'errors': errors,
-                                                                                     'post': request.POST})
+                               'description': desc[0]})
+                # TODO: add in template, if code == 'input_name', add is_invalid class to input tag.
+            return render(request, 'urlshortner/new_shorten_url_form.html',
+                          context={'errors': errors,
+                                   'post': request.POST,
+                                   'max_length': MAX_SHORTCODE_LENGTH}
+                          )
         url = reverse('preview', kwargs={'short_id': short_code}, host='urlshortner')
         if short_obj.data['do_collect_meta']:
             url += '?view_data_code=' + short_obj.data['view_data_code']
@@ -56,7 +49,7 @@ def create_new_link(request):
         return redirect(url)
 
     else:
-        return render(request, 'urlshortner/new_shorten_url_form.html', context={})
+        return render(request, 'urlshortner/new_shorten_url_form.html', context={'max_length': MAX_SHORTCODE_LENGTH})
 
 
 def view_data(request, view_data_code):

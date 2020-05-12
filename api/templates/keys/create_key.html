@@ -1,9 +1,9 @@
 {% extends "api_base.html" %}
 {% load static %}
 
-{% block head %}
+{% block scripts %}
     <link rel="stylesheet" href="{% static 'urlshortner/styles.css' %}">
-    <script src="{% static 'api/scripts.js' %}"></script>
+    <script src="{% static 'general/form-validation.js' %}"></script>
 {% endblock %}
 
 {% block title %}Получить ключ доступа API{% endblock %}
@@ -17,7 +17,7 @@
                 <div class="alert alert-danger">Ошибка! {{ i.description }}</div>
             {% endfor %}
         </div>
-        <form method="POST" novalidate>
+        <form method="POST" class="novalidate-form" novalidate>
             {% csrf_token %}
             <label for="key-name">Имя для ключа (50 символов макс.)</label>
             <input placeholder="Телеграм-бот сокращатель ссылок" id="key-name" name="name" type="text" class="form-control" required>
