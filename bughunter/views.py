@@ -14,13 +14,14 @@ def report(request):
     # cache.set(request.META['REMOTE_ADDR'], 'reported', 6 * 3600)
 
     if request.method == 'POST':
-        logger.info('New bugreport:\n'
+        logger.warning('New bugreport:\n'
                     'page: %s\n'
                     'user_ip: %s\n'
                     'user: %s\n'
-                    'error_type: %s'
+                    'error_type: %s\n'
+                    'description: %s'
                     % (request.POST.get('location'), request.META['REMOTE_ADDR'],
-                       request.user, request.POST.get('error_type')))
+                       request.user, request.POST.get('error_type'), request.POST.get('description')))
         # TODO: save in DB, create page about it. more info there
         return HttpResponse('thx doode')
     else:

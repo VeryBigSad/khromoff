@@ -3,12 +3,29 @@
 {% block title %}Возможные ошибки{% endblock %}
 
 {% block content2 %}
-    <div class="container-fluid">
-        <p class="display-3">Возможные ошибки</p>
-        <p class="alert alert-dark h1 font-weight-normal">
-            Скоро будет, так что пока-что все сами по себе <br>
-            (((ошибки описывают сами себя из названия (напишите мне если что) )))
-        </p>
-
+    <p class="display-3 mb-5">Возможные ошибки</p>
+    <div>
+        <ul>
+            <li class="">
+                <h2>not_authenticated</h2>
+                {# TODO: instead of h5 use p tag, and in default.css make it big-font-size text. #}
+                <h5 class="font-weight-normal">
+                    <span class="font-weight-bold">Описание:</span>
+                    для запрашиваемого вами метода необходима авторизация,
+                    пожалуйста, предоставьте токен API.
+                </h5>
+            </li>
+            <li>
+                <h2>item_not_found</h2>
+                <h5 class="font-weight-normal">
+                    <span class="font-weight-bold">Описание:</span>
+                    объект(ы) к которому вы пытаетесь обратиться не существует.
+                </h5>
+            </li>
+        </ul>
     </div>
+    <hr class="mt-5 mb-0">
+    <p class="mt-0 h3 font-weight-normal text-muted">
+        В прогрессе; скоро будет больше разнообразия в ошибках и лучшее их описание.
+    </p>
 {% endblock %}

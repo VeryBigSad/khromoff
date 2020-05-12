@@ -1,9 +1,9 @@
 from django.http import Http404
 from rest_framework.generics import get_object_or_404
-from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from api.utils import ParamRequired
+from api.utils import Response
 from urlshortner.api.permissions import DoCollectMetaPermission, IsVisitOwner
 from urlshortner.api.serializers import ShorturlSerializer, VisitSerializer
 from urlshortner.models import ShortUrl, Visit
@@ -21,7 +21,7 @@ class ShorturlDetails(APIView):
         try:
             shorturl = ShortUrl.objects.get(short_code=short_code)
         except ShortUrl.DoesNotExist:
-            return Response(status=404)
+            raise Http404
 
         serializer = ShorturlSerializer(shorturl, context={'request': request})
         return Response(serializer.data)
@@ -94,22 +94,22 @@ class VisitDetails(APIView):
         else:
             # visit list
             visits = self.queryset.filter(shorturl__short_code=short_code)
+
             try:
                 self.check_object_permissions(request, visits[0])
                 # Note: every single one of visits has 1 single owner,
                 # and since there is only 1 permission check (assigned to owner),
                 # we can check it and forget about the rest (because result would be the same)
             except IndexError:
-                # visits QuerySet is empty.
-                pass
-
-            if not visits.exists():
-                raise Http404()
+                # this means visits QuerySet is empty.
+                # checking if ShortURL exists in the first place
+                if not ShortUrl.objects.filter(short_code=short_code).exists():
+                    raise Http404()
 
             serializer = VisitSerializer(visits, many=True, context={'request': request})
             count = len(serializer.data)
 
-        return Response({'count': count, 'response': serializer.data})
+        return Response({'count': count, 'visits': serializer.data})
 
     def post(self, request):
         return self.get(request)

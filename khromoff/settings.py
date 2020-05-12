@@ -55,7 +55,7 @@ LOGGING = {
             'formatter': 'verbose'
         },
         'telegram_log': {
-            'level': 'INFO',
+            'level': 'WARNING',
             'filters': ['require_debug_false'],
             'class': 'khromoff.utils.TelegramLogHandler',
             'bot_token': secrets.bot_token,

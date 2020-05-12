@@ -2,6 +2,7 @@
 from django.contrib.auth.models import AnonymousUser
 from rest_framework import authentication, throttling
 from rest_framework import exceptions
+from rest_framework.response import Response as _Response
 
 from api.models import UserAPIKey
 
@@ -96,4 +97,11 @@ class ParamRequired(exceptions.APIException):
 
     def get_codes(self):
         return self.code
+
+
+def Response(thing, status=200, **kwargs):
+    if status == 200:
+        return _Response({'response': thing}, **kwargs)
+    else:
+        return _Response({'error': thing}, status=status, **kwargs)
 
