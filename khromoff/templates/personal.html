@@ -110,33 +110,33 @@
                                         </td>
                                     </tr>
                                 {% endfor %}
-                                <div class="modal fade" id="delete-item-modal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="delete-item-modalLabel" aria-hidden="true">
-                                    <div class="modal-dialog" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="delete-item-modalLabel">Вы уверены что хотите удалить ShortURL?
-                                                    <span class="text-muted">После этого ей будет нельзя пользоваться!</span></h5>
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <p class="font-weight-bold"><span id="modal-param1">Перенаправление на:</span> <span class="font-weight-normal" id="redirect-url"></span></p>
-                                                <p class="font-weight-bold"><span id="modal-param2">Кол-во переходов:</span> <span class="font-weight-normal" id="redirect-count"></span></p>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
-                                                <form action="{% url 'shorturl-deactivate' host 'api' %}" id="delete-shorturl-form">
-                                                    {% csrf_token %}
-                                                    <input hidden name="short_code" id="short_code_val">
-                                                    <button type="submit" id="delete" class="btn btn-danger">Удалить</button>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                             </tbody>
                         </table>
+                        <div class="modal fade" id="delete-item-modal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="delete-item-modalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="delete-item-modalLabel">Вы уверены что хотите удалить ShortURL?
+                                            <span class="text-muted">После этого ей будет нельзя пользоваться!</span></h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p class="font-weight-bold"><span id="modal-param1">Перенаправление на:</span> <span class="font-weight-normal" id="redirect-url"></span></p>
+                                        <p class="font-weight-bold"><span id="modal-param2">Кол-во переходов:</span> <span class="font-weight-normal" id="redirect-count"></span></p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                                        <form action="{% url 'shorturl-deactivate' host 'api' %}" id="delete-shorturl-form">
+                                            {% csrf_token %}
+                                            <input hidden name="short_code" id="short_code_val">
+                                            <button type="submit" id="delete" class="btn btn-danger">Удалить</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
                         <div class="invisible" id="hidden-shorturl-advice">
                             <h4 class="font-weight-normal">Вы еще не создавали ссылок...</h4>

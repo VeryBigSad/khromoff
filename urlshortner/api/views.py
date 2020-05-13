@@ -1,6 +1,5 @@
 from django.core.cache import cache
 from django.core.cache.utils import make_template_fragment_key
-from django.http import HttpResponse
 from rest_framework.generics import *
 from rest_framework.mixins import *
 from rest_framework.views import APIView
@@ -127,12 +126,13 @@ class ShorturlDeactivate(APIView):
     required_params = ['short_code']
 
     def options(self, request, *args, **kwargs):
-        resp = HttpResponse()
+        resp = super().options(request, *args, *kwargs)
+
         # ajax will never calm down so here i am writing VERY bad code,
         # probably a lot simpler solution exists. This works though
         resp['Access-Control-Allow-Credentials'] = 'true'
         resp['Access-Control-Allow-Origin'] = request.META['HTTP_ORIGIN']
-        resp["Access-Control-Allow-Headers"] = "Access-Control-Allow-Headers, access-control-allow-origin, Origin," \
+        resp['Access-Control-Allow-Headers'] = "Access-Control-Allow-Headers, access-control-allow-origin, Origin," \
                                                "Accept, X-Requested-With, " \
                                                "Content-Type, Access-Control-Request-Method, " \
                                                "Access-Control-Request-Headers "

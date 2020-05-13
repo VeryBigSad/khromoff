@@ -11,10 +11,16 @@ $(document).ready( function () {
 
 });
 
-$('#delete-shorturl-form').on('submit', function (qualifiedName, value){
+$('#delete-shorturl-form').on('submit', function (){
     try {
-        let csrf_token = $('[name="csrfmiddlewaretoken"]').attr('value');
         let url = $(this).attr('action');
+        $('.short-code-' + short_code).remove();
+        if($('#tbody-shorturls').children().length === 0){
+            $('#table-shorturls').remove();
+            $('#hidden-shorturl-advice').removeClass('invisible').addClass('visible')
+        }
+        $('#delete-item-modal').modal('hide');
+
         $.ajax(url, {
             method: 'GET',
             xhrFields: {
@@ -26,16 +32,6 @@ $('#delete-shorturl-form').on('submit', function (qualifiedName, value){
                         'Access-Control-Allow-Origin': '*'},
         }
         );
-        $('.short-code-' + short_code).remove();
-        console.log($('#tbody-shorturls').length);
-        if($('#tbody-shorturls').children().length === 0){
-            $('#table-shorturls').remove();
-            $('#hidden-shorturl-advice').removeAttr('hidden')
-        }
-        $('#delete-item-modal').modal('hide');
-
-        // TODO: sliding up the thing
-
 
         return false;
     }

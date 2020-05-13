@@ -1,9 +1,8 @@
 import requests
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAdminUser
+from rest_framework.views import APIView
 
 from api.models import UserAPIKey
 from api.serializers import UserAPIKeySerializer
@@ -69,7 +68,28 @@ def redirect_to_docs(request):
     return redirect('docs-index')
 
 
-@api_view(['GET', 'POST'])
-@permission_classes([IsAdminUser])
-def user_details(request):
-    return JsonResponse({'not_finished_yet': True})
+class DeactivateUserAPIKey(APIView):
+    # permission_classes = [IsAPIKeyOwner]
+    serializer_class = UserAPIKeySerializer
+    http_method_names = ['get', 'post', 'options']
+    queryset = UserAPIKey.objects.all()
+    required_params = ['prefix']
+
+    def options(self, request, *args, **kwargs):
+        resp = HttpResponse()
+        # ajax will never calm down so here i am writing VERY bad code,
+        # probably a lot simpler solution exists. This works though
+        resp['Access-Control-Allow-Credentials'] = 'true'
+        resp['Access-Control-Allow-Origin'] = request.META['HTTP_ORIGIN']
+        resp["Access-Control-Allow-Headers"] = "Access-Control-Allow-Headers, access-control-allow-origin, Origin," \
+                                               "Accept, X-Requested-With, " \
+                                               "Content-Type, Access-Control-Request-Method, " \
+                                               "Access-Control-Request-Headers "
+
+        return resp
+
+    def get(self, request):
+        pass
+
+    def post(self, request):
+        return self.get(request)
