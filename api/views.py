@@ -2,10 +2,12 @@ import requests
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
+from rest_framework.generics import get_object_or_404
 from rest_framework.views import APIView
 
 from api.models import UserAPIKey
 from api.serializers import UserAPIKeySerializer
+from api.utils import IsAPIKeyOwner, ParamRequired, Response
 
 
 def methods(request):
@@ -45,7 +47,7 @@ def errors(request):
 @login_required()
 def create_key(request):
     if request.method == 'POST':
-        if UserAPIKey.objects.filter(user=request.user).count() >= 5:
+        if UserAPIKey.objects.get_usable_keys().filter(user=request.user).count() >= 5:
             return render(request, 'keys/max_key_amount.html')
 
         data = {'user': request.user.pk, 'name': request.POST.get('name'),
@@ -59,7 +61,7 @@ def create_key(request):
             return render(request, 'keys/create_key.html', context={'errors': serializer.errors})
 
     elif request.method == 'GET':
-        if UserAPIKey.objects.filter(user=request.user).count() >= 5:
+        if UserAPIKey.objects.get_usable_keys().filter(user=request.user).count() >= 5:
             return render(request, 'keys/max_key_amount.html')
         return render(request, 'keys/create_key.html', context={})
 
@@ -69,9 +71,11 @@ def redirect_to_docs(request):
 
 
 class DeactivateUserAPIKey(APIView):
-    # permission_classes = [IsAPIKeyOwner]
+    permission_classes = [IsAPIKeyOwner]
     serializer_class = UserAPIKeySerializer
     http_method_names = ['get', 'post', 'options']
+
+    # TODO: here and in other serializers with .active, set queryset to .filter(active=True)
     queryset = UserAPIKey.objects.all()
     required_params = ['prefix']
 
@@ -89,7 +93,24 @@ class DeactivateUserAPIKey(APIView):
         return resp
 
     def get(self, request):
-        pass
+        if request.method == 'POST':
+            data = request.POST
+        else:
+            # GET method; elif request.method == 'GET':
+            data = request.GET
+
+        for i in self.required_params:
+            if i not in data:
+                raise ParamRequired('Parameter %s was required but wasn\'t specified' % i)
+
+        apikey = get_object_or_404(self.queryset, prefix=data.get('prefix').rstrip().lstrip())
+        self.check_object_permissions(request, apikey)
+
+        apikey.deactivate()
+        apikey.save()
+
+        # TODO: exception on accessing Inactive data
+        return Response(self.serializer_class(apikey, context={'request': request}).data)
 
     def post(self, request):
         return self.get(request)

@@ -117,7 +117,7 @@ def personal(request):
     created_shorturls = [{'times_visited': len(Visit.objects.filter(shorturl=i)), 'obj': i} for i in
                          created_shorturls]
 
-    keys = UserAPIKey.objects.filter(user=request.user)[:10]
+    keys = UserAPIKey.objects.get_usable_keys().filter(user=request.user)[:10]
     context['keys'] = keys
     context['created_shorturls'] = created_shorturls
 

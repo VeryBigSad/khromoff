@@ -1,6 +1,6 @@
 # from rest_framework.views import exception_handler
 from django.contrib.auth.models import AnonymousUser
-from rest_framework import authentication, throttling
+from rest_framework import authentication, throttling, permissions
 from rest_framework import exceptions
 from rest_framework.response import Response as _Response
 
@@ -104,3 +104,13 @@ def Response(thing, status=200, **kwargs):
     else:
         return _Response({'error': thing}, status=status, **kwargs)
 
+
+class IsAPIKeyOwner(permissions.BasePermission):
+    """
+        defines if you are owner of the key or not
+    """
+
+    def has_object_permission(self, request, view, obj):
+        if request.user == obj.user:
+            return True
+        return False
