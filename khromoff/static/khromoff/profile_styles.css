@@ -7,3 +7,6 @@
 .alert-popup{
     max-width: 400px;
 }
+.pointer-on-hover:hover{
+    cursor: pointer;
+}

@@ -12,11 +12,10 @@ class APITokenAuth(authentication.BaseAuthentication):
         if request.method == 'POST':
             token = request.POST.get('token')
         else:
-            if not request.method == 'GET':
-                raise exceptions.AuthenticationFailed('Method not POST or GET')
             token = request.GET.get('token')
 
         if not token:
+            # if wasn't specified or not GET or POST
             return None
 
         try:

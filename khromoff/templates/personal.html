@@ -2,11 +2,13 @@
 
 {% load static %}
 {% load hosts_override %}
+{% load cache %}
 
 {% block title %}Личный кабинет{% endblock %}
 
 {% block scripts %}
     <script src="{% static 'general/form-validation.js' %}"></script>
+    <script src="{% static 'khromoff/scripts.js' %}"></script>
     <link rel="stylesheet" href="{% static "khromoff/profile_styles.css" %}">
 {% endblock %}
 
@@ -68,53 +70,89 @@
         <hr class="mx-md-5 mx-xs-4 my-5">
 
         <div class="row mt-5">
-            {# TODO: at ShortURLs AND tokens add &times col to delete items (with modal, are you sure?) #}
-            <div class="shorturl col-lg-6 col-md-12">
-                <h3>Ваши сокращенные ссылки</h3>
-                {% if created_shorturls %}
-                    <table class="table table-sm table-bordered table-hover table-responsive-md">
-                        <thead>
-                            <tr>
-                                <th scope="col">Перенаправляет на</th>
-                                <th scope="col">Подробная информация о переходах</th>
-                                <th scope="col">Кол-во совершенных перенаправлений</th>
-                            </tr>
-                        </thead>
-                        <tbody>
+            {% cache 86400 shorturl-profile-list request.user.username %} {# one day cache #}
+                <div class="shorturl col-lg-6 col-md-12">
+                    <h3>Ваши сокращенные ссылки</h3>
+                    <div>
+                    {% if created_shorturls %}
 
-                        {% for i in created_shorturls %}
-                            {# TODO: on click we redirect to visits of this url, link: #}
-                            <tr>
-                                <th>
-                                    <a href="{% url 'redirect' i.obj.short_code host 'urlshortner' %}">
-                                        {{ i.obj.full_url }}
-                                    </a>
-                                </th>
-                                {% if i.obj.do_collect_meta %}
-                                    <td>
-                                        <a href="{% url 'data' i.obj.view_data_code host 'urlshortner' %}">
-                                            Подробная информация о переходах
-                                        </a>
-                                    </td>
-                                    <td>
-                                        {{ i.times_visited }}
-                                    </td>
-                                {% else %}
-                                    <td colspan="2">
-                                        Это анонимный редирект, вы не можете посмотреть информацию о нем.
-                                    </td>
-                                {% endif %}
-                            </tr>
-                        {% endfor %}
-                        </tbody>
-                   </table>
-                {% else %}
-                    <h4 class="font-weight-normal">Вы еще не создавали ссылок...</h4>
-                    <h4 class="font-weight-normal">Нажми <a href="{% url 'index' host 'urlshortner' %}">сюда</a> чтобы создать
-                        такую!</h4>
-                {% endif %}
+                        <table class="table table-sm table-bordered table-hover table-responsive-md" id="table-shorturls">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Перенаправляет на</th>
+                                    <th scope="col">Кол-во совершенных перенаправлений</th>
+                                    <th scope="col"></th>
+                                </tr>
+                            </thead>
 
-            </div>
+                            <tbody id="tbody-shorturls">
+                                {% for i in created_shorturls %}
+                                    {% url 'data' i.obj.view_data_code host 'urlshortner' as view_data_code_url %}
+                                    <tr id="shorturls-list" class="short-code-{{ i.obj.short_code }} pointer-on-hover" title="Подробная информация о переадресации">
+                                        <th {% if i.obj.do_collect_meta %}onclick="window.location = '{{ view_data_code_url }}'"{% endif %}>
+                                            <a href="{% url 'redirect' i.obj.short_code host 'urlshortner' %}">
+                                                {{ i.obj.full_url }}
+                                            </a>
+                                        </th>
+                                        {% if i.obj.do_collect_meta %}
+                                            <td onclick="window.location = '{{ view_data_code_url }}'">
+                                                {{ i.times_visited }}
+                                            </td>
+                                        {% else %}
+                                            <td>
+                                                Это анонимный редирект, вы не можете посмотреть информацию о нем.
+                                            </td>
+                                        {% endif %}
+
+                                        <td id="delete-item" title="Удалить короткую ссылку" class="p-0 text-center">
+                                            <div class="short_code_val" hidden>{{ i.obj.short_code }}</div>
+                                            <span>&times;</span>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                <div class="modal fade" id="delete-item-modal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="delete-item-modalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="delete-item-modalLabel">Вы уверены что хотите удалить ShortURL?
+                                                    <span class="text-muted">После этого ей будет нельзя пользоваться!</span></h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p class="font-weight-bold"><span id="modal-param1">Перенаправление на:</span> <span class="font-weight-normal" id="redirect-url"></span></p>
+                                                <p class="font-weight-bold"><span id="modal-param2">Кол-во переходов:</span> <span class="font-weight-normal" id="redirect-count"></span></p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                                                <form action="{% url 'shorturl-deactivate' host 'api' %}" id="delete-shorturl-form">
+                                                    {% csrf_token %}
+                                                    <input hidden name="short_code" id="short_code_val">
+                                                    <button type="submit" id="delete" class="btn btn-danger">Удалить</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </tbody>
+                        </table>
+
+                        <div class="invisible" id="hidden-shorturl-advice">
+                            <h4 class="font-weight-normal">Вы еще не создавали ссылок...</h4>
+                            <h4 class="font-weight-normal">
+                                Нажми <a href="{% url 'index' host 'urlshortner' %}">сюда</a> чтобы создать такую!
+                            </h4>
+                        </div>
+                        {% else %}
+                            <h4 class="font-weight-normal">Вы еще не создавали ссылок...</h4>
+                            <h4 class="font-weight-normal">Нажми <a href="{% url 'index' host 'urlshortner' %}">сюда</a> чтобы создать
+                                такую!</h4>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endcache %}
+
             <div class="keylist col-lg-6 col-md-12">
                 <h3>Ваши ключи API (для разработчиков)</h3>
                 {% if keys %}

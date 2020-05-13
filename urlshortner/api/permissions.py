@@ -40,8 +40,7 @@ class IsVisitOwner(permissions.BasePermission):
     message = 'Only owners of this shorturl can see it\'s visits.'
 
     def has_object_permission(self, request, view, obj):
-        user = request.user
-        if obj.shorturl.author == user:
+        if obj.shorturl.author == request.user:
             return True
         else:
             try:
@@ -51,3 +50,22 @@ class IsVisitOwner(permissions.BasePermission):
                 pass
         return False
 
+
+class IsShorturlOwner(permissions.BasePermission):
+    """
+        Permission for ShortUrl model, which tells if
+        you are it's owner or not.
+    """
+
+    message = 'Only owners of this shorturl can access it.'
+
+    def has_object_permission(self, request, view, obj):
+        if obj.author == request.user:
+            return True
+        else:
+            try:
+                if obj.key == request.auth.key:
+                    return True
+            except AttributeError:
+                pass
+        return False

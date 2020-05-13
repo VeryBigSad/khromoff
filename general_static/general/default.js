@@ -6,20 +6,19 @@ $('#bug-report').on('click', (function () {
     }
 }));
 
-$('#report-modal').on('hidden.bs.modal', function (e) {
-    $('#bug-report-flag').addClass('fas').removeClass('far');
-    $('#bug-report-text').html('Спасибо за помощь!').parent().attr('id', 'thanks-for-help');
-});
-
 $('#bug-report-form').on('submit', function(){
 
     $("<input />").attr("type", "hidden")
         .attr("name", "location")
         .attr("value", window.location.href)
         .appendTo("#bug-report-form");
+
     $.post($(this).attr('action'), $(this).serialize(), function(response){
     },'json');
-    $('#report-modal').modal('hide');
+
     do_open = false;
+    $('#report-modal').modal('hide');
+    $('#bug-report-flag').addClass('fas').removeClass('far');
+    $('#bug-report-text').html('Спасибо за помощь!').parent().attr('id', 'thanks-for-help');
     return false;
 });

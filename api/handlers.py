@@ -8,12 +8,11 @@ logger = getLogger('khrmff.api')
 
 
 def api_exception_handler(exc, context):
-    logger.warning('API Exception: context: %s exc_type: %s' % (str(context), type(str(exc))))
+    logger.warning('API Exception: context: %s exc_type: %s' % (str(context), type(exc)))
 
     # TODO: make it work not this shit
     # NO_AUTH_ERROR_CODE = 1
-    
-    
+
     request = context['request']
     response = exception_handler(exc, context)
     errors = {
@@ -41,7 +40,7 @@ def api_exception_handler(exc, context):
             if type(exc) == Http404:
                 response.data['error'] = {'error_code': errors['ITEM_NOT_FOUND_ERROR']['code'],
                                           'description': errors['ITEM_NOT_FOUND_ERROR']['desc']}
-        
+
         kwargs = dict(request.POST)
         kwargs.update(dict(request.GET))
         for key, val in kwargs.items():

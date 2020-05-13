@@ -1,5 +1,6 @@
 import datetime
 import string
+from logging import getLogger
 
 from rest_framework import serializers
 from rest_framework.fields import CharField, URLField, DateTimeField
@@ -12,6 +13,8 @@ from urlshortner.api.permissions import IsVisitOwner
 from urlshortner.constants import SHORTCODE_BASE_LENGTH, MAX_SHORTCODE_LENGTH, MAX_URL_LENGTH, MIN_SHORTCODE_LENGTH
 from urlshortner.models import ShortUrl, Visit
 from urlshortner.utils import get_shorturl
+
+logger = getLogger('khromoff.api')
 
 
 class ShorturlSerializer(serializers.ModelSerializer):
@@ -42,6 +45,9 @@ class ShorturlSerializer(serializers.ModelSerializer):
                 key = self.context['request'].auth.get('key')
         except AttributeError:
             pass
+
+        if not instance.active:
+            logger.warning('Inactive instance has been invoked; short_code: %s' % instance.short_code)
 
         ret = super().to_representation(instance)
         fields_to_pop = ['author', 'key', 'creator_ip', 'time_created', 'view_data_code']

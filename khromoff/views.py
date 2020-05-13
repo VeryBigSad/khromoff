@@ -113,7 +113,7 @@ def personal(request):
     context = {}
 
     # TODO: do something with that it only contains 10 last items
-    created_shorturls = ShortUrl.objects.filter(author=request.user).order_by('-time_created')[:10]
+    created_shorturls = ShortUrl.objects.filter(author=request.user, active=True).order_by('-time_created')[:10]
     created_shorturls = [{'times_visited': len(Visit.objects.filter(shorturl=i)), 'obj': i} for i in
                          created_shorturls]
 
