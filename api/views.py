@@ -10,6 +10,10 @@ from api.serializers import UserAPIKeySerializer
 from api.utils import IsAPIKeyOwner, ParamRequired, Response
 
 
+def robots_txt(request):
+    return HttpResponse()
+
+
 def methods(request):
     return render(request, 'docs/api_methods.html', context={})
 
