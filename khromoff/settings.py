@@ -57,7 +57,7 @@ LOGGING = {
         'telegram_log': {
             'level': 'WARNING',
             'filters': ['require_debug_false'],
-            'class': 'khromoff.utils.TelegramLogHandler',
+            'class': 'bughunter.apps.TelegramLogHandler',
             'bot_token': secrets.bot_token,
         }
     },
@@ -86,7 +86,7 @@ LOGGING = {
         },
     }
 }
-
+STAFF_TELEGRAM_IDS = secrets.STAFF_TELEGRAM_IDS
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
