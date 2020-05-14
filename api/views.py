@@ -110,7 +110,7 @@ class DeactivateUserAPIKey(APIView):
         apikey.save()
 
         # TODO: exception on accessing Inactive data
-        return Response(self.serializer_class(apikey, context={'request': request}).data)
+        return Response({'active': self.serializer_class(apikey, context={'request': request}).data['revoked']})
 
     def post(self, request):
         return self.get(request)

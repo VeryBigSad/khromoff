@@ -9,7 +9,8 @@
     <p class="display-3 mb-5">Методы API</p>
     <div>
         <div class="">
-            <p class="method-name h2">shorturl.get</p>
+            <p class="method-name h2 mb-0">shorturl.get</p>
+            <p class="mt-0">Возвращает короткую ссылку</p>
             <h6>Параметры</h6>
             <ul>
                 <li>
@@ -23,6 +24,8 @@
         </div>
         <div class="mt-4">
             <p class="method-name h2">shorturl.create</p>
+            <p>Создает короткую ссылку</p>
+
             <h6 class="mt-0">Параметры</h6>
             <ul>
                 <li>
@@ -48,7 +51,8 @@
             <h6>Возвращает: <a href="{% host_url 'docs-objects' host 'api' %}#shorturl">ShortURL object</a></h6>
         </div>
         <div class="mt-4">
-            <p class="method-name h2">visit.get</p>
+            <p class="method-name h2">visit.get </p>
+            <p>Возвращает список или один конкретный переход по ссылке. <span class="text-monospace font-weight-bold">(authorised-only)</span></p>
             <h6>Параметры</h6>
             <ul>
                 <li>
@@ -64,6 +68,36 @@
                 </li>
             </ul>
             <h6>Возвращает: <a href="{% host_url 'docs-objects' host 'api' %}#visit">Visit object</a></h6>
+        </div>
+        <div class="mt-4" id="shorturl.deactivate">
+            <p class="method-name h2">shorturl.deactivate</p>
+            <p>Ставит параметр <span class="text-monospace">.active</span> ссылки на <span class="text-monospace">False</span></p>
+            <h6>Параметры</h6>
+            <ul>
+                <li>
+                    shortcode <span class="font-weight-bold">(string)</span>
+                    <span class="font-weight-bold">(required)</span>
+                    - короткий код ссылки, по которой был произведен визит.<br>
+
+                    <small>Пример: VcF, cat-pictures</small>
+                </li>
+            </ul>
+            <h6>Возвращает: <a href="{% host_url 'docs-objects' host 'api' %}#visit">Visit object</a></h6>
+        </div>
+        <div class="mt-4" id="apikey.deactivate">
+            <p class="method-name h2">apikey.deactivate</p>
+            <p>Делает ключ недоступным.</p>
+            <h6>Параметры</h6>
+            <ul>
+                <li>
+                    prefix <span class="font-weight-bold">(string)</span>
+                    <span class="font-weight-bold">(required)</span>
+                    - префикс ключа.<br>
+
+                    <small>Пример: CKrkr3uM</small>
+                </li>
+            </ul>
+            <h6>Возвращает: <span class="text-monospace">true</span>, если успешно выполнено</h6>
         </div>
     </div>
 {% endblock %}

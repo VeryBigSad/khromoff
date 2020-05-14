@@ -23,6 +23,10 @@ def api_exception_handler(exc, context):
         'not_authenticated': {
             'code': 'not_authenticated',
             'desc': 'Required credentials were not provided.'
+        },
+        'err500': {
+            'code': 'server_error',
+            'desc': 'Server error occurred, please try again later.'
         }
     }
 

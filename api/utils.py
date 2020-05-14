@@ -43,7 +43,7 @@ class UserAPIKeyThrottle(throttling.SimpleRateThrottle):
         try:
             if request.auth:
                 # key
-                ident = request.auth
+                ident = request.auth['key'].hashed_key
             else:
                 # not a API KEY request, so ignore it
                 return None
@@ -113,4 +113,12 @@ class IsAPIKeyOwner(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         if request.user == obj.user:
             return True
+        else:
+            try:
+                if obj.prefix == request.auth['key'].prefix:
+                    return True
+            except (AttributeError, KeyError):
+                # not authenticated
+                # TODO: check if this is possible and maybe remove the exception
+                pass
         return False

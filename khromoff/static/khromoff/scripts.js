@@ -31,7 +31,7 @@ $('#delete-shorturl-form').on('submit', function (){
         $('.short-code-' + short_code).remove();
         if($('#tbody-shorturls').children().length === 0){
             $('#table-shorturls').remove();
-            $('#hidden-shorturl-advice').setAttribute('hidden', '')
+            $('#hidden-shorturl-advice').removeClass('invisible').addClass('visible')
         }
         $('#delete-item-modal').modal('hide');
 
