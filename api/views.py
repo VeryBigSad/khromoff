@@ -1,12 +1,17 @@
 import requests
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAdminUser
+from rest_framework.generics import get_object_or_404
+from rest_framework.views import APIView
 
 from api.models import UserAPIKey
 from api.serializers import UserAPIKeySerializer
+from api.utils import IsAPIKeyOwner, ParamRequired, Response
+
+
+def robots_txt(request):
+    return HttpResponse()
 
 
 def methods(request):
@@ -46,7 +51,7 @@ def errors(request):
 @login_required()
 def create_key(request):
     if request.method == 'POST':
-        if UserAPIKey.objects.filter(user=request.user).count() >= 5:
+        if UserAPIKey.objects.get_usable_keys().filter(user=request.user).count() >= 5:
             return render(request, 'keys/max_key_amount.html')
 
         data = {'user': request.user.pk, 'name': request.POST.get('name'),
@@ -60,7 +65,7 @@ def create_key(request):
             return render(request, 'keys/create_key.html', context={'errors': serializer.errors})
 
     elif request.method == 'GET':
-        if UserAPIKey.objects.filter(user=request.user).count() >= 5:
+        if UserAPIKey.objects.get_usable_keys().filter(user=request.user).count() >= 5:
             return render(request, 'keys/max_key_amount.html')
         return render(request, 'keys/create_key.html', context={})
 
@@ -69,7 +74,47 @@ def redirect_to_docs(request):
     return redirect('docs-index')
 
 
-@api_view(['GET', 'POST'])
-@permission_classes([IsAdminUser])
-def user_details(request):
-    return JsonResponse({'not_finished_yet': True})
+class DeactivateUserAPIKey(APIView):
+    permission_classes = [IsAPIKeyOwner]
+    serializer_class = UserAPIKeySerializer
+    http_method_names = ['get', 'post', 'options']
+
+    # TODO: here and in other serializers with .active, set queryset to .filter(active=True)
+    queryset = UserAPIKey.objects.all()
+    required_params = ['prefix']
+
+    def options(self, request, *args, **kwargs):
+        resp = HttpResponse()
+        # ajax will never calm down so here i am writing VERY bad code,
+        # probably a lot simpler solution exists. This works though
+        resp['Access-Control-Allow-Credentials'] = 'true'
+        resp['Access-Control-Allow-Origin'] = request.META['HTTP_ORIGIN']
+        resp["Access-Control-Allow-Headers"] = "Access-Control-Allow-Headers, access-control-allow-origin, Origin," \
+                                               "Accept, X-Requested-With, " \
+                                               "Content-Type, Access-Control-Request-Method, " \
+                                               "Access-Control-Request-Headers "
+
+        return resp
+
+    def get(self, request):
+        if request.method == 'POST':
+            data = request.POST
+        else:
+            # GET method; elif request.method == 'GET':
+            data = request.GET
+
+        for i in self.required_params:
+            if i not in data:
+                raise ParamRequired('Parameter %s was required but wasn\'t specified' % i)
+
+        apikey = get_object_or_404(self.queryset, prefix=data.get('prefix').rstrip().lstrip())
+        self.check_object_permissions(request, apikey)
+
+        apikey.deactivate()
+        apikey.save()
+
+        # TODO: exception on accessing Inactive data
+        return Response({'active': self.serializer_class(apikey, context={'request': request}).data['revoked']})
+
+    def post(self, request):
+        return self.get(request)

@@ -9,3 +9,5 @@ class UserAPIKey(AbstractAPIKey):
     user = models.ForeignKey(User, on_delete=models.CASCADE)  # who owns the key
     requests_per_minute = models.IntegerField(default=30)  # throttle value
 
+    def deactivate(self):
+        self.revoked = True

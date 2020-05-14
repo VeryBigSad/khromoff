@@ -24,6 +24,9 @@ class ShortUrl(models.Model):
     # page where we can see spy info actually
     view_data_code = models.CharField(max_length=MAX_SHORTCODE_LENGTH + 1, default=None, null=True)
 
+    def deactivate(self):
+        self.active = False
+
     def __str__(self):
         return str(self.time_created.strftime("%d.%m.%Y %H:%M:%S; ") + self.full_url)
 

@@ -11,6 +11,7 @@ urlpatterns = [
     path('preview/<str:short_id>', views.preview, name='preview'),  # preview of redirect
     path('<str:short_id>', views.redirect_to_long_url, name='redirect'),  # redirect
 
+    path('robots.txt', views.robots_txt, name='index'),
 ]
 
 handler404 = 'khromoff.views.error404'

@@ -5,6 +5,7 @@
 {% load static %}
 {% block scripts %}
     <link rel="stylesheet" href="{% static "khromoff/login.css" %}">
+    <script src="{% static 'general/form-validation.js' %}"></script>
 {% endblock %}
 
 {% block content %}
@@ -24,7 +25,7 @@
         </nav>
 
         <div class="tab-content" id="login-register">
-            <form class="tab-pane fade {% if menu == 'login' %}active show{% endif %}" action="" method="POST" id="login">
+            <form class="novalidate-form tab-pane fade {% if menu == 'login' %}active show{% endif %}" action="" method="POST" id="login" novalidate>
                 <h1 class=" font-weight-normal mb-3">Войти</h1>
 
                 {% csrf_token %}
@@ -32,15 +33,21 @@
 
                 <div class="form-group">
                     <label class="sr-only" for="username">Имя пользователя</label>
-                    <input class="form-control" id="username" type="text" name="username" placeholder="Имя пользователя" >
+                    <input class="form-control" id="username" type="text" name="username" placeholder="Имя пользователя" required>
+                    <div class="invalid-feedback">
+                        Это поле обязательно.
+                    </div>
                     <label class="sr-only" for="password">Пароль</label>
-                    <input class="form-control mt-1" id="password" type="password" name="password" placeholder="Пароль" >
+                    <input class="form-control mt-1" id="password" type="password" name="password" placeholder="Пароль" required>
+                    <div class="invalid-feedback">
+                        Это поле обязательно.
+                    </div>
                 </div>
 
                 <button class="btn btn-lg btn-primary">Войти</button>
             </form>
 
-            <form class="tab-pane fade {% if menu == 'register' %}active show{% elif menu != 'login' %}active show{% endif %} " action="" method="POST" id="register">
+            <form class="novalidate-form tab-pane fade {% if menu == 'register' %}active show{% elif menu != 'login' %}active show{% endif %} " action="" method="POST" id="register" novalidate>
                 <h1 class=" font-weight-normal ">Создать нового пользователя</h1>
 
                 {% csrf_token %}
@@ -48,11 +55,20 @@
 
                 <div class="form-group">
                     <label class="sr-only" for="username">Имя пользователя</label>
-                    <input class="form-control" id="username" type="text" name="username" placeholder="Имя пользователя">
+                    <input class="form-control" id="username" type="text" name="username" placeholder="Имя пользователя" required>
+                    <div class="invalid-feedback">
+                        Это поле обязательно.
+                    </div>
                     <label class="sr-only" for="password">Пароль</label>
-                    <input class="form-control mt-1" id="password" type="password" name="password" placeholder="Пароль">
+                    <input class="form-control mt-1" id="password" type="password" name="password" placeholder="Пароль" required>
+                    <div class="invalid-feedback">
+                        Это поле обязательно.
+                    </div>
                     <label class="sr-only" for="password">Повторите пароль</label>
-                    <input class="form-control mt-1" id="password" type="password" name="password_repeat" placeholder="Повторите пароль">
+                    <input class="form-control mt-1" id="password" type="password" name="password_repeat" placeholder="Повторите пароль" required>
+                    <div class="invalid-feedback">
+                        Это поле обязательно.
+                    </div>
                 </div>
 
                 <button class="btn btn-lg btn-primary">Создать</button>

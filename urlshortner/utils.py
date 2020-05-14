@@ -27,3 +27,5 @@ def get_shorturl(thing_object, url_length, filter_kwargs=None, check_for_existin
     return short_code
 
 
+class ObjectInactiveError(Exception):
+    pass

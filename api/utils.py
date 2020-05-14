@@ -1,7 +1,8 @@
 # from rest_framework.views import exception_handler
 from django.contrib.auth.models import AnonymousUser
-from rest_framework import authentication, throttling
+from rest_framework import authentication, throttling, permissions
 from rest_framework import exceptions
+from rest_framework.response import Response as _Response
 
 from api.models import UserAPIKey
 
@@ -11,11 +12,10 @@ class APITokenAuth(authentication.BaseAuthentication):
         if request.method == 'POST':
             token = request.POST.get('token')
         else:
-            if not request.method == 'GET':
-                raise exceptions.AuthenticationFailed('Method not POST or GET')
             token = request.GET.get('token')
 
         if not token:
+            # if wasn't specified or not GET or POST
             return None
 
         try:
@@ -43,7 +43,7 @@ class UserAPIKeyThrottle(throttling.SimpleRateThrottle):
         try:
             if request.auth:
                 # key
-                ident = request.auth
+                ident = request.auth['key'].hashed_key
             else:
                 # not a API KEY request, so ignore it
                 return None
@@ -97,3 +97,28 @@ class ParamRequired(exceptions.APIException):
     def get_codes(self):
         return self.code
 
+
+def Response(thing, status=200, **kwargs):
+    if status == 200:
+        return _Response({'response': thing}, **kwargs)
+    else:
+        return _Response({'error': thing}, status=status, **kwargs)
+
+
+class IsAPIKeyOwner(permissions.BasePermission):
+    """
+        defines if you are owner of the key or not
+    """
+
+    def has_object_permission(self, request, view, obj):
+        if request.user == obj.user:
+            return True
+        else:
+            try:
+                if obj.prefix == request.auth['key'].prefix:
+                    return True
+            except (AttributeError, KeyError):
+                # not authenticated
+                # TODO: check if this is possible and maybe remove the exception
+                pass
+        return False

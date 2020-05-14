@@ -55,9 +55,9 @@ LOGGING = {
             'formatter': 'verbose'
         },
         'telegram_log': {
-            'level': 'ERROR',
+            'level': 'WARNING',
             'filters': ['require_debug_false'],
-            'class': 'khromoff.utils.TelegramLogHandler',
+            'class': 'bughunter.apps.TelegramLogHandler',
             'bot_token': secrets.bot_token,
         }
     },
@@ -67,7 +67,7 @@ LOGGING = {
             'propagate': True,
         },
         'django.request': {
-            'handlers': ['console', 'file', 'telegram_log'],
+            'handlers': ['telegram_log'],
             'level': 'ERROR',
         },
         'django.db.backends': {
@@ -82,10 +82,11 @@ LOGGING = {
         'khromoff.bugs': {
             'handlers': ['telegram_log'],
             'level': 'INFO',
+            'propagate': False,
         },
     }
 }
-
+STAFF_TELEGRAM_IDS = secrets.STAFF_TELEGRAM_IDS
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
@@ -112,7 +113,6 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    # 'django.middleware.cache.UpdateCacheMiddleware',
     'django_hosts.middleware.HostsRequestMiddleware',
 
     'django.middleware.security.SecurityMiddleware',
@@ -124,7 +124,6 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
     'django_hosts.middleware.HostsResponseMiddleware',
-    # 'django.middleware.cache.FetchFromCacheMiddleware',
 ]
 
 ROOT_URLCONF = 'khromoff.urls'

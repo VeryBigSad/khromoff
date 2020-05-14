@@ -20,6 +20,9 @@ class UserAPIKeySerializer(serializers.ModelSerializer):
     def create(self, validated_data, *args, **kwargs):
         return self.Meta.model.objects.create_key(**validated_data)
 
+    def deactivate(self):
+        self.active = False
+
     class Meta:
         model = UserAPIKey
         fields = '__all__'
