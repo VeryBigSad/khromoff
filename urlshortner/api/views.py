@@ -20,10 +20,7 @@ class ShorturlDetails(APIView):
         else:
             short_code = request.POST.get('short_code')
 
-        try:
-            shorturl = ShortUrl.objects.get(short_code=short_code)
-        except ShortUrl.DoesNotExist:
-            raise Http404
+        shorturl = get_object_or_404(ShortUrl.objects.all(), short_code=short_code)
 
         serializer = ShorturlSerializer(shorturl, context={'request': request})
         return Response(serializer.data)

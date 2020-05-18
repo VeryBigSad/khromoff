@@ -238,6 +238,8 @@
                         <h4 class="font-weight-normal">Чтобы получить такой, нажмите <a href="{% url 'create-api-key' host 'api' %}">сюда</a></h4>
                     </div>
                 {% elif keys %}
+                    <h4 class="font-weight-normal" id="5-keys-limit" hidden>Вы не можете иметь больше 5 ключей.
+                        Если вы не используйте какой-то из них, удалите его и добавьте другой.</h4>
                     <h4 class="font-weight-normal" id="get-apikey-recommendation">Чтобы получить еще один, нажмите <a href="{% url 'create-api-key' host 'api' %}">сюда</a></h4>
                     <div class="invisible" id="hidden-apikey-advice">
                         <h4 class="font-weight-normal">У вас нет активных ключей</h4>

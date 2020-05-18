@@ -39,7 +39,7 @@ class ShorturlSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         key = 0
-        # 0 because KEY might be == None (if no was provided at moment of creation)
+        # 0 because KEY might be == None (==null in DB) (if no was provided at moment of creation)
         try:
             if self.context['request'].auth:
                 key = self.context['request'].auth.get('key')
@@ -82,8 +82,8 @@ class ShorturlSerializer(serializers.ModelSerializer):
         return short_code
 
     def create(self, validated_data):
-        obj = ShortUrl.objects.filter(full_url=self.validated_data['full_url'], do_collect_meta=False,
-                                      alias=False, active=True)
+        obj = ShortUrl.objects.get_valid_urls().filter(full_url=self.validated_data['full_url'],
+                                                       do_collect_meta=False, alias=False)
 
         # if object already exists, we don't need to create it again.
         if not self.validated_data.get('do_collect_meta') and \

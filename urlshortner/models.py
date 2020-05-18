@@ -1,11 +1,17 @@
 from django.contrib.auth import get_user_model
 from django.db import models
+from django.db.models.manager import BaseManager
 from rest_framework_api_key.models import AbstractAPIKey
 
 from api.models import UserAPIKey
 from urlshortner.constants import MAX_SHORTCODE_LENGTH, MAX_URL_LENGTH
 
 User = get_user_model()
+
+
+class ShortUrlManager(BaseManager):
+    def get_valid_urls(self):
+        return self.get_queryset().filter(active=True)
 
 
 class ShortUrl(models.Model):
@@ -23,6 +29,8 @@ class ShortUrl(models.Model):
     alias = models.BooleanField(default=False)
     # page where we can see spy info actually
     view_data_code = models.CharField(max_length=MAX_SHORTCODE_LENGTH + 1, default=None, null=True)
+
+    object = ShortUrlManager
 
     def deactivate(self):
         self.active = False
