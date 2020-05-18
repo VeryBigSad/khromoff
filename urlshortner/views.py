@@ -61,9 +61,10 @@ def view_data(request, view_data_code):
 
 @cache_page(60 * 15)
 def redirect_to_long_url(request, short_id):
-    url_object = ShortUrl.objects.filter(short_code=short_id)
+    url_base_obj = ShortUrl.objects.get_valid_urls()
+    url_object = url_base_obj.filter(short_code=short_id)
     if not url_object.exists():
-        url_object = ShortUrl.objects.filter(short_code=short_id.lower(), alias=True)
+        url_object = url_base_obj.filter(short_code=short_id.lower(), alias=True)
         if not url_object.exists():
             raise Http404('We are unable to find this shorturl.'
                           ' Please check that url is entered'
