@@ -49,7 +49,7 @@ LOGGING = {
             'class': 'logging.StreamHandler',
             'formatter': 'verbose'
         },
-        'file': {
+        'infile': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
             'filename': os.path.join(BASE_DIR, 'logs/django.log'),
@@ -64,20 +64,19 @@ LOGGING = {
     },
     'loggers': {
         'django': {
-            'handlers': ['console', 'file'],
-            'propagate': True,
+            'handlers': ['console', 'infile'],
         },
         'django.request': {
             'handlers': ['telegram_log'],
             'level': 'ERROR',
         },
         'django.db.backends': {
-            'handlers': ['console', 'file'],
+            'handlers': ['console', 'infile'],
             'level': 'DEBUG',
             'propagate': False
         },
         'khromoff': {
-            'handlers': ['console', 'file'],
+            'handlers': ['console', 'infile'],
             'level': 'DEBUG',
         },
         'khromoff.bugs': {
