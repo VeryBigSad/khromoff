@@ -2,9 +2,11 @@ import datetime
 import string
 from datetime import datetime
 
+import requests
 from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.password_validation import validate_password
+from django.core.cache import cache
 from django.core.exceptions import ValidationError
 from django.http import HttpResponseRedirect, HttpResponseServerError
 from django.shortcuts import render
@@ -12,7 +14,7 @@ from django.utils.translation import gettext
 from django_hosts import reverse
 
 from api.models import UserAPIKey
-from khromoff.utils import next_redirect_or_main
+from khromoff.utils import next_redirect_or_main, check_captcha
 from urlshortner.models import ShortUrl, Visit
 
 User = get_user_model()
@@ -78,20 +80,20 @@ def login_page(request):
     if request.method == 'POST':
         if request.POST['type'] == 'login':
             user = authenticate(username=request.POST['username'], password=request.POST['password'])
-            # If invalid session, then delete db and recreate.
-            # This user should always exist. Otherwise, idk create it manually, this is TEMP so not coding it :shrug:
             if user:
                 login(request, user)
                 return next_redirect_or_main(request)
             else:
-                return render(request, 'login_register.html', context={'errors': [{'type': 'wrong_credentials',
-                                                                                   'description': 'Неверный логин или'
-                                                                                                  ' пароль.'}],
-                                                                       'menu': request.POST['type']})
+                return render(request, 'login_register.html',
+                              context={'errors': [{'type': 'wrong_credentials',
+                                                   'description': 'Неверный логин или пароль.'}],
+                                       'menu': request.POST['type']})
         elif request.POST['type'] == 'register':
             errors = []
             errors += username_valid_checks(request.POST['username'])
             errors += password_valid_checks(request.POST['password'], request.POST['password_repeat'])
+
+            errors += check_captcha(request.POST['h-captcha-response'])
 
             if errors:
                 return render(request, 'login_register.html', context={'errors': errors, 'menu': request.POST['type']})
@@ -103,7 +105,7 @@ def login_page(request):
         else:
             return HttpResponseServerError()
 
-    elif request.method == 'GET':
+    else:
         return render(request, 'login_register.html')
 
 
@@ -113,6 +115,7 @@ def personal(request):
     context = {}
 
     # TODO: do something with that it only contains 10 last items
+    # TODO: use serializers, not db requests
     created_shorturls = ShortUrl.objects.get_valid_urls().filter(author=request.user).order_by('-time_created')[:10]
     created_shorturls = [{'times_visited': len(Visit.objects.filter(shorturl=i)), 'obj': i} for i in
                          created_shorturls]
@@ -146,7 +149,10 @@ def personal(request):
 
 
 def about(request):
-    return render(request, 'about.html')
+    last_update_date = cache.get_or_set('last_site_update', (lambda: datetime.strptime(
+        requests.get('https://api.github.com/repos/mikhailkhromov/khromoff').json()['updated_at'],
+        '%Y-%m-%dT%H:%M:%S%z').strftime('%d %b %Y')))
+    return render(request, 'about.html', context={'last_update_date': gettext(last_update_date)})
 
 
 def me(request):

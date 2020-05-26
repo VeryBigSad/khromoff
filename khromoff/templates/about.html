@@ -11,15 +11,23 @@
         <p>
             Привет! Это мой сайт. Что ты тут делаешь?
         </p>
-        <p>
+        <p class="pb-3">
             Во вкладке <button class="btn btn-primary" type="button">Интересное</button> вы можете увидить мои проекты.
+            <br>
+            Вкладки <a href="#">О сайте</a> и <a href="{% url 'me' %}">Обо мне</a> говорят сами за себя, а зарегистрировавшись в личном кабинете вы сможете управлять
+            созданными короткими ссылками и воспользоваться всеми возможностями API.
         </p>
-        <p class="text-muted mt-auto site-info-text">
+
+        <h5 class="mt-auto mb-0">Технологии</h5>
+        <p class="text-muted mt-0 pt-0 site-info-text pb-0">
             Сам сайт написан на <a class="text-muted" href="https://www.djangoproject.com/">Django</a>, для фронтенда
-            используется <a class="text-muted"
-                            href="https://getbootstrap.com/">Bootstrap 4.4</a>.
+            используется <a class="text-muted" href="https://getbootstrap.com/">Bootstrap 4.4</a>.
             Дизайн был вдохновлен плагином <a href="https://github.com/daattali/beautiful-jekyll" class="text-muted">beautiful-jekyll</a>.
+
             <a href="https://github.com/mikhailkhromov/khromoff" class="text-muted">Исходный код на гитхаб</a>
+        </p>
+        <p class="text-muted site-info-text mt-0 pt-0">
+            Последнее обновление сайта - {{ last_update_date }}.
         </p>
     </div>
 {% endblock %}

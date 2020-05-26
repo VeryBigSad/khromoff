@@ -5,10 +5,11 @@ from khromoff import secrets
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 SECRET_KEY = secrets.SECRET_KEY
+STAFF_TELEGRAM_IDS = secrets.STAFF_TELEGRAM_IDS
 DEBUG = True
-DOMAIN_NAME = 'khrmff.ru'
 
 if not DEBUG:
+    DOMAIN_NAME = 'khrmff.ru'
     CSRF_COOKIE_SECURE = True
     SESSION_COOKIE_SECURE = True
     SECURE_SSL_REDIRECT = True
@@ -86,7 +87,6 @@ LOGGING = {
         },
     }
 }
-STAFF_TELEGRAM_IDS = secrets.STAFF_TELEGRAM_IDS
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
@@ -96,7 +96,6 @@ CACHES = {
 
 INSTALLED_APPS = [
     'django.contrib.admin',
-    'django_log_to_telegram',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -106,6 +105,7 @@ INSTALLED_APPS = [
     # my apps
     'urlshortner.apps.UrlshortnerConfig',
     'api.apps.ApiConfig',
+    'bughunter.apps.BughunterConfig',
 
     # 3rd party
     'rest_framework',

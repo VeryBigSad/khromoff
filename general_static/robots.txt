@@ -1,10 +1,8 @@
 User-agent: *
 
-Disallow: /admin/*
-
+Disallow: /admin
 Disallow: /login
 Disallow: /personal
-
 Disallow: /about
 Disallow: /me
 
