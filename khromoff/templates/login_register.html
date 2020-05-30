@@ -6,17 +6,19 @@
 {% block scripts %}
     <link rel="stylesheet" href="{% static "khromoff/login.css" %}">
     <script src="{% static 'general/form-validation.js' %}"></script>
+    <script src="https://hcaptcha.com/1/api.js" async defer></script>
 {% endblock %}
 
 {% block content %}
     <div class="text-center signin">
-        <div class="errors">
+        <div class="errors row">
             {% for i in errors %}
-                <div class="alert alert-danger">
+                <div class="alert alert-danger mx-1 col">
                     Ошибка! {{ i.description }}
                 </div>
             {% endfor %}
         </div>
+
         <nav>
             <div class="nav nav-tabs mb-3 justify-content-center" id="nav-tab" role="tablist">
                 <a class="nav-item nav-link {% if menu == 'login' %}active{% endif %}" id="login-register" data-toggle="tab" href="#login" role="tab" aria-controls="login" aria-selected="true">Войти</a>
@@ -71,6 +73,9 @@
                     </div>
                 </div>
 
+                {# TODO: auth with VK, Telegram, github. #}
+                <label for="captcha">Пожалуйста, введите капчу.</label>
+                <div id="captcha" class="h-captcha" data-sitekey="6c844963-35f2-40c7-a554-e4abee5233eb"></div>
                 <button class="btn btn-lg btn-primary">Создать</button>
             </form>
         </div>

@@ -54,9 +54,11 @@ def create_new_link(request):
 
 def view_data(request, view_data_code):
     shorturl = get_object_or_404(ShortUrl, view_data_code=view_data_code)
+    visits = Visit.objects.filter(shorturl=shorturl)
+    visits.reverse()
 
     return render(request, 'urlshortner/view_data.html', context={
-        'shorturl': shorturl, 'visits': Visit.objects.filter(shorturl=shorturl)})
+        'shorturl': shorturl, 'visits': visits})
 
 
 @cache_page(60 * 15)

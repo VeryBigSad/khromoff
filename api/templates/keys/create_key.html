@@ -4,6 +4,8 @@
 {% block scripts %}
     <link rel="stylesheet" href="{% static 'urlshortner/styles.css' %}">
     <script src="{% static 'general/form-validation.js' %}"></script>
+    <script src="https://hcaptcha.com/1/api.js" async defer></script>
+
 {% endblock %}
 
 {% block title %}Получить ключ доступа API{% endblock %}
@@ -26,6 +28,9 @@
             </div>
             <label for="r-per-minute" class="mt-3">Сколько запросов в минуту максимум (от 1 до 30)</label>
             <input type="number" class="form-control" min="1" max="30" id="r-per-minute" name="requests_per_minute" value="30" required>
+
+            <label for="captcha">Пожалуйста, введите капчу.</label>
+            <div id="captcha" class="h-captcha" data-sitekey="6c844963-35f2-40c7-a554-e4abee5233eb"></div>
             <button class="btn btn-primary mt-2" type="submit">Получить</button>
         </form>
     </div>

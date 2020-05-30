@@ -5,6 +5,7 @@ from khromoff import secrets
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 SECRET_KEY = secrets.SECRET_KEY
+STAFF_TELEGRAM_IDS = secrets.STAFF_TELEGRAM_IDS
 DEBUG = False
 
 if not DEBUG:
@@ -48,7 +49,7 @@ LOGGING = {
             'class': 'logging.StreamHandler',
             'formatter': 'verbose'
         },
-        'file': {
+        'infile': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
             'filename': os.path.join(BASE_DIR, 'logs/django.log'),
@@ -63,21 +64,16 @@ LOGGING = {
     },
     'loggers': {
         'django': {
-            'handlers': ['console', 'file'],
-            'propagate': True,
+            'handlers': ['console', 'infile'],
         },
         'django.request': {
             'handlers': ['telegram_log'],
             'level': 'ERROR',
         },
-        'django.db.backends': {
-            'handlers': ['console', 'file'],
-            'level': 'DEBUG',
-            'propagate': False
-        },
         'khromoff': {
-            'handlers': ['console', 'file'],
+            'handlers': ['console', 'infile'],
             'level': 'DEBUG',
+            'formatters': ['verbose']
         },
         'khromoff.bugs': {
             'handlers': ['telegram_log'],
@@ -86,7 +82,6 @@ LOGGING = {
         },
     }
 }
-STAFF_TELEGRAM_IDS = secrets.STAFF_TELEGRAM_IDS
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
@@ -105,9 +100,11 @@ INSTALLED_APPS = [
     # my apps
     'urlshortner.apps.UrlshortnerConfig',
     'api.apps.ApiConfig',
+    'bughunter.apps.BughunterConfig',
 
     # 3rd party
     'rest_framework',
+    'django_log_to_telegram',
     'rest_framework_api_key',
     'django_hosts',
 ]
@@ -160,9 +157,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'khromoff.wsgi.application'
 
-# Database
-# https://docs.djangoproject.com/en/3.0/ref/settings/#databases
-
 
 DATABASES = {
     'default': {
@@ -214,9 +208,6 @@ if DEBUG:
     REST_FRAMEWORK['DEFAULT_RENDERER_CLASSES'].append('rest_framework.renderers.BrowsableAPIRenderer')
 
 
-# Password validation
-# https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
@@ -226,8 +217,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-# Internationalization
-# https://docs.djangoproject.com/en/3.0/topics/i18n/
 
 LANGUAGE_CODE = 'ru-ru'
 
@@ -239,7 +228,6 @@ USE_L10N = False
 
 USE_TZ = True
 
-# Static files (CSS, JavaScript, Images)
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "general_static"),

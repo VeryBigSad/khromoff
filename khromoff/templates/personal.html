@@ -17,7 +17,7 @@
         <div class="mt-3"></div>
 
 
-        <h1 class="text-center">Профиль пользвателя {{ request.user.username }}</h1>
+        <h1 class="text-center">Профиль пользователя {{ request.user.username }}</h1>
         {% if request.GET.new == '' %}
             <div class="alert alert-success text-center alert-popup container-fluid">
                 Аккаунт успешно создан!
@@ -176,13 +176,17 @@
                                         {{ i.prefix }}
                                     </td>
                                     <td>
-                                        <ul>
+                                        {% if not i.is_super_key %}
+                                            <ul>
                                             <li>Создавать <span class="font-weight-bold">
                                                 <a href="{% url 'docs-objects' host 'api' %}#shorturl">ShortURL</a></span>
                                             </li>
                                             <li>Смотреть информацию о <span class="font-weight-bold"><a
                                                     href="{% url 'docs-objects' host 'api' %}#visit">Visit</a></span></li>
-                                        </ul>
+                                            </ul>
+                                        {% else %}
+                                            GOD-key (все права)
+                                        {% endif %}
                                     </td>
                                     <td>
                                         {% if i.requests_per_minute >= 1000 %}
