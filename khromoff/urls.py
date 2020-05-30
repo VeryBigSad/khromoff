@@ -16,10 +16,11 @@ urlpatterns = [
 
     # bugs
     path('bugs/', include('bughunter.urls')),
-    # error 500
-    path('500', views.error500, name='error500'),
+
+    # path('search/', include('search.urls'))
 
 ]
 
 handler404 = 'khromoff.views.error404'
 handler500 = 'khromoff.views.error500'
+handler403 = 'khromoff.views.error403'

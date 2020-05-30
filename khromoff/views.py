@@ -69,6 +69,10 @@ def error404(request, exception):
     return render(request, '404error.html', context={'description': str(exception)}, status=404)
 
 
+def error403(request, exception=None):
+    return render(request, '403error.html', status=403)
+
+
 def error500(request):
     return render(request, '500error.html', status=500)
 

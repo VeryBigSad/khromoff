@@ -17,5 +17,4 @@ urlpatterns = [
     path('method/', include('urlshortner.api.urls')),
     path('method/apikey.deactivate', views.DeactivateUserAPIKey.as_view(), name='apikey-deactivate'),
 
-    path('robots.txt', views.robots_txt, name='index'),
 ]

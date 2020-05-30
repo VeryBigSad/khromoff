@@ -90,6 +90,11 @@ class UserAPIKeyThrottle(throttling.SimpleRateThrottle):
         return None
 
 
+class IsAdminKey(authentication.BaseAuthentication):
+    def has_permission(self, request, smthingelse):
+        return bool(request.auth and request.auth['key'].is_super_key)
+
+
 class ParamRequired(exceptions.APIException):
     detail = 'Required parameter not specified'
     code = 'params_required'
