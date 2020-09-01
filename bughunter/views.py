@@ -12,6 +12,9 @@ def report(request):
     # (e.g. creates a log entry)
 
     if request.method == 'POST':
+        if request.POST.get('location') is None:
+            return HttpResponse('What? How did you just do that? Are you an ad? If you are not, please report this.')
+
         logger.warning('New bugreport:\n'
                        'page: %s\n'
                        'user_ip: %s\n'
@@ -20,6 +23,7 @@ def report(request):
                        'description: %s'
                        % (request.POST.get('location'), request.META['REMOTE_ADDR'],
                           request.user, request.POST.get('error_type'), request.POST.get('description')))
+        
         # TODO: save in DB, create page about it. more info there
         return HttpResponse('thx doode')
     else:
