@@ -5,7 +5,7 @@ def static_context(request):
     # some basic stuff
 
     context = {'static': {
-        'HOSTNAME': request.META['HTTP_HOST'].replace('http://', 'https://'),
+        'HOSTNAME': request.META['HTTP_HOST'],
         'HOST': PARENT_HOST
     }}
     return context
