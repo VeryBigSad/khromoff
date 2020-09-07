@@ -63,7 +63,7 @@ def view_data(request, view_data_code):
 
 @cache_page(60 * 15)
 def redirect_to_long_url(request, short_id):
-    url_base_obj = ShortUrl.objects.get_valid_urls()
+    url_base_obj = ShortUrl.objects.filter(active=True)
     url_object = url_base_obj.filter(short_code=short_id)
     if not url_object.exists():
         url_object = url_base_obj.filter(short_code=short_id.lower(), alias=True)

@@ -30,7 +30,8 @@ class ShortUrl(models.Model):
     # page where we can see spy info actually
     view_data_code = models.CharField(max_length=MAX_SHORTCODE_LENGTH + 1, default=None, null=True)
 
-    object = ShortUrlManager
+    objects = ShortUrlManager
+    test = ShortUrlManager
 
     def deactivate(self):
         self.active = False

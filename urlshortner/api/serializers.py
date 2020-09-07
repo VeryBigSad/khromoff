@@ -82,7 +82,7 @@ class ShorturlSerializer(serializers.ModelSerializer):
         return short_code
 
     def create(self, validated_data):
-        obj = ShortUrl.objects.get_valid_urls().filter(full_url=self.validated_data['full_url'],
+        obj = ShortUrl.objects.filter(active=True).filter(full_url=self.validated_data['full_url'],
                                                        do_collect_meta=False, alias=False)
 
         # if object already exists, we don't need to create it again.
