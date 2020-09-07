@@ -164,6 +164,9 @@
                 <a href="{% url 'redirect' 'my-github-redirect' host 'urlshortner' %}" class="text-reset"><i
                         class="fab fa-github"></i></a>
             </span>
+            <span class="contact-me-icons discord-icon">
+                <i class="fab fa-discord text-reset" data-toggle="tooltip" data-placement="top" data-html="true" title="<b><em>Sanyss</em></b>#0001 (Такой тег будет как минимум до конца ноября)"></i>
+            </span>
             <span class="contact-me-icons email-icon">
                 <a href="mailto:khromov05@gmail.com" class="text-reset"><i class="far fa-envelope"></i></a>
             </span>
@@ -188,5 +191,10 @@
     <script src="{% static 'general/default.js' %}"></script>
 
     {% block scripts %}{% endblock %}
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+    </script>
 </body>
 </html>

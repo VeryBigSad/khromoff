@@ -6,7 +6,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 SECRET_KEY = secrets.SECRET_KEY
 STAFF_TELEGRAM_IDS = secrets.STAFF_TELEGRAM_IDS
+
 DEBUG = False
+if os.environ.get("IS_DEBUG"):
+    DEBUG = True
 
 if not DEBUG:
     DOMAIN_NAME = 'khrmff.ru'

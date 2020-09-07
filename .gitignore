@@ -4,7 +4,7 @@ __pycache__
 secrets.py
 db.mysqlite3
 
-logs/
+/logs/
 .idea/
 migrations
 
