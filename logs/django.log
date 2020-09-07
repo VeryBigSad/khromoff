@@ -1,0 +1,138 @@
+ERROR - 2020-09-01 23:58:36,323 | log: Internal Server Error: /
+Traceback (most recent call last):
+  File "/home/ubuntu/venv/lib/python3.6/site-packages/django/core/handlers/exception.py", line 34, in inner
+    response = get_response(request)
+  File "/home/ubuntu/venv/lib/python3.6/site-packages/django/core/handlers/base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/home/ubuntu/venv/lib/python3.6/site-packages/django/core/handlers/base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ubuntu/khromoff/khromoff/views.py", line 172, in index
+    return render(request, 'index.html', context={})
+  File "/home/ubuntu/venv/lib/python3.6/site-packages/django/shortcuts.py", line 19, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/home/ubuntu/venv/lib/python3.6/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "/home/ubuntu/venv/lib/python3.6/site-packages/django/template/backends/django.py", line 61, in render
+    return self.template.render(context)
+  File "/home/ubuntu/venv/lib/python3.6/site-packages/django/template/base.py", line 171, in render
+    return self._render(context)
+  File "/home/ubuntu/venv/lib/python3.6/site-packages/django/template/base.py", line 163, in _render
+    return self.nodelist.render(context)
+  File "/home/ubuntu/venv/lib/python3.6/site-packages/django/template/base.py", line 936, in render
+    bit = node.render_annotated(context)
+  File "/home/ubuntu/venv/lib/python3.6/site-packages/django/template/base.py", line 903, in render_annotated
+    return self.render(context)
+  File "/home/ubuntu/venv/lib/python3.6/site-packages/django/template/loader_tags.py", line 150, in render
+    return compiled_parent._render(context)
+  File "/home/ubuntu/venv/lib/python3.6/site-packages/django/template/base.py", line 163, in _render
+    return self.nodelist.render(context)
+  File "/home/ubuntu/venv/lib/python3.6/site-packages/django/template/base.py", line 936, in render
+    bit = node.render_annotated(context)
+  File "/home/ubuntu/venv/lib/python3.6/site-packages/django/template/base.py", line 903, in render_annotated
+    return self.render(context)
+  File "/home/ubuntu/venv/lib/python3.6/site-packages/django_hosts/templatetags/hosts.py", line 44, in render
+    path = super(HostURLNode, self).render(context)
+  File "/home/ubuntu/venv/lib/python3.6/site-packages/django/template/defaulttags.py", line 443, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "/home/ubuntu/venv/lib/python3.6/site-packages/django/urls/base.py", line 87, in reverse
+    return iri_to_uri(resolver._reverse_with_prefix(view, prefix, *args, **kwargs))
+  File "/home/ubuntu/venv/lib/python3.6/site-packages/django/urls/resolvers.py", line 617, in _reverse_with_prefix
+    self._populate()
+  File "/home/ubuntu/venv/lib/python3.6/site-packages/django/urls/resolvers.py", line 455, in _populate
+    for url_pattern in reversed(self.url_patterns):
+  File "/home/ubuntu/venv/lib/python3.6/site-packages/django/utils/functional.py", line 48, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+  File "/home/ubuntu/venv/lib/python3.6/site-packages/django/urls/resolvers.py", line 588, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/home/ubuntu/venv/lib/python3.6/site-packages/django/utils/functional.py", line 48, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+  File "/home/ubuntu/venv/lib/python3.6/site-packages/django/urls/resolvers.py", line 581, in urlconf_module
+    return import_module(self.urlconf_name)
+  File "/usr/lib/python3.6/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 994, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 971, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 955, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 665, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 678, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/home/ubuntu/khromoff/api/urls.py", line 3, in <module>
+    from . import views
+  File "/home/ubuntu/khromoff/api/views.py", line 13, in <module>
+    from search.scraping.requester import crawl
+ModuleNotFoundError: No module named 'search'
+ERROR - 2020-09-01 23:59:46,332 | log: Internal Server Error: /about
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/_strptime.py", line 362, in _strptime
+    (data_string, format))
+ValueError: time data '2020-09-01T20:42:40Z' does not match format '%Y-%m-%dT%H:%M:%S%z'
+ERROR - 2020-09-01 23:59:48,858 | log: Internal Server Error: /about
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/_strptime.py", line 362, in _strptime
+    (data_string, format))
+ValueError: time data '2020-09-01T20:42:40Z' does not match format '%Y-%m-%dT%H:%M:%S%z'
+ERROR - 2020-09-02 00:01:03,103 | log: Internal Server Error: /favicon.ico
+Traceback (most recent call last):
+  File "/home/ubuntu/khromoff/urlshortner/views.py", line 66, in redirect_to_long_url
+    url_base_obj = ShortUrl.objects.get_valid_urls()
+AttributeError: 'Manager' object has no attribute 'get_valid_urls'
+ERROR - 2020-09-02 00:01:16,283 | log: Internal Server Error: /my-vk-redirect
+Traceback (most recent call last):
+  File "/home/ubuntu/khromoff/urlshortner/views.py", line 66, in redirect_to_long_url
+    url_base_obj = ShortUrl.objects.get_valid_urls()
+AttributeError: 'Manager' object has no attribute 'get_valid_urls'
+ERROR - 2020-09-02 00:01:16,923 | log: Internal Server Error: /favicon.ico
+Traceback (most recent call last):
+  File "/home/ubuntu/khromoff/urlshortner/views.py", line 66, in redirect_to_long_url
+    url_base_obj = ShortUrl.objects.get_valid_urls()
+AttributeError: 'Manager' object has no attribute 'get_valid_urls'
+ERROR - 2020-09-02 00:01:18,061 | log: Internal Server Error: /my-vk-redirect
+Traceback (most recent call last):
+  File "/home/ubuntu/khromoff/urlshortner/views.py", line 66, in redirect_to_long_url
+    url_base_obj = ShortUrl.objects.get_valid_urls()
+AttributeError: 'Manager' object has no attribute 'get_valid_urls'
+ERROR - 2020-09-02 00:01:53,442 | log: Internal Server Error: /my-vk-redirect
+Traceback (most recent call last):
+  File "/home/ubuntu/khromoff/urlshortner/views.py", line 66, in redirect_to_long_url
+    url_base_obj = ShortUrl.objects.get_valid_urls()
+AttributeError: 'Manager' object has no attribute 'get_valid_urls'
+ERROR - 2020-09-02 00:01:54,487 | log: Internal Server Error: /favicon.ico
+Traceback (most recent call last):
+  File "/home/ubuntu/khromoff/urlshortner/views.py", line 66, in redirect_to_long_url
+    url_base_obj = ShortUrl.objects.get_valid_urls()
+AttributeError: 'Manager' object has no attribute 'get_valid_urls'
+ERROR - 2020-09-02 00:04:02,974 | log: Internal Server Error: /my-github-redirect
+Traceback (most recent call last):
+  File "/home/ubuntu/khromoff/urlshortner/views.py", line 66, in redirect_to_long_url
+    url_base_obj = ShortUrl.test.get_valid_urls()
+TypeError: get_valid_urls() missing 1 required positional argument: 'self'
+ERROR - 2020-09-02 00:04:03,822 | log: Internal Server Error: /favicon.ico
+Traceback (most recent call last):
+  File "/home/ubuntu/khromoff/urlshortner/views.py", line 66, in redirect_to_long_url
+    url_base_obj = ShortUrl.test.get_valid_urls()
+TypeError: get_valid_urls() missing 1 required positional argument: 'self'
+ERROR - 2020-09-02 00:05:33,653 | log: Internal Server Error: /my-github-redirect
+Traceback (most recent call last):
+  File "/home/ubuntu/khromoff/urlshortner/views.py", line 66, in redirect_to_long_url
+    url_base_obj = ShortUrl.objects.get_valid_urls()
+AttributeError: 'Manager' object has no attribute 'get_valid_urls'
+ERROR - 2020-09-02 00:05:34,655 | log: Internal Server Error: /favicon.ico
+Traceback (most recent call last):
+  File "/home/ubuntu/khromoff/urlshortner/views.py", line 66, in redirect_to_long_url
+    url_base_obj = ShortUrl.objects.get_valid_urls()
+AttributeError: 'Manager' object has no attribute 'get_valid_urls'
+ERROR - 2020-09-02 00:07:18,181 | log: Internal Server Error: /my-github-redirect
+Traceback (most recent call last):
+  File "/home/ubuntu/khromoff/urlshortner/views.py", line 66, in redirect_to_long_url
+    url_base_obj = ShortUrl.objects.filter(active=true)
+NameError: name 'true' is not defined
+ERROR - 2020-09-02 00:07:19,624 | log: Internal Server Error: /favicon.ico
+Traceback (most recent call last):
+  File "/home/ubuntu/khromoff/urlshortner/views.py", line 66, in redirect_to_long_url
+    url_base_obj = ShortUrl.objects.filter(active=true)
+NameError: name 'true' is not defined
+ERROR - 2020-09-02 00:07:57,531 | log: Internal Server Error: /
+Traceback (most recent call last):
+  File "/home/ubuntu/khromoff/urlshortner/api/serializers.py", line 85, in create
+    obj = ShortUrl.objects.get_valid_urls().filter(full_url=self.validated_data['full_url'],
+AttributeError: 'Manager' object has no attribute 'get_valid_urls'
