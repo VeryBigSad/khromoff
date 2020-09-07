@@ -2,9 +2,11 @@
 __pycache__
 
 secrets.py
-db.sqlite3
+db.mysqlite3
 
+logs/
 .idea/
 migrations
 
 /static/
+
