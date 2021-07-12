@@ -1,6 +1,6 @@
 let short_code;
 let prefix;
-$(document).ready( function () {
+$(document).ready(function () {
     $(document.getElementsByClassName('shorturl-item')).on('click', function () {
         short_code = $($(this).children()[2]).children()[0].textContent;
         $('#redirect-url').text($(this).children()[0].textContent);
@@ -25,31 +25,32 @@ $(document).ready( function () {
 
 });
 
-$('#delete-shorturl-form').on('submit', function (){
+$('#delete-shorturl-form').on('submit', function () {
     try {
         let url = $(this).attr('action');
         $('.short-code-' + short_code).remove();
-        if($('#tbody-shorturls').children().length === 0){
+        if ($('#tbody-shorturls').children().length === 0) {
             $('#table-shorturls').remove();
             $('#hidden-shorturl-advice').removeClass('invisible').addClass('visible')
         }
         $('#delete-item-modal').modal('hide');
 
         $.ajax(url, {
-            method: 'GET',
-            xhrFields: {
-                withCredentials: true
-            },
-            data: $(this).serialize(),
-            headers: {"Content-Type": "application/json",
-                        'X-Requested-With': 'XMLHttpRequest',
-                        'Access-Control-Allow-Origin': '*'},
-        }
+                method: 'GET',
+                xhrFields: {
+                    withCredentials: true
+                },
+                data: $(this).serialize(),
+                headers: {
+                    "Content-Type": "application/json",
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Access-Control-Allow-Origin': '*'
+                },
+            }
         );
 
         return false;
-    }
-    catch (e) {
+    } catch (e) {
         console.log(e);
         return false;
     }
@@ -61,7 +62,7 @@ $('#delete-apikey-form').on('submit', function () {
         let url = $(this).attr('action');
         $('.prefix-' + prefix).remove();
         let childrens = $('#tbody-apikeys').children().length;
-        if(childrens === 0){
+        if (childrens === 0) {
             $('#table-apikeys').remove();
             $('#hidden-apikey-advice').removeClass('invisible').addClass('visible');
             document.getElementById('get-apikey-recommendation').hidden = true;
@@ -78,15 +79,16 @@ $('#delete-apikey-form').on('submit', function () {
                     withCredentials: true
                 },
                 data: $(this).serialize(),
-                headers: {"Content-Type": "application/json",
+                headers: {
+                    "Content-Type": "application/json",
                     'X-Requested-With': 'XMLHttpRequest',
-                    'Access-Control-Allow-Origin': '*'},
+                    'Access-Control-Allow-Origin': '*'
+                },
             }
         );
 
         return false;
-    }
-    catch (e) {
+    } catch (e) {
         console.log(e);
         return false;
     }

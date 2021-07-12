@@ -1,5 +1,3 @@
-from threading import Thread
-
 import requests
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
@@ -9,8 +7,7 @@ from rest_framework.views import APIView
 
 from api.models import UserAPIKey
 from api.serializers import UserAPIKeySerializer
-from api.utils import IsAPIKeyOwner, ParamRequired, Response, IsAdminKey, APITokenAuth
-#from search.scraping.requester import crawl
+from api.utils import IsAPIKeyOwner, ParamRequired, Response
 
 
 def methods(request):

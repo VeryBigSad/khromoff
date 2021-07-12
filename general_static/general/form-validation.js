@@ -1,4 +1,4 @@
-$(document).ready(function() {
+$(document).ready(function () {
 
     window.addEventListener('load', function () {
         const forms = document.getElementsByClassName('novalidate-form');

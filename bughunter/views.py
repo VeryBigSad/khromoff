@@ -23,7 +23,7 @@ def report(request):
                        'description: %s'
                        % (request.POST.get('location'), request.META['REMOTE_ADDR'],
                           request.user, request.POST.get('error_type'), request.POST.get('description')))
-        
+
         # TODO: save in DB, create page about it. more info there
         return HttpResponse('thx doode')
     else:

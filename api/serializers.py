@@ -12,7 +12,6 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class UserAPIKeySerializer(serializers.ModelSerializer):
-
     requests_per_minute = IntegerField(
         max_value=30
     )
@@ -26,4 +25,3 @@ class UserAPIKeySerializer(serializers.ModelSerializer):
     class Meta:
         model = UserAPIKey
         fields = '__all__'
-

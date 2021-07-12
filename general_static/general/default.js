@@ -6,15 +6,15 @@ $('#bug-report').on('click', (function () {
     }
 }));
 
-$('#bug-report-form').on('submit', function(){
+$('#bug-report-form').on('submit', function () {
 
     $("<input />").attr("type", "hidden")
         .attr("name", "location")
         .attr("value", window.location.href)
         .appendTo("#bug-report-form");
 
-    $.post($(this).attr('action'), $(this).serialize(), function(response){
-    },'json');
+    $.post($(this).attr('action'), $(this).serialize(), function (response) {
+    }, 'json');
 
     do_open = false;
     $('#report-modal').modal('hide');

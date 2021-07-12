@@ -83,7 +83,7 @@ class ShorturlSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         obj = ShortUrl.objects.filter(active=True).filter(full_url=self.validated_data['full_url'],
-                                                       do_collect_meta=False, alias=False)
+                                                          do_collect_meta=False, alias=False)
 
         # if object already exists, we don't need to create it again.
         if not self.validated_data.get('do_collect_meta') and \

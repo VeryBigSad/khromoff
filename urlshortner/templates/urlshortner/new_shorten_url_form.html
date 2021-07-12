@@ -36,14 +36,16 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text">https://{{ static.HOSTNAME }}/</span>
                     </div>
-                    <input id="basic-url" type="text" class="form-control" name="short_code" placeholder="my_url" value="{{ post.short_code }}"
-                    maxlength="{{ max_length }}">
+                    <input id="basic-url" type="text" class="form-control" name="short_code" placeholder="my_url"
+                           value="{{ post.short_code }}"
+                           maxlength="{{ max_length }}">
                 </div>
             </div>
 
             {% if user.is_authenticated %}
                 <div class="custom-control custom-checkbox">
-                    <input class="custom-control-input" id="checkbox" type="checkbox" name="do_collect_meta" value="true" checked>
+                    <input class="custom-control-input" id="checkbox" type="checkbox" name="do_collect_meta"
+                           value="true" checked>
                     <label class="custom-control-label" for="checkbox">Позволить собирать данные о переходах?</label>
                 </div>
             {% else %}

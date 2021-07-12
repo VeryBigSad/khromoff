@@ -160,7 +160,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'khromoff.wsgi.application'
 
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -210,7 +209,6 @@ REST_FRAMEWORK = {
 if DEBUG:
     REST_FRAMEWORK['DEFAULT_RENDERER_CLASSES'].append('rest_framework.renderers.BrowsableAPIRenderer')
 
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
@@ -219,7 +217,6 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
     },
 ]
-
 
 LANGUAGE_CODE = 'ru-ru'
 
@@ -230,7 +227,6 @@ USE_I18N = True
 USE_L10N = False
 
 USE_TZ = True
-
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "general_static"),

@@ -32,7 +32,8 @@
             </h4>
         {% endif %}
         <h3>Короткая ссылка: </h3>
-        <a id="shorturl-url" class="font-weight-bold h4 text-break" href="{% host_url 'redirect' short_code host 'urlshortner' %}">
+        <a id="shorturl-url" class="font-weight-bold h4 text-break"
+           href="{% host_url 'redirect' short_code host 'urlshortner' %}">
             https:{% host_url 'redirect' short_code host 'urlshortner' %}
         </a>
         <button id="shorturl-copy" class="btn-success btn btn-lg" data-placement="top"
