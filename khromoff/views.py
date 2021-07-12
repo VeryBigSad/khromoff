@@ -154,8 +154,8 @@ def personal(request):
 
 def about(request):
     last_update_date = cache.get_or_set('last_site_update', (lambda: datetime.strptime(
-        requests.get('https://api.github.com/repos/mikhailkhromov/khromoff').json()['updated_at'],
-        '%Y-%m-%dT%H:%M:%Sz').strftime('%d %b %Y')))
+        requests.get('https://api.github.com/repos/verybigsad/khromoff').json()['updated_at'],
+        '%Y-%m-%dT%H:%M:%Sz').strftime('%d.%m.%Y')))
     return render(request, 'about.html', context={'last_update_date': gettext(last_update_date)})
 
 
