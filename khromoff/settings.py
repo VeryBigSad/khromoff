@@ -1,27 +1,22 @@
 import os
 
-from khromoff import secrets
-
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-SECRET_KEY = secrets.SECRET_KEY
-STAFF_TELEGRAM_IDS = secrets.STAFF_TELEGRAM_IDS
+SECRET_KEY = os.getenv("SECRET_KEY", default="default secret key (woo!)")
+STAFF_TG_ID = os.getenv("STAFF_TG_ID")
 
-DEBUG = False
-if os.environ.get("IS_DEBUG"):
-    DEBUG = True
-
-if not DEBUG:
+DEBUG = True
+DOMAIN_NAME = 'khrmff.test'
+if not os.environ.get("IS_DEBUG"):
+    DEBUG = False
     DOMAIN_NAME = 'khrmff.ru'
     CSRF_COOKIE_SECURE = True
     SESSION_COOKIE_SECURE = True
-    SECURE_SSL_REDIRECT = True
+    # SECURE_SSL_REDIRECT = True
     SECURE_HSTS_PRELOAD = True
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_SECONDS = 3600
     SECURE_REFERRER_POLICY = 'no-referrer-when-downgrade'
-else:
-    DOMAIN_NAME = 'khrmff.test'
 
 ALLOWED_HOSTS = ['*']
 LOGIN_URL = '//%s/login' % DOMAIN_NAME
@@ -62,7 +57,7 @@ LOGGING = {
             'level': 'WARNING',
             'filters': ['require_debug_false'],
             'class': 'bughunter.apps.TelegramLogHandler',
-            'bot_token': secrets.bot_token,
+            'bot_token': os.getenv("TELEGRAM_BOT_TOKEN"),
         }
     },
     'loggers': {
@@ -104,6 +99,7 @@ INSTALLED_APPS = [
     'urlshortner.apps.UrlshortnerConfig',
     'api.apps.ApiConfig',
     'bughunter.apps.BughunterConfig',
+    'blog.apps.BlogConfig',
 
     # 3rd party
     'rest_framework',
@@ -163,11 +159,11 @@ WSGI_APPLICATION = 'khromoff.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': secrets.db_name,
-        'HOST': secrets.db_hostname,
+        'NAME': 'postgres',
+        'HOST': 'localhost',
         'PORT': '5432',
-        'PASSWORD': secrets.db_password,
-        'USER': secrets.db_username
+        'PASSWORD': 'postgres',
+        'USER': 'postgres'
     }
 }
 

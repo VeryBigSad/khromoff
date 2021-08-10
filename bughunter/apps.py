@@ -30,8 +30,7 @@ class TelegramLogFormatter(TelegramFormatter):
 class TelegramLogHandler(AdminTelegramHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.staff_ids = settings.STAFF_TELEGRAM_IDS
-
+        self.staff_id = settings.STAFF_TG_ID
         self.setFormatter(TelegramLogFormatter())
 
     def emit(self, record):
@@ -43,15 +42,12 @@ class TelegramLogHandler(AdminTelegramHandler):
         self.notify_all_staff(self.format(record))
 
     def notify_all_staff(self, message):
-        for i in self.staff_ids:
-            self.send_message(message, i)
+        self.send_message(message, self.staff_id)
 
     def send_message(self, message, tg_id=None):
         if tg_id is None:
             tg_id = self.bot_data.chat_id
-        message_url = '{bot_url}sendMessage'.format(
-            bot_url=self.bot_data.bot_url()
-        )
+        message_url = f'{self.bot_data.bot_url()}sendMessage'
         r = requests.post(message_url, json={
             "chat_id": self.bot_data.chat_id,
             "text": message,
