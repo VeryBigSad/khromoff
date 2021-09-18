@@ -5,8 +5,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.getenv("SECRET_KEY", default="default secret key (woo!)")
 STAFF_TG_ID = os.getenv("STAFF_TG_ID")
 
-DEBUG = True
-DOMAIN_NAME = 'khrmff.test'
+DEBUG = False
+DOMAIN_NAME = 'khrmff.ru'
 if not os.environ.get("IS_DEBUG"):
     DEBUG = False
     DOMAIN_NAME = 'khrmff.ru'
@@ -95,17 +95,16 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    # my apps
-    'urlshortner.apps.UrlshortnerConfig',
-    'api.apps.ApiConfig',
-    'bughunter.apps.BughunterConfig',
-    'blog.apps.BlogConfig',
-
     # 3rd party
     'rest_framework',
     'django_log_to_telegram',
     'rest_framework_api_key',
     'django_hosts',
+
+    # my apps
+    'urlshortner.apps.UrlshortnerConfig',
+    'api.apps.ApiConfig',
+    'bughunter.apps.BughunterConfig'
 ]
 
 MIDDLEWARE = [
@@ -158,20 +157,14 @@ WSGI_APPLICATION = 'khromoff.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'postgres',
-        'HOST': 'localhost',
+        'HOST': 'db',
         'PORT': '5432',
         'PASSWORD': 'postgres',
         'USER': 'postgres'
     }
 }
-
-if DEBUG:
-    DATABASES['default'] = {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'db.mysqlite3',
-    }
 
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
@@ -214,7 +207,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-LANGUAGE_CODE = 'ru-ru'
+# LANGUAGE_CODE = 'ru-ru'
 
 TIME_ZONE = 'Europe/Moscow'
 

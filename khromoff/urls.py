@@ -16,7 +16,6 @@ urlpatterns = [
 
     # bugs
     path('bugs/', include('bughunter.urls')),
-
 ]
 
 handler404 = 'khromoff.views.error404'
