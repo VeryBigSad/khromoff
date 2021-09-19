@@ -31,7 +31,6 @@ class ShortUrl(models.Model):
     view_data_code = models.CharField(max_length=MAX_SHORTCODE_LENGTH + 1, default=None, null=True)
 
     objects = ShortUrlManager
-    test = ShortUrlManager
 
     def deactivate(self):
         self.active = False

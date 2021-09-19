@@ -120,7 +120,8 @@ def personal(request):
 
     # TODO: do something with that it only contains 10 last items
     # TODO: use serializers, not db requests
-    created_shorturls = ShortUrl.objects.get_valid_urls().filter(author=request.user).order_by('-time_created')[:10]
+    created_shorturls = ShortUrl.objects.all().filter(active=True).filter(author=request.user).order_by(
+        '-time_created')[:10]
     created_shorturls = [{'times_visited': len(Visit.objects.filter(shorturl=i)), 'obj': i} for i in
                          created_shorturls]
 

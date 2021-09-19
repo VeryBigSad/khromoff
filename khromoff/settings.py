@@ -5,14 +5,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.getenv("SECRET_KEY", default="default secret key (woo!)")
 STAFF_TG_ID = os.getenv("STAFF_TG_ID")
 
-DEBUG = False
-DOMAIN_NAME = 'khrmff.ru'
-if not os.environ.get("IS_DEBUG"):
-    DEBUG = False
+DEBUG = (os.getenv("DEBUG") == 'True')
+DOMAIN_NAME = 'khrmff.test'
+if not DEBUG:
     DOMAIN_NAME = 'khrmff.ru'
     CSRF_COOKIE_SECURE = True
     SESSION_COOKIE_SECURE = True
-    # SECURE_SSL_REDIRECT = True
     SECURE_HSTS_PRELOAD = True
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_SECONDS = 3600
