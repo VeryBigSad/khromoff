@@ -7,6 +7,9 @@
         <div class="offset-lg-3 col-lg-6 text-center">
             <h1>Мой сайт</h1>
             <h5>Если вы что-то ищете, то оно скорее всего здесь...</h5>
+            {% if debug %}
+                <p class="alert alert-danger">DEBUG включен. Если вы это видите, то все плохо.</p>
+            {% endif %}
         </div>
     </div>
 {% endblock %}
