@@ -1,3 +1,5 @@
+import os
+
 from django.contrib import admin
 from django.urls import path, include
 
@@ -16,6 +18,9 @@ urlpatterns = [
 
     # bugs
     path('bugs/', include('bughunter.urls')),
+
+    # bot
+    path('tgbot/%s' % os.getenv("TELEGRAM_BOT_TOKEN"), include("tgbot.urls"))
 ]
 
 handler404 = 'khromoff.views.error404'
