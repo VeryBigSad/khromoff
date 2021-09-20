@@ -6,7 +6,6 @@ db.mysqlite3
 
 /logs/
 .idea/
-migrations
 
 /static/
 
