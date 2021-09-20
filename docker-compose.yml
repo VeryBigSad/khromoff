@@ -13,8 +13,8 @@ services:
       - POSTGRES_PASSWORD=postgres
     env_file:
       - ./.env
-    expose:
-      - 5432
+    ports:
+      - "5432:5432"
   web:
     build: .
     container_name: django
@@ -35,7 +35,7 @@ services:
     volumes:
       - static_volume:/code/static
     ports:
-      - 80:80
+      - "80:80"
 
 volumes:
   postgres_data:
