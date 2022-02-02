@@ -1,6 +1,5 @@
 import datetime
 import string
-from datetime import datetime
 
 import requests
 from django.contrib.auth import authenticate, login, logout, get_user_model
@@ -154,14 +153,15 @@ def personal(request):
 
 
 def about(request):
-    last_update_date = cache.get_or_set('last_site_update', (lambda: datetime.strptime(
+    last_update_date = cache.get_or_set('last_site_update', (lambda: datetime.datetime.strptime(
         requests.get('https://api.github.com/repos/verybigsad/khromoff').json()['updated_at'],
         '%Y-%m-%dT%H:%M:%Sz').strftime('%d.%m.%Y')))
     return render(request, 'about.html', context={'last_update_date': gettext(last_update_date)})
 
 
 def me(request):
-    return render(request, 'me.html', context={'age': datetime.today().year - 2005})
+    age = (datetime.date.today() - datetime.date(2005, 2, 22)).days // 365
+    return render(request, 'me.html', context={'age': age})
 
 
 def logout_page(request):

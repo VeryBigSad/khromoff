@@ -1,0 +1,42 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:12
+    container_name: postgres_db
+    restart: always
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+      - ./sql:/sql/
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    env_file:
+      - dev.env
+    ports:
+      - "5432:5432"
+  web:
+    build: .
+    container_name: django
+    command: bash -c "python manage.py migrate && gunicorn --workers 3 --bind 0.0.0.0:8000 khromoff.wsgi:application"
+    volumes:
+      - .:/code
+      - static_volume:/code/static
+    ports:
+      - "8000:8000"
+    env_file:
+      - dev.env
+    depends_on:
+      - db
+      - nginx
+  nginx:
+    build: ./services/nginx
+    container_name: nginx_server
+    volumes:
+      - static_volume:/code/static
+    ports:
+      - "80:80"
+
+volumes:
+  postgres_data:
+  static_volume:
