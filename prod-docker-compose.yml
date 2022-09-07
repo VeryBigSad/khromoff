@@ -37,7 +37,7 @@ services:
     volumes:
       - static_volume:/code/static
     ports:
-      - "80:80"
+      - "80:8002"
 
 volumes:
   postgres_data:
