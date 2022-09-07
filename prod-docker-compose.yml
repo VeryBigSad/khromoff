@@ -16,6 +16,7 @@ services:
     ports:
       - "5432:5432"
   web:
+    restart: always
     build: .
     container_name: django
     command: bash -c "python manage.py migrate && gunicorn --workers 3 --bind 0.0.0.0:8000 khromoff.wsgi:application"
@@ -30,6 +31,7 @@ services:
       - db
       - nginx
   nginx:
+    restart: always
     build: ./services/nginx
     container_name: nginx_server
     volumes:
