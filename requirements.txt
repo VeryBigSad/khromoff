@@ -1,7 +1,7 @@
 asgiref==3.4.1
 certifi==2021.5.30
 chardet==4.0.0
-Django==3.2.5
+Django==3.2.15
 django-hosts==4.0
 django-log-to-telegram==2020.1.23
 djangorestframework==3.12.4
